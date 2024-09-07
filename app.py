@@ -62,10 +62,27 @@ def counter():
 <!doctype html>
 <html>
     <body>
+        <a href="/lab1/clear">Очищение</a>
         Cколько раз вы сюда заходили: ''' + str(count) + '''
     </body>
 </html>
 '''
+
+
+@app.route('/lab1/clear')
+def clear():
+    global count
+    count = 0
+    return '''
+<!doctype html>
+<html>
+    <body>
+    <a href="/lab1/counter">Очистка</a>
+    </body>
+</html>
+'''
+
+
 @app.route('/info')
 def info():
     return redirect('/author')
@@ -81,3 +98,5 @@ def created():
     </body>
 </html>
 ''', 201
+
+
