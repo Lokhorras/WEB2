@@ -8,8 +8,6 @@ def not_found(err):
 
 
 
-
-
 @app.route("/web")
 def web():
     return """<!doctype html> 
@@ -44,9 +42,11 @@ def author():
 @app.route("/lab1/oak")
 def oak():
     path = url_for("static", filename="1.jpg")
+    lab1 = url_for("static", filename="lab1.css")
     return '''
 <!doctype html>
 <html>
+    <link rel = "stylesheet" href="''' + lab1 +'''"
     <body>
         <h1>Дуб</h1>
         <img src="''' + path +'''">
