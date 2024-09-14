@@ -122,9 +122,11 @@ def created():
 
 @app.route('/lab1')
 def lab1():
+        styles = url_for("static", filename="styles.css")
         return '''
 <!doctype html>
 <html>
+    <link rel = "stylesheet" href="''' + styles +'''"    
     <title> Лаба 1 </title>
     <body>
         <p>Flask — фреймворк для создания веб-приложений на языке
@@ -132,7 +134,6 @@ def lab1():
 Werkzeug, а также шаблонизатор Jinja2. Относится к категории так
 называемых микрофреймворков — минималистичных каркасов
 веб-приложений, сознательно предоставляющих лишь самые базовые возможности.</p>
-        <div><i>что-то задано...</i></div>
         <a href="/">Корень сайта</a>
     </body>
 </html>
