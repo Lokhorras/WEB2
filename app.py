@@ -7,6 +7,26 @@ def not_found(err):
     return "Нет такой страницы", 404
 
 
+@app.route("/")
+def start():
+
+    styles = url_for("static", filename="styles.css")
+    return '''<!doctype html>
+        <html>
+            <header>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных </header>
+            <link rel = "stylesheet" href="''' + styles +'''"    
+            <body>
+                <h1>НГТУ, ФБ, Лабораторные работы</h1> 
+                <ol> <a href="/lab1"> 1 Лабораторная работа </a> </ol>
+            </body>
+            <footer><p>Студент: Миракин Д.В.</p>
+            Группа: ФБИ-22 
+            Курс: Ф3
+            Год: 2024
+            </footer>
+        </html>'''
+
+
 
 @app.route("/lab1/web")
 def web():

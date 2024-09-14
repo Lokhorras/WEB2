@@ -1,0 +1,29 @@
+header{
+    height: 50px;
+    background-color: antiquewhite;
+    margin: 0;
+    padding: 0;
+}
+body{
+    margin: 0;
+    padding: 0;
+}
+footer{
+    height: 75px;
+    background-color: antiquewhite;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+a{
+    color: black;
+}
+a:active{
+    color: aqua;
+}
+a:hover{
+    color: rgb(214, 108, 66);
+}
