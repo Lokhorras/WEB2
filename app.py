@@ -180,3 +180,14 @@ def error_405():
 @app.route('/error/418')
 def error_418():
     return "I'm a teapot", 418
+
+@app.route('/error/500')
+def error_500():
+    return  1/0 
+
+@app.errorhandler(500)
+def not_found(err):
+    return '''
+        <h1>Ошибка сервера</h1>
+        <p>Извините, произошла ошибка на сервере. Пожалуйста, попробуйте позже.</p>
+    ''', 500
