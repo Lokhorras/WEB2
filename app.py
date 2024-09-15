@@ -232,6 +232,7 @@ Werkzeug, а также шаблонизатор Jinja2. Относится к �
         <li><a href="/error/401">401</a></li>
         <li><a href="/error/402">402</a></li>
         <li><a href="/error/403">403</a></li>
+        <li><a href="/error/404">404</a></li>
         <li><a href="/error/405">405</a></li>
         <li><a href="/error/418">418</a></li>
         <li><a href="/error/500">500</a></li>
