@@ -191,3 +191,29 @@ def not_found(err):
         <h1>Ошибка сервера</h1>
         <p>Извините, произошла ошибка на сервере. Пожалуйста, попробуйте позже.</p>
     ''', 500
+    
+@app.route('/lab1/routestudent')
+def routestudent():
+    hm = url_for("static", filename="тяжелыйметалл.jpg")
+    content = '''
+<!doctype html>
+<html>
+    <body>
+        <h1>Тяжелый металл</h1>
+        <p>Fire Alarm.</p>
+        <p>Грязный бит — нужен Мойдодыр-р</p>
+        <p>На шее ice — это не water-r</p>
+        <p>Мой бро — Дима, но не LAZER</p>
+        <p>Dodge Challenger, он sounds like «skrrt»</p>
+        <p>V-I-P-E-double-R (Р-р-р)</p>
+        <p>V-I-P-E-double-R (Р-р-р)</p>
+        <p>9mice & Kai Angel</p>
+        <img src="''' + hm +'''">
+    </body>
+</html>'''
+    headers = {
+        'Content-Language': 'ru',
+        'X-Custom-Header-1': 'HM2',
+        'X-Custom-Header-2': 'KAI&MICE'
+    }
+    return (content, 200, headers)
