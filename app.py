@@ -16,8 +16,7 @@ def not_found(err):
                 <h1>Тяжелый металл</h1>     
                 <img src="''' + hm +'''">
             </body>
-            <footer><p>Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал</p>
-            </footer>
+            <footer><p>Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал</p></footer>
         </html>''', 404
     
 
@@ -56,6 +55,8 @@ def web():
         }
 
 
+
+
 @app.route("/lab1/author")
 def author():
     name = "Миракин Д.В."
@@ -73,6 +74,8 @@ def author():
         </html>"""
         
         
+        
+        
 @app.route("/lab1/oak")
 def oak():
     path = url_for("static", filename="1.jpg")
@@ -87,6 +90,10 @@ def oak():
     </body>
 </html>
 '''
+
+
+
+
 count = 0 
 @app.route('/lab1/counter')
 def counter():
@@ -101,6 +108,8 @@ def counter():
     </body>
 </html>
 '''
+
+
 
 
 @app.route('/lab1/clear')
@@ -119,7 +128,7 @@ def clear():
 
 @app.route('/lab1/info')
 def info():
-    return redirect('/lab1/info')
+    return redirect('/lab1//author')
 
 @app.route('/lab1/created')
 def created():
@@ -132,30 +141,6 @@ def created():
     </body>
 </html>
 ''', 201
-
-
-@app.route('/lab1')
-def lab1():
-        styles = url_for("static", filename="styles.css")
-        return '''
-<!doctype html>
-<html>
-    <link rel = "stylesheet" href="''' + styles +'''"    
-    <title> Лаба 1 </title>
-    <body>
-        <p>Flask — фреймворк для создания веб-приложений на языке
-программирования Python, использующий набор инструментов
-Werkzeug, а также шаблонизатор Jinja2. Относится к категории так
-называемых микрофреймворков — минималистичных каркасов
-веб-приложений, сознательно предоставляющих лишь самые базовые возможности.</p>
-        <a href="/">Корень сайта</a>
-    </body>
-</html>
-'''
-
-
-
-
 
 @app.route('/error/400')
 def error_400():
@@ -217,3 +202,42 @@ def routestudent():
         'X-Custom-Header-2': 'KAI&MICE'
     }
     return (content, 200, headers)
+
+
+@app.route('/lab1')
+def lab1():
+        styles = url_for("static", filename="styles.css")
+        return '''
+<!doctype html>
+<html>
+    <title> Лаба 1 </title>
+    <link rel = "stylesheet" href="''' + styles +'''"    
+    <body>
+        <header>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных </header>
+        <p>Flask — фреймворк для создания веб-приложений на языке
+программирования Python, использующий набор инструментов
+Werkzeug, а также шаблонизатор Jinja2. Относится к категории так
+называемых микрофреймворков — минималистичных каркасов
+веб-приложений, сознательно предоставляющих лишь самые базовые возможности.</p>
+        <a href="/">Корень сайта</a>
+        <h2>Список роутов</h2>
+        <ol>
+        <li><a href="/lab1/web">Веб</a></li>
+        <li><a href="/lab1/author">Автор</a></li>
+        <li><a href="/lab1/oak">ДуБ</a></li>
+        <li><a href="/lab1/counter">Не помню чё там</a></li>
+        <li><a href="lab1/clear">Очистка</a></li>
+        <li><a href="/lab1/info">Инфа</a></li>
+        <li><a href="/error/400">400</a></li>
+        <li><a href="/error/401">401</a></li>
+        <li><a href="/error/402">402</a></li>
+        <li><a href="/error/403">403</a></li>
+        <li><a href="/error/405">405</a></li>
+        <li><a href="/error/418">418</a></li>
+        <li><a href="/error/500">500</a></li>
+        <li><a href="/lab1/routestudent">Навыборстудентатяжелыйметалл</a></li>
+        </ol>
+        <footer><p>Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал</p></footer>
+    </body>
+</html>
+'''   

@@ -7,6 +7,7 @@ header{
 body{
     margin: 0;
     padding: 0;
+    color: rgb(34, 29, 16);
 }
 footer{
     height: 75px;
@@ -27,3 +28,4 @@ a:active{
 a:hover{
     color: rgb(214, 108, 66);
 }
+
