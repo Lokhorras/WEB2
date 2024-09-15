@@ -4,12 +4,26 @@ app = Flask(__name__)
 
 @app.errorhandler(404)
 def not_found(err):
-    return "Нет такой страницы", 404
+    hm = url_for("static", filename="тяжелыйметалл.jpg")
+    styles = url_for("static", filename="styles.css")
+    lab1 = url_for("static", filename="lab1.css")
+    return '''<!doctype html>
+        <html>
+            <header>Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал</header>
+            <link rel = "stylesheet" href="''' + lab1 +'''"  
+            <link rel = "stylesheet" href="''' + styles +'''"    
+            <body>
+                <h1>Тяжелый металл</h1>     
+                <img src="''' + hm +'''">
+            </body>
+            <footer><p>Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал Тяжелый метал</p>
+            </footer>
+        </html>''', 404
+    
 
 
 @app.route("/")
 def start():
-
     styles = url_for("static", filename="styles.css")
     return '''<!doctype html>
         <html>
