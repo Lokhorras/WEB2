@@ -137,4 +137,32 @@ Werkzeug, а также шаблонизатор Jinja2. Относится к �
         <a href="/">Корень сайта</a>
     </body>
 </html>
-''', 201
+'''
+
+
+
+
+
+@app.route('/error/400')
+def error_400():
+    return 'Bad Request', 400
+
+@app.route('/error/401')
+def error_401():
+    return 'Unauthorized', 401
+
+@app.route('/error/402')
+def error_402():
+    return 'Payment Required', 402
+
+@app.route('/error/403')
+def error_403():
+    return 'Forbidden', 403
+
+@app.route('/error/405')
+def error_405():
+    return 'Method Not Allowed', 405
+
+@app.route('/error/418')
+def error_418():
+    return "I'm a teapot", 418
