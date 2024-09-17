@@ -1,0 +1,31 @@
+body {
+    background-color: #bae7ba;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+}
+
+img {
+    display: block;
+    margin: 20px auto;
+    max-width: 100%;
+    height: auto;
+}
+
+a {
+    display: block;
+    text-align: center;
+    margin: 10px 0;
+    color: #007BFF;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: aqua;
+}

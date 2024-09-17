@@ -1,6 +1,7 @@
 from flask import Flask, url_for, redirect
 app = Flask(__name__)
-
+deleted = False
+create = False
 
 @app.errorhandler(404)
 def not_found(err):
@@ -227,6 +228,7 @@ Werkzeug, а также шаблонизатор Jinja2. Относится к �
         <li><a href="/lab1/oak">ДуБ</a></li>
         <li><a href="/lab1/counter">Не помню чё там</a></li>
         <li><a href="lab1/clear">Очистка</a></li>
+        <li><a href="/lab1/created'">created</a></li>
         <li><a href="/lab1/info">Инфа</a></li>
         <li><a href="/error/400">400</a></li>
         <li><a href="/error/401">401</a></li>
@@ -242,3 +244,129 @@ Werkzeug, а также шаблонизатор Jinja2. Относится к �
     </body>
 </html>
 '''   
+
+
+
+
+@app.route('/lab1/resourse')
+def resourse():
+    styles2 = url_for("static", filename="sctyles2.css")
+    Kaktus = url_for("static", filename="Кактус.jpg")
+    Mertviy = url_for("static", filename="Мертвыйкактус.jpg")
+    politiy = url_for("static", filename="Политыйкактус.jpg")
+    global create
+    global deleted
+    if deleted is False  and create is True:
+        return '''
+        <!doctype html>
+        <html>
+            <link rel = "stylesheet" href="''' + styles2 +'''" 
+            <body>
+                <h1>Кактус полит</h1>
+                <img src="''' + Kaktus +'''">
+                <a href="/lab1/create">Полить</a>
+                <a href="/lab1/delete">kill kaktus</a>
+            </body>
+        </html>
+        '''
+    elif deleted is True:
+        return '''
+        <!doctype html>
+        <html>
+            <link rel = "stylesheet" href="''' + styles2 +'''" 
+            <body>
+                <h1>Кактус зДОХ</h1>
+                <img src="''' + Mertviy +'''">
+                <a href="/lab1/create">Полить</a>
+                <a href="/lab1/delete">kill kaktus</a>
+            </body>
+        </html>
+        '''
+    else:
+        return '''
+        <!doctype html>
+        <html>
+            <link rel = "stylesheet" href="''' + styles2 +'''" 
+            <body>
+                <h1>Кактус не полит</h1>
+                <img src="''' + Kaktus +'''">
+                <a href="/lab1/create">Полить</a>
+                <a href="/lab1/delete">kill kaktus</a>
+            </body>
+        </html>
+        '''
+        
+@app.route('/lab1/delete')
+def delete():
+    styles2 = url_for("static", filename="sctyles2.css")
+    Kaktus = url_for("static", filename="Кактус.jpg")
+    Mertviy = url_for("static", filename="Мертвыйкактус.jpg")
+    politiy = url_for("static", filename="Политыйкактус.jpg")
+    global deleted
+    if deleted is True:
+        return '''
+        <!doctype html>
+        <link rel = "stylesheet" href="''' + styles2 +'''" 
+        <html>
+            <body>
+                <h1>Уже убил, чё ты его мучаешь..</h1>
+                <img src="''' + Mertviy +'''">
+                <a href="/lab1/resourse">нАзад</a>
+            </body>
+        </html>'''
+    else:
+        deleted = True
+        return '''
+        <!doctype html>
+        <html>
+            <link rel = "stylesheet" href="''' + styles2 +'''" 
+            <body>
+                <h1>Убит....</h1>
+                <img src="''' + Mertviy +'''">
+                <a href="/lab1/resourse">нАзад</a>
+            </body>
+        </html>'''
+    
+@app.route('/lab1/create')
+def create():
+    styles2 = url_for("static", filename="sctyles2.css")
+    Kaktus = url_for("static", filename="Кактус.jpg")
+    Mertviy = url_for("static", filename="Мертвыйкактус.jpg")
+    politiy = url_for("static", filename="Политыйкактус.jpg")
+    global create
+    global deleted 
+    if deleted is True:
+        return '''
+        <!doctype html>
+        <html>
+            <link rel = "stylesheet" href="''' + styles2 +'''" 
+            <body>
+
+                <h1>Мертвого водой не спасти</h1>
+                <img src="''' + Mertviy +'''">
+                <a href="/lab1/resourse">нАзад</a>
+            </body>
+        </html>'''
+    elif create is True:
+        return '''
+        <!doctype html>
+        <html>
+            <link rel = "stylesheet" href="''' + styles2 +'''" 
+            <body>
+                <h1>Уже полит</h1>
+                <img src="''' + politiy +'''">
+                <a href="/lab1/resourse">нАзад</a>
+            </body>
+        </html>'''
+    else:
+        create = True
+        return '''
+        <!doctype html>
+        <html>
+            <link rel = "stylesheet" href="''' + styles2 +'''" 
+            <body>
+                <h1>ПОЛИТ</h1>
+                <img src="''' + politiy +'''">
+                <a href="/lab1/resourse">нАзад</a>
+            </body>
+        </html>'''
