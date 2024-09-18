@@ -370,3 +370,14 @@ def create():
                 <a href="/lab1/resourse">нАзад</a>
             </body>
         </html>'''
+        
+        
+
+
+@app.route('/lab2/a')
+def a():
+    return 'ok'
+
+@app.route('/lab2/a/')
+def aa():
+    return 'ok s /'
