@@ -384,10 +384,37 @@ def aa():
 
 
 
-flower_list =  ('роза', 'тюльпан', 'незабудка', 'ромашка')
+flower_list =  ['роза', 'тюльпан', 'незабудка', 'ромашка']
 @app.route('/lab2/flower/<int:flower_id>')
 def flowers(flower_id):
     if flower_id >= len(flower_list):
         return "Такого цветка нет", 404
     else:
         return "Цветок: " + flower_list[flower_id]
+    
+    
+    
+    
+
+@app.route('/lab2/add_flower/<name>')
+def add_flower(name):
+    if name in flower_list:
+        return f'''
+        <!doctype html>
+        <html>
+            <body>
+            <h1>Такой цветок уже есть, попробуй другой</h1>
+            <p>Список цветков: {flower_list} </p>
+            </body>
+        </html>'''
+    else: 
+        flower_list.append(name)
+        return f'''
+        <!doctype html>
+        <html>
+            <body>
+            <h1>Добавлен новый цветок</h1>
+            <p>Название нового цветка: {name} </p>
+            <p>Список цветков: {flower_list} </p>
+            </body>
+        </html>'''        
