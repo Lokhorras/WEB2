@@ -426,4 +426,5 @@ def example():
     group = 'фби-22'
     year = 2024
     course = 3 
-    return render_template('example.html', name = name, group=group, year=year, course=course)
+    lab_num = 2
+    return render_template('example.html', name = name, group=group, year=year, course=course, lab_num=lab_num)

@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Миракин Даниил. Лабораторна работа 2</title>
+    <title>{% if name %}
+                {{name}},
+            {% else %}
+                Аноним, 
+            {% endif %} Лабораторна работа 2</title>
 </head>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <body>
     <header>
-        НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных 
+        НГТУ, ФБ, WEB-программирование, часть 2. {% if lab_num %} Лабораторная работа 2 {% endif %}
     </header>
 
     <main>
@@ -22,10 +26,31 @@
     </main>
 
     <footer>    
-        &copy; Студент: {{name}} 
-        Группа: {{group}}
-        Курс: {{course}}
-        Год: {{year}}
+        &copy; 
+        {% if name %}
+            Студент: {{name}}, 
+        {%  else %}
+            Аноним,
+        {% endif %}
+
+        {% if group %}
+            Группа: {{group}},
+        {%  else %}
+            Неопределена,
+        {% endif %}
+
+        {% if course %}
+            Курс: {{course}},
+        {%  else %}
+            Неопределен,
+        {% endif %}       
+        
+        {% if year %}
+        Год: {{year}},
+        {%  else %}
+            Неопределен,
+        {% endif %}       
+
     </footer>
     
 </body>
