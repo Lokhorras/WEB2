@@ -427,4 +427,12 @@ def example():
     year = 2024
     course = 3 
     lab_num = 2
-    return render_template('example.html', name = name, group=group, year=year, course=course, lab_num=lab_num)
+    fruits = [
+        {'name': 'яблоки', 'price' : 100},
+        {'name': 'груши', 'price' : 120},
+        {'name': 'апельсины', 'price' : 80},
+        {'name': 'мандарины', 'price' : 95},
+        {'name': 'манго', 'price' : 321}
+        ]
+    
+    return render_template('example.html', name = name, group=group, year=year, course=course, lab_num=lab_num, fruits = fruits)
