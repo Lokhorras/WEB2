@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Миракин Даниил. Лабораторна работа 2</title>
 </head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 <body>
     <header>
         НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных 
@@ -21,7 +22,7 @@
     </main>
 
     <footer>    
-        &copy; <p>Студент: {{name}} </p>
+        &copy; Студент: {{name}} 
         Группа: {{group}}
         Курс: {{course}}
         Год: {{year}}
