@@ -390,7 +390,18 @@ def flowers(flower_id):
     if flower_id >= len(flower_list):
         return "Такого цветка нет", 404
     else:
-        return "Цветок: " + flower_list[flower_id]
+        flower_name = flower_list[flower_id]
+        return f'''
+        <html>
+        <head>
+            <title>Цветок</title>
+        </head>
+        <body>
+            <h1>Цветок: {flower_name}</h1>
+            <a href="/lab2/flowers">Посмотреть все цветы</a>
+        </body>
+        </html>
+        '''
     
     
     
@@ -446,4 +457,32 @@ def lab2():
 @app.route('/lab2/filters')
 def filters():
     phrase = 'ухухух <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..'
-    return render_template('filter.html', phrase=phrase)
+    return render_template('filter.html', phrase=phrase)\
+        
+@app.route('/lab2/flower/')
+def flower_f():
+    return 'Вы не задали имя цветка', 400
+
+@app.route('/lab2/flowers')
+def all_flowers():
+    return f'''
+    <p>Список цветков: {', '.join(flower_list)}</p>
+    <p>Количество цветов: {len(flower_list)}</p>
+    '''
+    
+    
+@app.route('/lab2/clear_flowers')
+def clear_flowers():
+    global flower_list
+    flower_list = []
+    return '''
+    <html>
+    <head>
+        <title>Список цветов очищен</title>
+    </head>
+    <body>
+        <h1>Список цветов очищен</h1>
+        <a href="/lab2/flowers">Посмотреть все цветы</a>
+    </body>
+    </html>
+    '''
