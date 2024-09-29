@@ -514,3 +514,23 @@ def calc(a, b):
 def redirect_to_default(a):
     return redirect(f'/lab2/calc/{a}/1')
     
+    
+    
+# Список книг
+books = [
+    {"author": "Хьюберт Селби", "title": "Реквием по мечте", "genre": "Психологический-реализм", "pages": 320},
+    {"author": "Филип Пулман", "title": "Тень горы", "genre": "Фэнтези", "pages": 464},
+    {"author": "Дэниел Киз", "title": "Цветы для Элджернона", "genre": "Научная фантастика", "pages": 311},
+    {"author": "Джордж Оруэлл", "title": "Скотный двор", "genre": "Сатира", "pages": 112},
+    {"author": "Габриэль Гарсиа Маркес", "title": "Любовь во время холеры", "genre": "Роман", "pages": 368},
+    {"author": "Артур Конан Дойл", "title": "Приключения Шерлока Холмса", "genre": "Детектив", "pages": 307},
+    {"author": "Джером Д. Сэлинджер", "title": "Над пропастью во ржи", "genre": "Роман", "pages": 277},
+    {"author": "Джон Стейнбек", "title": "Гроздья гнева", "genre": "Роман", "pages": 464},
+    {"author": "Роберт Гэлбрейт", "title": "Крестный отец", "genre": "Криминальный роман", "pages": 448},
+    {"author": "Эмили Бронте", "title": "Грозовой перевал", "genre": "Роман", "pages": 416},
+    {"author": "Джейн Остин", "title": "Эмма", "genre": "Роман", "pages": 474},
+]
+
+@app.route('/lab2/books')
+def list_books():
+    return render_template('books.html', books=books)
