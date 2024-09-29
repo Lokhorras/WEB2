@@ -486,3 +486,31 @@ def clear_flowers():
     </body>
     </html>
     '''
+    
+@app.route('/lab2/calc/<int:a>/<int:b>')
+def calc(a, b):
+    result_1 = a + b
+    result_2 = a - b
+    result_3 = a * b
+    result_4 = a / b
+    result_5 = a ** b
+    return '''
+    <html>
+    <head>
+        <title>Расчёт с параметрами</title>
+    </head>
+    <body>
+        <h1>Расчёт с параметрами</h1>
+        <p>{a} + {b} = {result_1}</p>
+        <p>{a} - {b} = {result_2}</p>
+        <p>{a} * {b} = {result_3}</p>
+        <p>{a} / {b} = {result_4}</p>
+        <p>{a} ^ {b} = {result_5}</p>
+                                        
+    </body>
+    </html>
+    '''.format(a=a, b=b, result_2=result_2, result_1=result_1, result_3=result_3, result_4=result_4, result_5=result_5)
+@app.route('/lab2/calc/<int:a>')
+def redirect_to_default(a):
+    return redirect(f'/lab2/calc/{a}/1')
+    
