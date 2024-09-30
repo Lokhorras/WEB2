@@ -32,6 +32,7 @@ def start():
             <body>
                 <h1>НГТУ, ФБ, Лабораторные работы</h1> 
                 <ol> <a href="/lab1"> 1 Лабораторная работа </a> </ol>
+                <ol> <a href="/lab2"> 2 Лабораторная работа </a> </ol>
             </body>
             <footer><p>Студент: Миракин Д.В.</p>
             Группа: ФБИ-22 
@@ -247,7 +248,6 @@ Werkzeug, а также шаблонизатор Jinja2. Относится к �
 
 
 
-
 @app.route('/lab1/resourse')
 def resourse():
     styles2 = url_for("static", filename="sctyles2.css")
@@ -451,7 +451,22 @@ def example():
 
 @app.route('/lab2/')
 def lab2():
-    return render_template('lab2.html')
+    links = [
+    {"url": "/lab2/example", "text": "example"},
+    {"url": "/lab2/a", "text": "/lab2/a"},
+    {"url": "/lab2/a/", "text": "/lab2/a/"},
+    {"url": "/lab2/flower/1", "text": "Кол-во цветов"},
+    {"url": "/lab2/filters", "text": "Фильтры"},
+    {"url": "/lab2/add_flower/rose", "text": "Добавить цветок"},
+    {"url": "/lab2/add_flower/", "text": "Забыл написать цветок"},
+    {"url": "/lab2/flowers", "text": "Список цветов и кол-во"},
+    {"url": "/lab2/clear_flowers", "text": "Очистка списка цветов"},
+    {"url": "/lab2/calc/11/12", "text": "Калькулятор"},
+    {"url": "/lab2/calc/1", "text": "Перенаправление"},
+    {"url": "/lab2/books", "text": "Книги"},
+    {"url": "/lab2/spisok", "text": "Список"}
+]
+    return render_template('lab2.html', links=links)
 
 
 @app.route('/lab2/filters')
@@ -459,7 +474,7 @@ def filters():
     phrase = 'ухухух <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..'
     return render_template('filter.html', phrase=phrase)\
         
-@app.route('/lab2/flower/')
+@app.route('/lab2/add_flower/')
 def flower_f():
     return 'Вы не задали имя цветка', 400
 
@@ -563,3 +578,4 @@ objects = [
 @app.route('/lab2/spisok')
 def spisok():
     return render_template('spisok.html', objects=objects)
+

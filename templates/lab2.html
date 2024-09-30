@@ -4,11 +4,19 @@
 {# Осн контент #}
 {% block main %}
     <h1>Шаблоны </h1>
-    <div> Тема лабораторной - шаблоны. Список сделанных страниц</div>
+    {% block site %}<a href= 'http://127.0.0.1:5000/'>Корень сайта </a>{%endblock%}
+    <p><div> Тема лабораторной - шаблоны. Список сделанных страниц</div></p>
+
+    
+
     <ol>
-        <li>
-            <a href= '/lab2/example'>example </a>
-        </li>
+        {% for link in links %}
+            <li>
+                <p><a href="{{ link.url }}">{{ link.text }}</a></p>
+            </li>
+        {% endfor %}
     </ol>
+    
 
 {% endblock %}
+
