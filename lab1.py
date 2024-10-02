@@ -31,7 +31,6 @@ def author():
                 <a href="/lab1/web">web</a>
             </body> 
         </html>"""
-         
         
         
 @lab1.route("/lab1/oak")
@@ -83,6 +82,7 @@ def clear():
 @lab1.route('/lab1/info')
 def info():
     return redirect('/lab1//author')
+
 
 @lab1.route('/lab1/created')
 def created():
@@ -171,7 +171,6 @@ Werkzeug, а также шаблонизатор Jinja2. Относится к �
 '''   
 
 
-
 @lab1.route('/lab1/resourse')
 def resourse():
     styles2 = url_for("static", filename="sctyles2.css")
@@ -219,6 +218,7 @@ def resourse():
             </body>
         </html>
         '''
+
         
 @lab1.route('/lab1/delete')
 def delete():
@@ -250,6 +250,7 @@ def delete():
                 <a href="/lab1/resourse">нАзад</a>
             </body>
         </html>'''
+
     
 @lab1.route('/lab1/create')
 def create():
@@ -294,4 +295,3 @@ def create():
                 <a href="/lab1/resourse">нАзад</a>
             </body>
         </html>'''
-        
