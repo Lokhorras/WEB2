@@ -1,21 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Объекты</title>
+{% extends "base.html" %}
+
+{% block lab %}Объекты{% endblock %}
+
+{% block main %}
     <style>
-        body{
+        body {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             grid-gap: 10px;
         }
     </style>
-</head>
-<body>
+
     {% for obj in objects %}
-        <img src="{{ url_for('static', filename=obj.image) }}"  width="200">
+        <img src="{{ url_for('static', filename=obj.image) }}" width="200">
         <h2>{{ obj.name }}</h2>
     {% endfor %}
-</body>
-</html>
+{% endblock %}

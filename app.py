@@ -74,7 +74,7 @@ def author():
                 <a href="/lab1/web">web</a>
             </body> 
         </html>"""
-        
+         
         
         
         
@@ -471,7 +471,7 @@ def lab2():
 @app.route('/lab2/filters')
 def filters():
     phrase = 'ухухух <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..'
-    return render_template('filter.html', phrase=phrase)\
+    return render_template('filter.html', phrase=phrase)
         
 @app.route('/lab2/add_flower/')
 def flower_f():

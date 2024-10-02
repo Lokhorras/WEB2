@@ -1,62 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if name %}
-                {{name}},
-            {% else %}
-                Аноним, 
-            {% endif %} Лабораторна работа 2</title>
-</head>
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-<body>
-    <header>
-        НГТУ, ФБ, WEB-программирование, часть 2. {% if lab_num %} Лабораторная работа 2 {% endif %}
-    </header>
+{% extends "base.html" %}
 
-    <main>
-        5 + 2 = {{5+2}}<br>
-        11 * 28 = {{11*28}}<br>
-        3258 - 759 = {{3258 - 759}}<br>
-        8452 / 793 = {{ 8452 / 793}}<br>
-        8452 // 793 = {{ 8452 // 793}}<br>
-        3258 - 759 = {{3258 - 759}}<br>
-        45<sup>8</sup> = {{45 ** 8}}<br>
+{% block lab %}Лабораторная работа 2{% endblock %}
 
-        <ul>
-            {% for f in fruits %}
-            <li> {{loop.index}} - {{f.name}} : {{f.price}} ₽ </li>
-            {% endfor %}
-        </ul>
-    </main>
+{% block main %}
+    5 + 2 = {{5+2}}<br>
+    11 * 28 = {{11*28}}<br>
+    3258 - 759 = {{3258 - 759}}<br>
+    8452 / 793 = {{ 8452 / 793}}<br>
+    8452 // 793 = {{ 8452 // 793}}<br>
+    3258 - 759 = {{3258 - 759}}<br>
+    45<sup>8</sup> = {{45 ** 8}}<br>
 
-    <footer>    
-        &copy; 
-        {% if name %}
-            Студент: {{name}}, 
-        {%  else %}
-            Аноним,
-        {% endif %}
-
-        {% if group %}
-            Группа: {{group}},
-        {%  else %}
-            Неопределена,
-        {% endif %}
-
-        {% if course %}
-            Курс: {{course}},
-        {%  else %}
-            Неопределен,
-        {% endif %}       
-        
-        {% if year %}
-        Год: {{year}},
-        {%  else %}
-            Неопределен,
-        {% endif %}       
-    </footer>
-    
-</body>
-</html>
+    <ul>
+        {% for f in fruits %}
+        <li> {{loop.index}} - {{f.name}} : {{f.price}} ₽ </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
