@@ -8,6 +8,7 @@ def lab3_main():
     links = [
         {"url": "/lab3/cookie", "text": "Куки"},
         {"url": "/lab3/del_cookie", "text": "delete_cookies"},
+        {"url": "/lab3/form1", "text": "form1"},
     ]
     return render_template('lab3.html', links=links, name=name, name_color=name_color)
 
