@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {# Номер лаб работы #}
-{% block lab %} Лабораторная работа 3 {%endblock%}
+{% block lab %} Лабораторная работа 3 {% endblock %}
 {# Осн контент #}
 {% block main %}
 
@@ -13,7 +13,7 @@
         Ваш возраст: {{ age }}
     </div>
     <div> 
-        Ваш пол: {{ 'Мужской' if sex == 'male' else 'Женский'}}
+        Ваш пол: {{ 'Мужской' if sex == 'male' else 'Женский' }}
     </div>
 
     <div> 
@@ -21,34 +21,31 @@
     </div>
     {% else %}
 
-
-
     <h1>Пользователь </h1>
 
     <form>
         <label> Ваше имя: </label>
         <div>
             <input type='text' placeholder='как вас зовут?' name='user' value='{{ user or '' }}'>
-        <span class='error'> {{ errors.user }} </span>
+            <span class='error'> {{ errors.user or '' }} </span>
         </div>
 
         <label> Ваш возраст: </label>
         <div>
-            <input type='number' name='age' value='{{ age or '' }}'>
-            <span class='error'> {{ errors.age }} </span>
+            <input type="number" placeholder="Сколько вам лет?" name="age" value="{{ age or '' }}"><br>
+            <span class="error">{{ errors.age }}</span>
         </div>
 
         <label> Ваш пол: </label>
         <div>
             <select name='sex'>
-            <option value='male' {{ sex == 'male' and selected}}>Мужчина</option>
-            <option value='female' {{ sex == 'female' and selected}}>Женщина</option>
+                <option value='male' {{ 'selected' if sex == 'male' else '' }}>Мужчина</option>
+                <option value='female' {{ 'selected' if sex == 'female' else '' }}>Женщина</option>
             </select>
         </div>
         <div>
             <button type='submit'> Отправить</button>
         </div>
-    <form>
+    </form>
     {% endif %}
 {% endblock %}
-

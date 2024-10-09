@@ -9,8 +9,9 @@ def lab3_main():
         {"url": "/lab3/cookie", "text": "Куки"},
         {"url": "/lab3/del_cookie", "text": "delete_cookies"},
         {"url": "/lab3/form1", "text": "form1"},
+        {"url": "/lab3/order", "text": "Бар"},
     ]
-    return render_template('lab3.html', links=links, name=name, name_color=name_color)
+    return render_template('/lab3/lab3.html', links=links, name=name, name_color=name_color)
 
 @lab3.route('/lab3/cookie')
 def cookie():
@@ -32,11 +33,41 @@ def del_cookie():
 @lab3.route('/lab3/form1')
 def form1():
     errors = {}
+    age = request.args.get('age')
+    if age == '':
+        errors['age'] = 'Заполните поле!'
     user = request.args.get('user')
     if user == '':
         errors['user'] = 'Заполните поле!'
-    if age == '':
-        errors['age'] = 'Заполните поле!'
-    age = request.args.get('age')
     sex = request.args.get('sex')
-    return render_template('form1.html', user=user, age=age, sex=sex, errors= errors)
+    return render_template('/lab3/form1.html', user=user, age=age, sex=sex, errors= errors)
+
+
+
+@lab3.route('/lab3/order')
+def order():
+    return render_template('/lab3/order.html')
+price = 0
+@lab3.route('/lab3/pay')
+def pay():
+    global price
+    drink=request.args.get('drink')
+    #кофе 120р черный чай 80р зеленый 70
+    if drink == 'cofee':
+        price = 120
+    elif drink == 'black-tea':
+        price = 80
+    else:
+        price = 70
+    #добавка молока удорожает напиток на 30р а сахара на 10
+    
+    if request.args.get('milk') == 'on':
+        price+=30
+    if request.args.get('sugar') == 'on':
+        price += 10
+    return render_template('/lab3/pay.html', price=price)
+
+@lab3.route('/lab3/success')
+def success():
+    global price
+    return render_template('/lab3/success.html', price=price)
