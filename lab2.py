@@ -67,7 +67,7 @@ def example():
         {'name': 'манго', 'price' : 321}
         ]
     
-    return render_template('example.html', name=name, group=group, year=year, course=course, lab_num=lab_num, fruits=fruits)
+    return render_template('lab2/example.html', name=name, group=group, year=year, course=course, lab_num=lab_num, fruits=fruits)
 
 @lab2.route('/lab2/')
 def lab2_main():
@@ -86,12 +86,12 @@ def lab2_main():
         {"url": "/lab2/books", "text": "Книги"},
         {"url": "/lab2/spisok", "text": "Список"}
     ]
-    return render_template('lab2.html', links=links)
+    return render_template('lab2/lab2.html', links=links)
 
 @lab2.route('/lab2/filters')
 def filters():
     phrase = 'ухухух <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..'
-    return render_template('filter.html', phrase=phrase)
+    return render_template('lab2/filter.html', phrase=phrase)
 
 @lab2.route('/lab2/add_flower/')
 def flower_f():
@@ -164,31 +164,31 @@ books = [
 
 @lab2.route('/lab2/books')
 def list_books():
-    return render_template('books.html', books=books)
+    return render_template('lab2/books.html', books=books)
 
 objects = [
     {
         "name": "Джордан",
-        "image": "джордан.jpg"
+        "image": "lab2/джордан.jpg"
     },
     {
         "name": "лакост",
-        "image": "лакост.jpg"
+        "image": "lab2/лакост.jpg"
     },
     {
         "name": "баленсиага",
-        "image": "баленсиага.jpg"
+        "image": "lab2/баленсиага.jpg"
     },
     {
         "name": "осирис",
-        "image": "осирис.jpg"
+        "image": "lab2/осирис.jpg"
     },
     {
         "name": "рики",
-        "image": "рики.jpg"
+        "image": "lab2/рики.jpg"
     }
 ]
 
 @lab2.route('/lab2/spisok')
 def spisok():
-    return render_template('spisok.html', objects=objects)
+    return render_template('lab2/spisok.html', objects=objects)

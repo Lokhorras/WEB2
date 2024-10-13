@@ -35,8 +35,8 @@ def author():
         
 @lab1.route("/lab1/oak")
 def oak():
-    path = url_for("static", filename="1.jpg")
-    lab1 = url_for("static", filename="lab1.css")
+    path = url_for("static", filename="lab1/1.jpg")
+    lab1 = url_for("static", filename="lab1/lab1.css")
     return '''
 <!doctype html>
 <html>
@@ -106,7 +106,7 @@ def not_found(err):
     
 @lab1.route('/lab1/routestudent')
 def routestudent():
-    hm = url_for("static", filename="тяжелыйметалл.jpg")
+    hm = url_for("static", filename="lab1/тяжелыйметалл.jpg")
     content = '''
 <!doctype html>
 <html>
@@ -133,7 +133,7 @@ def routestudent():
 
 @lab1.route('/lab1')
 def lab():
-        styles = url_for("static", filename="styles.css")
+        styles = url_for("static", filename="lab1/styles.css")
         return '''
 <!doctype html>
 <html>
@@ -173,10 +173,10 @@ Werkzeug, а также шаблонизатор Jinja2. Относится к �
 
 @lab1.route('/lab1/resourse')
 def resourse():
-    styles2 = url_for("static", filename="sctyles2.css")
-    Kaktus = url_for("static", filename="Кактус.jpg")
-    Mertviy = url_for("static", filename="Мертвыйкактус.jpg")
-    politiy = url_for("static", filename="Политыйкактус.jpg")
+    styles2 = url_for("static", filename="lab1/sctyles2.css")
+    Kaktus = url_for("static", filename="lab1/Кактус.jpg")
+    Mertviy = url_for("static", filename="lab1/Мертвыйкактус.jpg")
+    politiy = url_for("static", filename="lab1/Политыйкактус.jpg")
     global create
     global deleted
     if deleted is False  and create is True:
@@ -223,9 +223,9 @@ def resourse():
 @lab1.route('/lab1/delete')
 def delete():
     styles2 = url_for("static", filename="sctyles2.css")
-    Kaktus = url_for("static", filename="Кактус.jpg")
-    Mertviy = url_for("static", filename="Мертвыйкактус.jpg")
-    politiy = url_for("static", filename="Политыйкактус.jpg")
+    Kaktus = url_for("static", filename="lab1/Кактус.jpg")
+    Mertviy = url_for("static", filename="lab1/Мертвыйкактус.jpg")
+    politiy = url_for("static", filename="lab1/Политыйкактус.jpg")
     global deleted
     if deleted is True:
         return '''
@@ -255,9 +255,9 @@ def delete():
 @lab1.route('/lab1/create')
 def create():
     styles2 = url_for("static", filename="sctyles2.css")
-    Kaktus = url_for("static", filename="Кактус.jpg")
-    Mertviy = url_for("static", filename="Мертвыйкактус.jpg")
-    politiy = url_for("static", filename="Политыйкактус.jpg")
+    Kaktus = url_for("static", filename="lab1/Кактус.jpg")
+    Mertviy = url_for("static", filename="lab1/Мертвыйкактус.jpg")
+    politiy = url_for("static", filename="lab1/Политыйкактус.jpg")
     global create
     global deleted 
     if deleted is True:

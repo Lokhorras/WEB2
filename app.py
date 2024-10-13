@@ -13,7 +13,7 @@ create = False
 
 @app.route("/")
 def start():
-    styles = url_for("static", filename="styles.css")
+    styles = url_for("static", filename="lab1/styles.css")
     return '''<!doctype html>
         <html>
             <header>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных </header>
@@ -34,8 +34,8 @@ def start():
 
 @app.errorhandler(404)
 def not_found(err):
-    hm = url_for("static", filename="тяжелыйметалл.jpg")
-    styles = url_for("static", filename="styles.css")
+    hm = url_for("static", filename="lab1/тяжелыйметалл.jpg")
+    styles = url_for("static", filename="lab1/styles.css")
     lab1 = url_for("static", filename="lab1.css")
     return '''<!doctype html>
         <html>
