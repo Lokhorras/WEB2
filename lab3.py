@@ -5,6 +5,7 @@ lab3 = Blueprint('lab3', __name__)
 def lab3_main():
     name_color = request.cookies.get('name_color')
     name = request.cookies.get('name')
+    age = 18
     links = [
         {"url": "/lab3/cookie", "text": "Куки"},
         {"url": "/lab3/del_cookie", "text": "delete_cookies"},
@@ -12,7 +13,7 @@ def lab3_main():
         {"url": "/lab3/order", "text": "Бар"},
         {"url": "/lab3/settings", "text": "Настройки"},
     ]
-    return render_template('/lab3/lab3.html', links=links, name=name, name_color=name_color)
+    return render_template('/lab3/lab3.html', links=links, name=name, name_color=name_color, age=age)
 
 @lab3.route('/lab3/cookie')
 def cookie():

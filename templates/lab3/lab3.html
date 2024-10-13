@@ -5,7 +5,8 @@
 
 {% block main %}
     <h1>Формы, cookie</h1>
-    <div>Привет, <span style='color: {{name_color}}'> {{name}} </span>!</div>
+    <div>Привет, <span style='color: {{name_color}}'> {{name or "Аноним"}} </span>!</div>
+    Вам {{age}} лет
     <p><div> Cписок сделанных страниц</div></p>
     <ol>
         {% for link in links %}
