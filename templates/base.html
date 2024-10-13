@@ -14,6 +14,13 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon (2).ico') }}">
 </head>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <style>
+        body{
+            {% if request.cookies.get('color') %}
+            color: {{ request.cookies.get('color')}};
+            {% endif %}
+        }
+    </style>
 <body>
     <header>
         НГТУ, ФБ, WEB-программирование, часть 2. {% if self.lab() %} Лабораторная работа 2 {% endif %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{# Номер лабораторной работы: #}
+{% block lab %}Лабораторная работа 3{% endblock %}
+
+{# Основной контент: #}
+{% block main %}
+    <h1>Cookies</h1>
+    <form method="get">
+        <div>
+            <label for="color">Выберите цвет текста:</label>
+            <input type="color" id="color" name="color" value="{{ color or '' }}">
+        </div>
+
+        <div>
+            <button type="submit">ОK</button>
+        </div>        
+    </form>
+    
+    <form method="get">
+        <div>
+            <label for="color">Выберите цвет фона:</label>
+            <input type="color" id="bgcolor" name="bgcolor" value="{{ bgcolor or '' }}">
+        </div>
+        <div>
+            <button type="submit">ОK</button>
+        </div>
+    </form>
+
+    <form method="get">
+        <div>
+            <label for="fize">Выберите размер шрифта:</label>
+            <input type="range"  min="10" max="30" id="fsize" name="fsize" value="{{ fsize or '16' }}">
+        </div>
+        <div>
+            <button type="submit">ОK</button>
+        </div>
+    </form>
+
+    <form method="get">
+        <div>
+            <label for="bordercolor">Выберите цвет границы:</label>
+            <input type="color" id="bordercolor" name="bordercolor" value="{{ bordercolor or '' }}">
+        </div>
+        <div>
+            <button type="submit">ОK</button>
+        </div>
+    </form>
+
+    <form method="get">
+        <div>
+            <label for="borderwidth">Выберите толщину границы:</label>
+            <input type="range" min="1" max="10" id="borderwidth" name="borderwidth" value="{{ borderwidth or '1' }}">
+        </div>
+        <div>
+            <button type="submit">ОK</button>
+        </div>
+    </form>
+
+    <style>
+        body {
+            background-color: {{ bgcolor or '#ffffff' }};
+            color: {{ color or '#000000' }};
+            font-size: {{ fsize or '16' }}px;
+            border: {{ borderwidth or '1' }}px solid {{ bordercolor or '#000000' }};
+        }
+    </style>
+{% endblock %}

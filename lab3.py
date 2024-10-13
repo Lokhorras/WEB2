@@ -10,6 +10,7 @@ def lab3_main():
         {"url": "/lab3/del_cookie", "text": "delete_cookies"},
         {"url": "/lab3/form1", "text": "form1"},
         {"url": "/lab3/order", "text": "Бар"},
+        {"url": "/lab3/settings", "text": "Настройки"},
     ]
     return render_template('/lab3/lab3.html', links=links, name=name, name_color=name_color)
 
@@ -71,3 +72,39 @@ def pay():
 def success():
     global price
     return render_template('/lab3/success.html', price=price)
+
+@lab3.route('/lab3/settings/')
+def settings():
+    color = request.args.get('color')
+    bgcolor = request.args.get('bgcolor')
+    fsize = request.args.get('fsize')
+    bordercolor = request.args.get('bordercolor')
+    borderwidth = request.args.get('borderwidth')
+
+    if color:
+        resp = make_response(redirect('/lab3/settings/'))
+        resp.set_cookie('color', color)
+        return resp
+    if bgcolor:
+        resp = make_response(redirect('/lab3/settings/'))
+        resp.set_cookie('bgcolor', bgcolor)
+        return resp
+    if fsize:
+        resp = make_response(redirect('/lab3/settings/'))
+        resp.set_cookie('fsize', fsize)
+        return resp
+    if bordercolor:
+        resp = make_response(redirect('/lab3/settings/'))
+        resp.set_cookie('bordercolor', bordercolor)
+        return resp
+    if borderwidth:
+        resp = make_response(redirect('/lab3/settings/'))
+        resp.set_cookie('borderwidth', borderwidth)
+        return resp
+
+    color = request.cookies.get('color')
+    bgcolor = request.cookies.get('bgcolor')
+    fsize = request.cookies.get('fsize')
+    bordercolor = request.cookies.get('bordercolor')
+    borderwidth = request.cookies.get('borderwidth')
+    return render_template('lab3/settings.html', color=color, bgcolor=bgcolor, fsize=fsize, bordercolor=bordercolor, borderwidth=borderwidth)
