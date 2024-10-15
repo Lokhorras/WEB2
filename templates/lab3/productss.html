@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block lab %}Поиск товаров{% endblock %}
+
+{% block main %}
+    <h1>Поиск товаров по цене</h1>
+    <form action="/lab3/results" method="post">
+        <label for="min_price">Мин. цена:</label>
+        <input type="number" id="min_price" name="min_price" step="0.01" required>
+        <br>
+        <label for="max_price">Макс. цена:</label>
+        <input type="number" id="max_price" name="max_price" step="0.01" required>
+        <br>
+        <button type="submit">Искать</button>
+    </form>
+{% endblock %}

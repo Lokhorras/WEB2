@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block lab %}Результаты поиска{% endblock %}
+
+{% block main %}
+    <h1>Результаты поиска</h1>
+    <table class="search-results">
+        <tr>
+            <th>Название</th>
+            <th>Цена</th>
+            <th>Бренд</th>
+            <th>Размер</th>
+        </tr>
+        {% for product in products %}
+        <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.price }}</td>
+            <td>{{ product.brand }}</td>
+            <td>{{ product.size }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <a href="/lab3/productss">Назад к поиску</a>
+{% endblock %}
+
+
+
+{% endblock %}

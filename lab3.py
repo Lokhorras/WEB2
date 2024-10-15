@@ -14,6 +14,7 @@ def lab3_main():
         {"url": "/lab3/settings", "text": "Настройки"},
         {"url": "/lab3/ticketform", "text": "Дорога"},
         {"url": "/lab3/settings/clear_cookies", "text": "Не люблю куки"},
+        {"url": "/lab3/productss", "text": "Бренды"},
     ]
     return render_template('/lab3/lab3.html', links=links, name=name, name_color=name_color, age=age)
 
@@ -168,3 +169,41 @@ def clear_cookies():
     resp.delete_cookie('bordercolor')
     resp.delete_cookie('borderwidth')
     return resp
+
+
+
+
+# Список товаров
+products = [
+    {"name": "Футболка", "price": 1000, "brand": "Nike", "size": "M"},
+    {"name": "Джинсы", "price": 3000, "brand": "Levi's", "size": "32"},
+    {"name": "Куртка", "price": 13000, "brand": "The North Face", "size": "L"},
+    {"name": "Шорты", "price": 500, "brand": "Adidas", "size": "S"},
+    {"name": "Платье", "price": 200, "brand": "Zara", "size": "M"},
+    {"name": "Ботинки", "price": 20000, "brand": "Timberland", "size": "42"},
+    {"name": "Рубашка", "price": 3250, "brand": "Ralph Lauren", "size": "L"},
+    {"name": "Свитер", "price": 700, "brand": "Gucci", "size": "XL"},
+    {"name": "Шляпа", "price": 1000, "brand": "New Era", "size": "M"},
+    {"name": "Пальто", "price": 170, "brand": "Burberry", "size": "L"},
+    {"name": "Брюки", "price": 3000, "brand": "Calvin Klein", "size": "34"},
+    {"name": "Кроссовки", "price": 15000, "brand": "Puma", "size": "41"},
+    {"name": "Юбка", "price": 700, "brand": "H&M", "size": "S"},
+    {"name": "Футболка", "price": 600, "brand": "Under Armour", "size": "L"},
+    {"name": "Джемпер", "price": 700, "brand": "Tommy Hilfiger", "size": "M"},
+    {"name": "Шорты", "price": 500, "brand": "Reebok", "size": "M"},
+    {"name": "Платье", "price": 190, "brand": "Mango", "size": "S"},
+    {"name": "Ботинки", "price": 23000, "brand": "Dr. Martens", "size": "43"},
+    {"name": "Рубашка", "price": 1900, "brand": "Hugo Boss", "size": "L"},
+    {"name": "Свитер", "price": 1000, "brand": "Armani", "size": "XL"}
+]
+
+@lab3.route('/lab3/productss')
+def productss():
+    return render_template('lab3/productss.html')
+
+@lab3.route('/lab3/results', methods=['POST', 'GET'])
+def search():
+    min_price = float(request.form['min_price'])
+    max_price = float(request.form['max_price'])
+    filtered_products = [product for product in products if min_price <= product['price'] <= max_price]
+    return render_template('lab3/result.html', products=filtered_products)
