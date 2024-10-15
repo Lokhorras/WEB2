@@ -12,6 +12,8 @@ def lab3_main():
         {"url": "/lab3/form1", "text": "form1"},
         {"url": "/lab3/order", "text": "Бар"},
         {"url": "/lab3/settings", "text": "Настройки"},
+        {"url": "/lab3/ticketform", "text": "Дорога"},
+        {"url": "/lab3/delete_cookies", "text": "Не люблю куки"},
     ]
     return render_template('/lab3/lab3.html', links=links, name=name, name_color=name_color, age=age)
 
@@ -35,12 +37,15 @@ def del_cookie():
 @lab3.route('/lab3/form1')
 def form1():
     errors = {}
-    age = request.args.get('age')
-    if age == '':
-        errors['age'] = 'Заполните поле!'
     user = request.args.get('user')
     if user == '':
         errors['user'] = 'Заполните поле!'
+    age = request.args.get('age')
+    if age == '':
+        errors['age'] = 'Заполните поле!'
+    else:
+        errors = ""
+        return errors['']
     sex = request.args.get('sex')
     return render_template('/lab3/form1.html', user=user, age=age, sex=sex, errors= errors)
 
@@ -109,3 +114,48 @@ def settings():
     bordercolor = request.cookies.get('bordercolor')
     borderwidth = request.cookies.get('borderwidth')
     return render_template('lab3/settings.html', color=color, bgcolor=bgcolor, fsize=fsize, bordercolor=bordercolor, borderwidth=borderwidth)
+
+
+
+
+
+@lab3.route('/lab3/ticketform')
+def ticketform():
+    return render_template('lab3/ticketform.html')
+
+@lab3.route('/lab3/ticketresult', methods=['POST', 'GET'])
+def ticket():
+    fio = request.form['fio']
+    shelf = request.form['shelf']
+    bedding = 'bedding' in request.form
+    baggage = 'baggage' in request.form
+    age = int(request.form['age'])
+    departure = request.form['departure']
+    destination = request.form['destination']
+    date = request.form['date']
+    insurance = 'insurance' in request.form
+
+    # Проверка на пустые поля
+    if not all([fio, shelf, age, departure, destination, date]):
+        return "Все поля должны быть заполнены!", 400
+
+    # Проверка возраста
+    if age < 1 or age > 120:
+        return "Возраст должен быть от 1 до 120 лет!", 400
+
+    # Расчет стоимости билета
+    base_price = 700 if age < 18 else 1000
+    if shelf in ['нижняя', 'нижняя боковая']:
+        base_price += 100
+    if bedding:
+        base_price += 75
+    if baggage:
+        base_price += 250
+    if insurance:
+        base_price += 150
+
+    return render_template('lab3/ticketresult.html', fio=fio, shelf=shelf, bedding=bedding, baggage=baggage, age=age,
+                        departure=departure, destination=destination, date=date, insurance=insurance, price=base_price)
+    
+    
+    

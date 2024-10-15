@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 3. Билет{% endblock %}
+
+{% block main %}
+<h1>Железнодорожный билет</h1>
+
+<table class="ticket-info">
+    <tr>
+        <td><strong>ФИО пассажира:</strong></td>
+        <td>{{ fio }}</td>
+    </tr>
+    <tr>
+        <td><strong>Полка:</strong></td>
+        <td>{{ shelf }}</td>
+    </tr>
+    <tr>
+        <td><strong>С бельём:</strong></td>
+        <td>{{ 'Да' if bedding else 'Нет' }}</td>
+    </tr>
+    <tr>
+        <td><strong>С багажом:</strong></td>
+        <td>{{ 'Да' if baggage else 'Нет' }}</td>
+    </tr>
+    <tr>
+        <td><strong>Возраст:</strong></td>
+        <td>{{ age }}</td>
+    </tr>
+    <tr>
+        <td><strong>Пункт выезда:</strong></td>
+        <td>{{ departure }}</td>
+    </tr>
+    <tr>
+        <td><strong>Пункт назначения:</strong></td>
+        <td>{{ destination }}</td>
+    </tr>
+    <tr>
+        <td><strong>Дата поездки:</strong></td>
+        <td>{{ date }}</td>
+    </tr>
+    <tr>
+        <td><strong>Нужна ли страховка:</strong></td>
+        <td>{{ 'Да' if insurance else 'Нет' }}</td>
+    </tr>
+    <tr>
+        <td><strong>Тип билета:</strong></td>
+        <td>{{ 'Детский билет' if age < 18 else 'Взрослый билет' }}</td>
+    </tr>
+    <tr>
+        <td><strong>Стоимость билета:</strong></td>
+        <td>{{ price }} руб.</td>
+    </tr>
+</table>
+
+<h2>Детали стоимости:</h2>
+<table class="price-details">
+    <tr>
+        <td>Базовая стоимость:</td>
+        <td>{{ '700 руб.' if age < 18 else '1000 руб.' }}</td>
+    </tr>
+    <tr>
+        <td>Дополнительная плата за полку:</td>
+        <td>{{ '100 руб.' if shelf in ['нижняя', 'нижняя боковая'] else '0 руб.' }}</td>
+    </tr>
+    <tr>
+        <td>Плата за бельё:</td>
+        <td>{{ '75 руб.' if bedding else '0 руб.' }}</td>
+    </tr>
+    <tr>
+        <td>Плата за багаж:</td>
+        <td>{{ '250 руб.' if baggage else '0 руб.' }}</td>
+    </tr>
+    <tr>
+        <td>Плата за страховку:</td>
+        <td>{{ '150 руб.' if insurance else '0 руб.' }}</td>
+    </tr>
+    <tr>
+        <td><strong>Итого:</strong></td>
+        <td><strong>{{ price }} руб.</strong></td>
+    </tr>
+</table>
+{% endblock %}
