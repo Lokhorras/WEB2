@@ -13,7 +13,7 @@ def lab3_main():
         {"url": "/lab3/order", "text": "Бар"},
         {"url": "/lab3/settings", "text": "Настройки"},
         {"url": "/lab3/ticketform", "text": "Дорога"},
-        {"url": "/lab3/delete_cookies", "text": "Не люблю куки"},
+        {"url": "/lab3/settings/clear_cookies", "text": "Не люблю куки"},
     ]
     return render_template('/lab3/lab3.html', links=links, name=name, name_color=name_color, age=age)
 
@@ -159,3 +159,12 @@ def ticket():
     
     
     
+@lab3.route('/lab3/settings/clear_cookies')
+def clear_cookies():
+    resp = make_response(redirect('/lab3/settings/'))
+    resp.delete_cookie('color')
+    resp.delete_cookie('bgcolor')
+    resp.delete_cookie('fsize')
+    resp.delete_cookie('bordercolor')
+    resp.delete_cookie('borderwidth')
+    return resp
