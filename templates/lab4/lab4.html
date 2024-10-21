@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block lab %}Лаба 3{% endblock %}
+
+{% block main %}
+    <h1> Формы (post) </h1>
+    <div> Тема Лаб. - формы (post). Список сделанных страниц: </div>
+    <ol>
+        {% for link in links %}
+        <li>
+            <p><a href="{{ link.url }}">{{ link.text }}</a></p>
+        </li>
+        {% endfor %}
+    </ol>
+{% endblock %}
