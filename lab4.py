@@ -143,15 +143,17 @@ users = [
     {'login': 'kaiangel', 'password': '888'}
 ]
 
+
 @lab4.route('/lab4/login', methods = ['GET', 'POST'])
 def login():
     if request.method == 'GET':
         return render_template('/lab4/login.html', authorized=False)
     login = request.form.get('login')
     password = request.form.get('password')
-
-    if login == 'alex' and password == '123':
-        return render_template('/lab4/login.html', error = 'Успешная авторизация', authorized=True, login=login)
+    
+    for user in users:
+        if login == user['login'] and password == user['password']:
+            return render_template('/lab4/login.html', error = 'Успешная авторизация', authorized=True, login=login)
     error = 'неверные логин и/или пароль'
     return render_template('/lab4/login.html', error=error, authorized=False)
 
