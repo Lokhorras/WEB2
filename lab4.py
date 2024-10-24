@@ -13,6 +13,7 @@ def lab3_main():
         {"url": "/lab4/mul-form", "text": "Умножение"},
         {"url": "/lab4/pow-form", "text": "Cтепень"},
         {"url": "/lab4/tree", "text": "Дерево"},
+        {"url": "/lab4/login", "text": "Логин"},
     ]
     return render_template('/lab4/lab4.html', links=links, name=name, name_color=name_color, age=age)
 
@@ -133,3 +134,25 @@ def tree():
         return "Операция не выбрана", 400
         
     return redirect(url_for('lab4.tree'))
+
+
+users = [
+    {'login': 'Alex', 'password': '123'},
+    {'login': 'Bob', 'password': '555'},
+    {'login': '9mice', 'password': '777'},
+    {'login': 'kaiangel', 'password': '888'}
+]
+
+@lab4.route('/lab4/login', methods = ['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('/lab4/login.html', authorized=False)
+    login = request.form.get('login')
+    password = request.form.get('password')
+
+    if login == 'alex' and password == '123':
+        return render_template('/lab4/login.html', error = 'Успешная авторизация', authorized=True, login=login)
+    error = 'неверные логин и/или пароль'
+    return render_template('/lab4/login.html', error=error, authorized=False)
+
+
