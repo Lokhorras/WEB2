@@ -1,16 +1,54 @@
 {% extends "base.html" %}
 
+{% block lab %}Холодильник{% endblock %}
 
-{% block lab %} Холодос {% endblock %}
+
 
 {% block main %}
-<h1>Холодос</h1>
-<h2>Пожалуйста, Введите темпу</h2>
-<form method="post">
-    <label for="temperature">Установить температуру:</label>
-    <input type="number" id="temperature" name="temperature" step="0.1" required>
-    <button type="submit">Установить</button>
-</form>
+    <style>
+        form {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        input[type="number"] {
+            padding: 10px;
+            font-size: 1em;
+            width: 200px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            color: blue;
+        }
+
+        .message {
+            margin-top: 20px;
+            font-size: 1.2em;
+            text-align: center;
+        }
+
+        .snowflake {
+            font-size: 1.5em;
+            margin: 0 5px;
+        }
+    </style>
+    <form method="post">
+        <label for="temperature">Установить температуру:</label>
+        <input type="number" id="temperature" name="temperature" step="0.1">
+        <button type="submit">Установить</button>
+    </form>
+
 {% if message %}
     <div class="message">
         <p>{{ message }}</p>
