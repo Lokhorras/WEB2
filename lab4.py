@@ -16,6 +16,8 @@ def lab3_main():
         {"url": "/lab4/login", "text": "Логин"},
         {"url": "/lab4/cold", "text": "Холодос"},
         {"url": "/lab4/zerno-form", "text": "Зерно"},
+        {"url": "/lab4/autorez", "text": "Регистр"},
+        {"url": "/lab4/users", "text": "Пользователи"},
     ]
     return render_template('/lab4/lab4.html', links=links, name=name, name_color=name_color, age=age)
 
@@ -167,18 +169,18 @@ def login():
         if login == user['login'] and password == user['password']:
             session['login'] = login
             session['name'] = user['name']
-            return redirect('/lab4/welcome')
+            return redirect('/lab4/qq')
     
     error = 'неверные логин и/или пароль'
     return render_template('/lab4/login.html', error=error, authorized=False, login=login)
 
-@lab4.route('/lab4/welcome')
-def welcome():
+@lab4.route('/lab4/qq')
+def qq():
     if 'login' not in session:
         return redirect('/lab4/login')
     
     name = session['name']
-    return render_template('/lab4/welcome.html', name=name)
+    return render_template('/lab4/qq.html', name=name)
 
 @lab4.route('/lab4/logout', methods=['POST'])
 def logout():
@@ -256,3 +258,69 @@ def zerno():
         total_cost -= discount
 
     return render_template('/lab4/zerno.html', zerno=zerno_type, weight=weight, total_cost=total_cost, discount=discount)
+
+
+@lab4.route('/lab4/autorez', methods=['GET', 'POST'])
+def autorez():
+    if request.method == 'GET':
+        return render_template('/lab4/autorez.html')
+    
+    login = request.form.get('login')
+    password = request.form.get('password')
+    name = request.form.get('name')
+    gender = request.form.get('gender')
+
+    if not login or not password or not name or not gender:
+        error = 'Все поля должны быть заполнены!'
+        return render_template('/lab4/autorez.html', error=error)
+
+    for user in users:
+        if user['login'] == login:
+            error = 'Пользователь с таким логином уже существует!'
+            return render_template('/lab4/autorez.html', error=error)
+
+    users.append({'login': login, 'password': password, 'name': name, 'gender': gender})
+    return redirect('/lab4/login')
+
+
+
+@lab4.route('/lab4/users')
+def users_list():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+    
+    return render_template('/lab4/users.html', users=users)
+
+@lab4.route('/lab4/delete_user', methods=['POST'])
+def delete_user():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+    
+    login = session['login']
+    users[:] = [user for user in users if user['login'] != login]
+    session.pop('login', None)
+    session.pop('name', None)
+    return redirect('/lab4/login')
+
+@lab4.route('/lab4/edit_user', methods=['GET', 'POST'])
+def edit_user():
+    if 'login' not in session:
+        return redirect('/lab4/login')
+    
+    login = session['login']
+    user = next((user for user in users if user['login'] == login), None)
+
+    if request.method == 'GET':
+        return render_template('/lab4/edit_user.html', user=user)
+    
+    new_name = request.form.get('name')
+    new_password = request.form.get('password')
+
+    if not new_name or not new_password:
+        error = 'Все поля должны быть заполнены!'
+        return render_template('/lab4/edit_user.html', user=user, error=error)
+
+    user['name'] = new_name
+    user['password'] = new_password
+    session['name'] = new_name
+    return redirect('/lab4/users')
