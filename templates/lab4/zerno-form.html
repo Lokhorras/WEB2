@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{% block main %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .ticket {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #28a745;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+    <h1>Заказ зерна</h1>
+    <form method="post" action="/lab4/zerno">
+        <div class="ticket">
+            <label for="zerno">Выберите зерно:</label><br>
+
+            <select name="zerno">
+                <option value="Ячмень">Ячмень</option>
+                <option value="Овёс">Овёс</option>
+                <option value="Пшеница">Пшеница</option>
+                <option value="Рожь">Рожь</option>
+            </select><br>
+
+            <label for="weight">Введите вес:</label>
+            <input type="number" name="weight" placeholder="Вес (т)"><br>
+
+            <button type="submit">Сформировать заказ</button>
+        </div>
+    </form>
+{% endblock %}

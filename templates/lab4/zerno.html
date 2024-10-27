@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 4{% endblock %}
+
+{% block main %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #333;
+        }
+
+        .ticket {
+            max-width: 400px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .ticket div {
+            margin-bottom: 10px;
+        }
+
+        .error {
+            color: red;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+
+    {% if error %}
+        <h2 class="error">{{ error }}</h2>
+    {% else %}
+        <div class="ticket">
+            <h3>Заказ успешно сформирован.</h3>
+            <div>Вы заказали: {{ zerno }}</div>
+            <div>Вес: {{ weight }} т.</div>
+            <div>Сумма к оплате: {{ total_cost }}</div>
+            {% if discount %}
+                <div>Скидка: {{ discount }}</div>
+            {% endif %}
+        </div>
+    {% endif %}<br>
+{% endblock %}

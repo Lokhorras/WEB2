@@ -14,6 +14,8 @@ def lab3_main():
         {"url": "/lab4/pow-form", "text": "Cтепень"},
         {"url": "/lab4/tree", "text": "Дерево"},
         {"url": "/lab4/login", "text": "Логин"},
+        {"url": "/lab4/cold", "text": "Холодос"},
+        {"url": "/lab4/zerno-form", "text": "Зерно"},
     ]
     return render_template('/lab4/lab4.html', links=links, name=name, name_color=name_color, age=age)
 
@@ -213,3 +215,44 @@ def cold():
                 snowflakes = 1
 
     return render_template('lab4/cold.html', message=message, snowflakes=snowflakes)
+
+
+
+
+@lab4.route('/lab4/zerno-form')
+def zerno_form():
+    return render_template('/lab4/zerno-form.html')
+
+@lab4.route('/lab4/zerno', methods=['POST'])
+def zerno():
+    zerno_type = request.form.get('zerno')  
+    weight = request.form.get('weight')
+
+    if weight == '':
+        return render_template('/lab4/zerno.html', error='Укажите вес')
+
+    weight = int(weight)
+
+    if weight <= 0:
+        return render_template('/lab4/zerno.html', error='Вес должен быть больше > 0 ')
+
+    if weight > 500:
+        return render_template('/lab4/zerno.html', error='Такого объёма у нас нет')
+
+    if zerno_type == "Ячмень":
+        price_per_ton = 12345
+    elif zerno_type == "Овёс":
+        price_per_ton = 8522
+    elif zerno_type == "Пшеница":
+        price_per_ton = 8722
+    else:
+        price_per_ton = 14111
+
+    total_cost = price_per_ton * weight
+
+    discount = 0
+    if weight > 50:
+        discount = total_cost * 0.1
+        total_cost -= discount
+
+    return render_template('/lab4/zerno.html', zerno=zerno_type, weight=weight, total_cost=total_cost, discount=discount)
