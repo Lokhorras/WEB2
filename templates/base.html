@@ -14,12 +14,7 @@
     <link rel="icon" href="{{ url_for('static', filename='favicon (2).ico') }}">
 </head>
     <link rel="stylesheet" href="{{ url_for('static', filename='lab1/main.css') }}">
-    <style>
-        body{
-            {% if request.cookies.get('color') %}
-            color: {{ request.cookies.get('color')}};
-            {% endif %}
-        }                                                   
+    <style>                                              
     </style>
 <body>
     <header>

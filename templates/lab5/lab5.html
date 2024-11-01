@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+    <style>
+        .title{
+            width: 100%;
+            height: 150px;
+            display: flex;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            text-align: center;
+            background-color: rgb(156, 209, 209);
+            justify-content: center;
+
+        }
+        .a1{
+            border-radius: 50px;
+            width: 150px;
+            height: 20px;
+            vertical-align: 30px;
+            background-color: antiquewhite;
+            text-decoration: none;
+        }
+
+    </style>
+    <div class="title">
+        <a class="a1" href = '/lab5/login'> вход
+        <a class="a1" href = '/lab5/register'> регистрация
+        <a class="a1" href = '/lab5/list'> список статей
+        <a class="a1" href = '/lab5/create'> создать статью
+    </div>
+
+
+{% endblock %}
