@@ -97,12 +97,7 @@ def created():
 ''', 201
 
 
-@lab1.errorhandler(500)
-def not_found(err):
-    return '''
-        <h1>Ошибка сервера</h1>
-        <p>Извините, произошла ошибка на сервере. Пожалуйста, попробуйте позже.</p>
-    ''', 500
+
     
 @lab1.route('/lab1/routestudent')
 def routestudent():
