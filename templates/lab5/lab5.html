@@ -32,12 +32,13 @@
 
     </style>
     <div class="title">
-        <a class="a1" href = '/lab5/login'> вход
-        <a class="a1" href = '/lab5/register'> регистрация
-        <a class="a1" href = '/lab5/list'> список статей
-        <a class="a1" href = '/lab5/create'> создать статью
-        <a class="a1" href = '#'> {{login or "Аноним"}}
+        <a class="a1" href="/lab5/login">Вход</a>
+        <a class="a1" href="/lab5/register">Регистрация</a>
+        <a class="a1" href="/lab5/list">Список статей</a>
+        <a class="a1" href="/lab5/create">Создать статью</a>
+        <a class="a1" href="/lab5/users">Юзеры</a>
+        <a class="a1" href="/lab5/logout">Выход</a>
+        <a class="a1" href="/lab5/public_articles">Статьи публичные</a>
+        <a class="a1" href="#">{{ login or "Аноним" }}</a>
     </div>
-
-
 {% endblock %}

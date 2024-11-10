@@ -143,14 +143,13 @@ def list():
     user_id = cur.fetchone()["id"]
 
     if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("SELECT * FROM articles WHERE user_id=%s;", (user_id, ))
+        cur.execute("SELECT * FROM articles WHERE user_id=%s ORDER BY is_favorite DESC;", (user_id, ))
     else:
-        cur.execute("SELECT * FROM articles WHERE user_id=?;", (user_id, ))
+        cur.execute("SELECT * FROM articles WHERE user_id=? ORDER BY is_favorite DESC;", (user_id, ))
     articles = cur.fetchall()
     
     db_close(conn, cur)
     
-
     if not articles:
         return render_template('/lab5/articles.html', articles=articles, no_articles=True)
     
@@ -195,8 +194,37 @@ def edit_article(article_id):
     db_close(conn, cur)
     return redirect('/lab5/list')
 
-@lab5.route('/lab5/delete/<int:article_id>', methods=['POST'])
-def delete_article(article_id):
+
+
+@lab5.route('/lab5/users')
+def users():
+    conn, cur = db_connect()
+
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT login FROM users;")
+    else:
+        cur.execute("SELECT login FROM users;")
+    users = cur.fetchall()
+
+    db_close(conn, cur)
+    return render_template('lab5/users.html', users=users)
+
+
+@lab5.route('/lab5/public_articles')
+def public_articles():
+    conn, cur = db_connect()
+
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT * FROM articles WHERE is_public=true;")
+    else:
+        cur.execute("SELECT * FROM articles WHERE is_public=?;", (True, ))
+    articles = cur.fetchall()
+
+    db_close(conn, cur)
+    return render_template('lab5/public_articles.html', articles=articles)
+
+@lab5.route('/lab5/toggle_public/<int:article_id>', methods=['POST'])
+def toggle_public(article_id):
     login = session.get('login')
     if not login:
         return redirect('/lab5/login')
@@ -204,9 +232,22 @@ def delete_article(article_id):
     conn, cur = db_connect()
 
     if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("DELETE FROM articles WHERE id=%s;", (article_id, ))
+        cur.execute("SELECT is_public FROM articles WHERE id=%s;", (article_id, ))
     else:
-        cur.execute("DELETE FROM articles WHERE id=?;", (article_id, ))
+        cur.execute("SELECT is_public FROM articles WHERE id=?;", (article_id, ))
+    article = cur.fetchone()
+
+    if not article:
+        db_close(conn, cur)
+        return "Статья не найдена", 404
+
+    new_is_public = not article['is_public']
+
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("UPDATE articles SET is_public=%s WHERE id=%s;", (new_is_public, article_id))
+    else:
+        cur.execute("UPDATE articles SET is_public=? WHERE id=?;", (new_is_public, article_id))
 
     db_close(conn, cur)
+    print(f"Article ID: {article_id}, New is_public: {new_is_public}") 
     return redirect('/lab5/list')

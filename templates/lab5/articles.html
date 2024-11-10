@@ -46,6 +46,24 @@
         {% for article in articles %}
             <h2>{{ article['title']}}</h2>
             <blockquote> {{ article['article_text']}} </blockquote>
+            <form action="/lab5/toggle_favorite/{{ article['id'] }}" method="POST" style="display:inline;">
+                <button type="submit">
+                    {% if article['is_favorite'] %}
+                        Убрать из любимых
+                    {% else %}
+                        Добавить в любимые
+                    {% endif %}
+                </button>
+            </form>
+            <form action="/lab5/toggle_public/{{ article['id'] }}" method="POST" style="display:inline;">
+                <button type="submit">
+                    {% if article['is_public'] %}
+                        Сделать приватной
+                    {% else %}
+                        Сделать публичной
+                    {% endif %}
+                </button>
+            </form>
             <form action="/lab5/edit/{{ article['id'] }}" method="GET" style="display:inline;">
                 <button type="submit">Редактировать</button>
             </form>
