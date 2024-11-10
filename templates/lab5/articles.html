@@ -3,10 +3,55 @@
 {% block lab %}Лабораторная работа 5{% endblock %}
 
 {% block main %}
+    <style>
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        h2 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+        blockquote {
+            border-left: 4px solid #ccc;
+            padding-left: 15px;
+            margin-left: 0;
+            color: #555;
+        }
+        form {
+            display: inline;
+            margin-right: 10px;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #11b1f0;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #3db4ae;
+        }
+        body {
+            background-color: #f0f8ff; 
+        }
+        
+    </style>
+
     <h1>Cтатьи</h1>
 
-    {% for article in articles %}
-    <h2>{{ article['title']}}</h2>
-    <blockquote> {{ article['article_text']}} </blockquote>
-    {% endfor %}
+    {% if no_articles %}
+        <p>У вас пока нет статей.</p>
+    {% else %}
+        {% for article in articles %}
+            <h2>{{ article['title']}}</h2>
+            <blockquote> {{ article['article_text']}} </blockquote>
+            <form action="/lab5/edit/{{ article['id'] }}" method="GET" style="display:inline;">
+                <button type="submit">Редактировать</button>
+            </form>
+            <form action="/lab5/delete/{{ article['id'] }}" method="POST" style="display:inline;">
+                <button type="submit">Удалить</button>
+            </form>
+        {% endfor %}
+    {% endif %}
 {% endblock %}

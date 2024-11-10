@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 5{% endblock %}
+
+{% block main %}
+<style>
+    h1 {
+        font-size: 2em;
+        margin-bottom: 20px;
+    }
+    h2 {
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+    blockquote {
+        border-left: 4px solid #ccc;
+        padding-left: 15px;
+        margin-left: 0;
+        color: #555;
+    }
+    form {
+        display: inline;
+        margin-right: 10px;
+    }
+    button {
+        padding: 5px 10px;
+        background-color: #11b1f0;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    button:hover {
+        background-color: #3db4ae;
+    }
+    body {
+        background-color: #f0f8ff; 
+    }
+    
+</style>
+    <h1>Редактирование статьи</h1>
+    <form method="POST">
+        <label for="title">Заголовок:</label>
+        <input type="text" id="title" name="title" value="{{ article['title'] }}" required>
+        <br>
+        <label for="article_text">Текст статьи:</label>
+        <textarea id="article_text" name="article_text" required>{{ article['article_text'] }}</textarea>
+        <br>
+        <button type="submit">Сохранить изменения</button>
+    </form>
+{% endblock %}
