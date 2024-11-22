@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 6{% endblock %}
+
+{% block head %}
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f2f2f2;
+    }
+
+    h1 {
+        color: #333;
+        text-align: center;
+        margin-top: 50px;
+    }
+
+    #office-list {
+        list-style-type: none;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    #office-list li {
+        background-color: #fff;
+        margin: 20px;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        width: 200px;
+        text-align: center;
+    }
+
+    button {
+        background-color: #5db9c0;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: #c2ba4f;
+    }
+</style>
+{% endblock %}
+
+{% block script %}
+<script>
+    function getOfficeList() {
+        const url = '/lab6/json-rpc-api/';
+        const json = {
+            'jsonrpc': '2.0',
+            'method': 'info',
+            'id': Math.round(Math.random()*1000)
+        };
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(json)
+        })
+        .then(function(response) {
+            return response.json()
+        })
+        .then(function(data) {
+            const office_list = data.result;
+            const ul = document.getElementById('office-list');
+            ul.innerHTML = ''; // Очищаем список перед обновлением
+            for(let i = 0; i < office_list.length; i++) {
+                const office = office_list[i];
+                const li = document.createElement('li');
+                li.innerText = `${office.number}: ${office.tenant || 'свободен'}`;
+                
+                const bookingButton = document.createElement('button');
+                bookingButton.innerText = 'зарезервировать';
+                bookingButton.onclick = function() { booking(office.number) };
+                li.appendChild(bookingButton);
+
+                if (office.tenant) {
+                    const cancellationButton = document.createElement('button');
+                    cancellationButton.innerText = 'Освободить';
+                    cancellationButton.onclick = function() { cancellation(office.number) };
+                    li.appendChild(cancellationButton);
+                }
+
+                ul.appendChild(li);
+            }
+        });
+    }
+
+    function booking(officeNumber) {
+        const url = '/lab6/json-rpc-api/';
+        const json = {
+            'jsonrpc': '2.0',
+            'method': 'booking',
+            'params': officeNumber,
+            'id': Math.round(Math.random()*1000)
+        };
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(json)
+        })
+        .then(function(response) {
+            return response.json()
+        })
+        .then(function(data) {
+            if(data.error) {
+                switch(data.error.code) {
+                    case 1:
+                        alert('Вы не авторизированы, пожалуйста, авторизируйтесь');
+                        break;
+                    case 2:
+                        alert('Офис уже арендуется');
+                        break;
+                    case -32601:
+                        alert('Запрошенный метод не найден на сервере');
+                        break;
+                    default:
+                        alert('Неизвестная ошибка');
+                        break;
+                }
+            }
+            else {
+                document.getElementById('office-list').innerHTML = '';
+                getOfficeList();
+            }  
+        })
+        .catch(function(error) {
+            console.error('Ошибка при выполнении запроса:', error);
+            alert('Произошла ошибка при выполнении запроса');
+        });
+    }
+
+    function cancellation(officeNumber) {
+        const url = '/lab6/json-rpc-api/';
+        const json = {
+            'jsonrpc': '2.0',
+            'method': 'cancellation',
+            'params': officeNumber,
+            'id': Math.round(Math.random()*1000)
+        };
+        fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(json)
+        })
+        .then(function(response) {
+            return response.json()
+        })
+        .then(function(data) {
+            if(data.error) {
+                switch(data.error.code) {
+                    case 1:
+                        alert('Вы не авторизированы, пожалуйста, авторизируйтесь');
+                        break;
+                    case 3:
+                        alert('Офис не был забронирован');
+                        break;
+                    case 4:
+                        alert('Вы не можете отменить бронирование, которое сделал другой пользователь');
+                        break;
+                    case -32601:
+                        alert('Запрошенный метод не найден на сервере');
+                        break;
+                    default:
+                        alert('Неизвестная ошибка');
+                        break;
+                }
+            }
+            else {
+                document.getElementById('office-list').innerHTML = '';
+                getOfficeList();
+            }  
+        })
+        .catch(function(error) {
+            console.error('Ошибка при выполнении запроса:', error);
+            alert('Произошла ошибка при выполнении запроса');
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        getOfficeList();
+    });
+</script>
+{% endblock %}
+
+{% block main %}
+    <h1>Список кабинетов</h1>
+    <ul id="office-list"></ul>
+{% endblock %}

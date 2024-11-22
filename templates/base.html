@@ -11,6 +11,8 @@
             {% block lab %}
             {% endblock %}
     </title>
+    {% block head %}{% endblock %}
+    {% block script %} {% endblock %}
     <link rel="icon" href="{{ url_for('static', filename='favicon (2).ico') }}">
 </head>
     <link rel="stylesheet" href="{{ url_for('static', filename='lab1/main.css') }}">
@@ -22,7 +24,7 @@
     </header>
 
     <main>
-        {% block site %}<a href= 'https://lokhorras.pythonanywhere.com/'>Корень сайта </a>{%endblock%}
+        {% block site %}<a href= 'http://127.0.0.1:5000/'>Корень сайта </a>{%endblock%}
         {% block main %} {% endblock %}
     </main>
 
