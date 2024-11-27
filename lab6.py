@@ -40,6 +40,7 @@ def add():
         {'number': 4, 'tenant': ''},
         {'number': 5, 'tenant': ''}
     ]
+    cur.execute('CREATE TABLE offices(number INT, tenant VARCHAR(255))')
     conn, cur = db_connect()
     for office in offices:
         cur.execute("INSERT INTO offices (number, tenant) VALUES (%s, %s);", (office['number'], office['tenant']))
