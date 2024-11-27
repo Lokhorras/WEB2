@@ -46,13 +46,6 @@ conn.close()
 
 
 
-def get_db_connection():
-    return psycopg2.connect(
-    host = '127.0.0.1',
-    database = 'one',
-    user = 'one',
-    password = '123'
-    )
 
 @lab6.route('/lab6/')
 def main():
@@ -64,7 +57,7 @@ def api():
     id = data['id']
 
     if data['method'] == 'info':
-        conn = get_db_connection()
+        conn = db_connect()
         cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute("SELECT * FROM offices;")
         offices = cur.fetchall()
@@ -89,7 +82,7 @@ def api():
 
     if data['method'] == 'booking':
         office_number = data['params']
-        conn = get_db_connection()
+        conn = db_connect()
         cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute("SELECT * FROM offices WHERE number = %s;", (office_number,))
         office = cur.fetchone()
@@ -117,7 +110,7 @@ def api():
 
     if data['method'] == 'cancellation':
         office_number = data['params']
-        conn = get_db_connection()
+        conn = db_connect()
         cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute("SELECT * FROM offices WHERE number = %s;", (office_number,))
         office = cur.fetchone()
