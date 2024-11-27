@@ -1,4 +1,4 @@
-from flask import Blueprint, url_for, redirect, render_template, request, session, current_app
+from flask import Blueprint, url_for, redirect, render_template, request, session, current_app, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 from psycopg2.extras import RealDictCursor
 import psycopg2
@@ -63,11 +63,11 @@ def api():
         cur.execute("SELECT * FROM offices;")
         offices = cur.fetchall()
         db_close(conn, cur)
-        return {
+        return jsonify({
             'jsonrpc': '2.0',
-            'result': offices,
+            'result': (offices),
             'id': id
-        }
+        })
 
     login = session.get('login')
     if not login:
