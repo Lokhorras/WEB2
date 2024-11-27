@@ -3,12 +3,14 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from psycopg2.extras import RealDictCursor
 import psycopg2
 import sqlite3
-from os import path 
 import os
+from os import path 
+
 lab6 = Blueprint('lab6', __name__)
 
 
 offices = []
+
 def db_connect():
     if current_app.config['DB_TYPE'] == 'postgres':
         conn = psycopg2.connect(
@@ -24,24 +26,25 @@ def db_connect():
         conn = sqlite3.connect(db_path)
         conn.row_factory = sqlite3.Row
         cur = conn.cursor()
-        
+
     return conn, cur
 
-conn, cur = db_connect()
+
+
+
 def db_close(conn, cur):
     conn.commit()
     cur.close()
     conn.close()
 
 
-cur.execute("DELETE FROM offices;")
-
-for office in offices:
-    cur.execute("INSERT INTO offices (number, tenant) VALUES (%s, %s);", (office['number'], office['tenant']))
-
-conn.commit()
-cur.close()
-conn.close()
+# def add():
+#     conn, cur = db_connect()
+#     for office in offices:
+#         cur.execute("INSERT INTO offices (number, tenant) VALUES (%s, %s);", (office['number'], office['tenant']))
+#     conn.commit()
+#     cur.close()
+#     conn.close()
 
 
 
