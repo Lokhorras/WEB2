@@ -43,7 +43,7 @@ def add():
     cur.execute('CREATE TABLE offices(number INT, tenant VARCHAR(255))')
     conn, cur = db_connect()
     for office in offices:
-        cur.execute("INSERT INTO offices (number, tenant) VALUES (%s, %s);", (office['number'], office['tenant']))
+        cur.execute("INSERT INTO offices (number, tenant) VALUES (?, ?);", (office['number'], office['tenant']))
     conn.commit()
     cur.close()
     conn.close()
