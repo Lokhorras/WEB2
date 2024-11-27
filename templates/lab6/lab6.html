@@ -72,7 +72,7 @@
         .then(function(data) {
             const office_list = data.result;
             const ul = document.getElementById('office-list');
-            ul.innerHTML = ''; // Очищаем список перед обновлением
+            ul.innerHTML = '';
             for(let i = 0; i < office_list.length; i++) {
                 const office = office_list[i];
                 const li = document.createElement('li');

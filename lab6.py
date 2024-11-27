@@ -8,9 +8,6 @@ from os import path
 
 lab6 = Blueprint('lab6', __name__)
 
-
-offices = []
-
 def db_connect():
     if current_app.config['DB_TYPE'] == 'postgres':
         conn = psycopg2.connect(
@@ -29,26 +26,27 @@ def db_connect():
 
     return conn, cur
 
-
-
-
 def db_close(conn, cur):
     conn.commit()
     cur.close()
     conn.close()
 
-
-# def add():
-#     conn, cur = db_connect()
-#     for office in offices:
-#         cur.execute("INSERT INTO offices (number, tenant) VALUES (%s, %s);", (office['number'], office['tenant']))
-#     conn.commit()
-#     cur.close()
-#     conn.close()
-
-
-
-
+@lab6.route('/lab6/create')
+def add():
+    offices = [
+        {'number': 1, 'tenant': ''},
+        {'number': 2, 'tenant': ''},
+        {'number': 3, 'tenant': ''},
+        {'number': 4, 'tenant': ''},
+        {'number': 5, 'tenant': ''}
+    ]
+    conn, cur = db_connect()
+    for office in offices:
+        cur.execute("INSERT INTO offices (number, tenant) VALUES (%s, %s);", (office['number'], office['tenant']))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return "Offices added successfully"
 
 @lab6.route('/lab6/')
 def main():
@@ -60,12 +58,10 @@ def api():
     id = data['id']
 
     if data['method'] == 'info':
-        conn = db_connect()
-        cur = conn.cursor(cursor_factory=RealDictCursor)
+        conn, cur = db_connect()
         cur.execute("SELECT * FROM offices;")
         offices = cur.fetchall()
-        cur.close()
-        conn.close()
+        db_close(conn, cur)
         return {
             'jsonrpc': '2.0',
             'result': offices,
@@ -85,13 +81,11 @@ def api():
 
     if data['method'] == 'booking':
         office_number = data['params']
-        conn = db_connect()
-        cur = conn.cursor(cursor_factory=RealDictCursor)
+        conn, cur = db_connect()
         cur.execute("SELECT * FROM offices WHERE number = %s;", (office_number,))
         office = cur.fetchone()
         if office['tenant'] != '':
-            cur.close()
-            conn.close()
+            db_close(conn, cur)
             return {
                 'jsonrpc': '2.0',
                 'error': {
