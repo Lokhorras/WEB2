@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block lab %}bank{% endblock %}
+
+{% block main %}
+    <style>
+        body {
+            background-color: #f0f8ff; 
+        }
+        
+        .title{
+            width: 100%;
+            height: 150px;
+            display: flex;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            text-align: center;
+            background-color: rgb(156, 209, 209);
+            justify-content: center;
+
+        }
+        .a1{
+            border-radius: 50px;
+            width: 150px;
+            height: 20px;
+            vertical-align: 30px;
+            background-color: antiquewhite;
+            text-decoration: none;
+        }
+
+    </style>
+    <div class="title">
+        <a class="a1" href="/rgz/login">Вход</a> 
+        <a class="a1" href="/rgz/account">Профиль</a> 
+        <a class="a1" href="/rgz/transfer">Перевести деньги</a>
+        <a class="a1" href="/rgz/history">История транзакций</a>
+        <a class="a1" href="/rgz/logout">Выход</a>
+        <a class="a1" href="#">{{ login or "Аноним" }}</a>
+    </div>
+{% endblock %}

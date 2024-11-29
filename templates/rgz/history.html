@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block lab %}История переводов{% endblock %}
+
+{% block main %}
+<h1>История переводов</h1>
+
+{% if transactions %}
+<table>
+    <thead>
+        <tr>
+            <th>Отправитель</th>
+            <th>Получатель</th>
+            <th>Сумма</th>
+            <th>Дата и время</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction[0] }}</td>
+            <td>{{ transaction[1] }}</td>
+            <td>{{ transaction[2] }}</td>
+            <td>{{ transaction[3] }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>Нет записей о переводах.</p>
+{% endif %}
+
+<a href="{{ url_for('rgz.account') }}">Вернуться в личный кабинет</a>
+{% endblock %}

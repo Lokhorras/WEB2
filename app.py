@@ -5,7 +5,7 @@ from lab3 import lab3
 from lab4 import lab4
 from lab5 import lab5
 from lab6 import lab6
-
+from rgz import rgz
 
 import sqlite3
 from os import path 
@@ -20,6 +20,7 @@ app.register_blueprint(lab3)
 app.register_blueprint(lab4)
 app.register_blueprint(lab5)
 app.register_blueprint(lab6)
+app.register_blueprint(rgz)
 
 deleted = False
 create = False
