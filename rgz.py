@@ -33,7 +33,7 @@ def db_close(conn, cur):
     conn.commit()
     cur.close()
     conn.close()
-# INSERT INTO users_new (id, full_name, login, password, phone, account_number, balance, role) 
+# INSERT INTO users_new2 (id, full_name, login, password, phone, account_number, balance, role) 
 # VALUES
 # (1, 'John Doe', 'johndoe', '123', '+1234567890', '12345678', 1000.00, 'client'),
 # (2, 'Jane Smith', 'janesmith', '123', '+0987654321', '09876543', 1500.00, 'client'),
@@ -61,9 +61,9 @@ def login():
     conn, cur = db_connect()
 
     if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("SELECT login, password FROM users_new WHERE login=%s;", (login, ))
+        cur.execute("SELECT login, password FROM users_new2 WHERE login=%s;", (login, ))
     else:
-        cur.execute("SELECT login, password FROM users_new WHERE login=?;", (login, ))   
+        cur.execute("SELECT login, password FROM users_new2 WHERE login=?;", (login, ))   
     user = cur.fetchone()
 
     if not user:
@@ -113,9 +113,9 @@ def transfer():
 
         # Получаем баланс отправителя
         if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("SELECT balance FROM users_new WHERE login=%s;", (sender_login,))
+            cur.execute("SELECT balance FROM users_new2 WHERE login=%s;", (sender_login,))
         else:
-            cur.execute("SELECT balance FROM users_new WHERE login=?;", (sender_login,))
+            cur.execute("SELECT balance FROM users_new2 WHERE login=?;", (sender_login,))
         sender_balance = cur.fetchone()['balance']
 
         # Проверка достаточности средств
@@ -125,15 +125,15 @@ def transfer():
         # Обновляем баланс отправителя
         new_sender_balance = sender_balance - amount
         if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("UPDATE users_new SET balance=%s WHERE login=%s;", (new_sender_balance, sender_login))
+            cur.execute("UPDATE users_new2 SET balance=%s WHERE login=%s;", (new_sender_balance, sender_login))
         else:
-            cur.execute("UPDATE users_new SET balance=? WHERE login=?;", (new_sender_balance, sender_login))
+            cur.execute("UPDATE users_new2 SET balance=? WHERE login=?;", (new_sender_balance, sender_login))
 
         # Получаем логин и баланс получателя
         if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("SELECT login, balance FROM users_new WHERE account_number=%s;", (receiver_account_number,))
+            cur.execute("SELECT login, balance FROM users_new2 WHERE account_number=%s;", (receiver_account_number,))
         else:
-            cur.execute("SELECT login, balance FROM users_new WHERE account_number=?;", (receiver_account_number,))
+            cur.execute("SELECT login, balance FROM users_new2 WHERE account_number=?;", (receiver_account_number,))
         receiver = cur.fetchone()
 
         if not receiver:
@@ -145,9 +145,9 @@ def transfer():
         # Обновляем баланс получателя
         new_receiver_balance = receiver_balance + amount
         if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("UPDATE users_new SET balance=%s WHERE account_number=%s;", (new_receiver_balance, receiver_account_number))
+            cur.execute("UPDATE users_new2 SET balance=%s WHERE account_number=%s;", (new_receiver_balance, receiver_account_number))
         else:
-            cur.execute("UPDATE users_new SET balance=? WHERE account_number=?;", (new_receiver_balance, receiver_account_number))
+            cur.execute("UPDATE users_new2 SET balance=? WHERE account_number=?;", (new_receiver_balance, receiver_account_number))
 
         cur.execute(
             """
@@ -209,9 +209,9 @@ def account():
     conn, cur = db_connect()
 
     if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("SELECT * FROM users_new WHERE login=%s;", (session['login'],))
+        cur.execute("SELECT * FROM users_new2 WHERE login=%s;", (session['login'],))
     else:
-        cur.execute("SELECT * FROM users_new WHERE login=?;", (session['login'],))
+        cur.execute("SELECT * FROM users_new2 WHERE login=?;", (session['login'],))
 
     user = cur.fetchone()
     db_close(conn, cur)
