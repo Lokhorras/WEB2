@@ -1,4 +1,4 @@
-from flask import Blueprint, url_for, redirect, render_template, request, session, current_app, jsonify
+from flask import Blueprint, url_for, redirect, render_template, request, session, current_app
 from werkzeug.security import check_password_hash, generate_password_hash
 from psycopg2.extras import RealDictCursor
 import psycopg2
@@ -47,6 +47,15 @@ def get_film(id):
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['DELETE'])
 def del_film(id):
     if id < 0 or id >= len(films):
-        return jsonify({"error": "Такого фильма нет"}), 404
+        return ({"error": "Такого фильма нет"}), 404
     del films[id]
     return '', 204
+
+
+@lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
+def put_film(id):
+    if id < 0 or id >= len(films):
+        return ({"error": "Такого фильма нет"}), 404
+    film = request.get_json()
+    films[id] = film
+    return (films[id])
