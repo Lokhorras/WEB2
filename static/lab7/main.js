@@ -26,17 +26,6 @@ function fillFilmList() {
             delButton.onclick = function(){
                 deleteFilm(i, films[i].title_ru);
             };
-function deleteFilm(id, title){
-    if (! confirm(`Вы точно хотите удалить фильм?"${title}"?`))
-        return;
-
-    fetch(`/lab7/rest-api/films/${id}`, {method:'DELETE'})
-    .then(function(){
-        fillFilmList();
-    });
-}
-            
-
             tdActions.append(editButton);
             tdActions.append(delButton);
 
@@ -47,5 +36,54 @@ function deleteFilm(id, title){
 
             tbody.append(tr);
         }
+    });
+}
+
+
+
+function deleteFilm(id, title){
+    if (! confirm(`Вы точно хотите удалить фильм?"${title}"?`))
+        return;
+
+    fetch(`/lab7/rest-api/films/${id}`, {method:'DELETE'})
+    .then(function(){
+        fillFilmList();
+    });
+}
+function showModal(){
+    document.querySelector('div.modal').style.display = 'block';
+}
+function hideModal(){
+    document.querySelector('div.modal').style.display = 'none';
+}
+function addFilm(){
+    document.getElementById('id').value = '';
+    document.getElementById('title').value = '';
+    document.getElementById('title-ru').value = '';
+    document.getElementById('year').value = '';
+    document.getElementById('description').value = '';
+    showModal()
+}
+function cancel(){
+    hideModal()
+}
+function sendFilm(){
+    const film = {
+        title: document.getElementById('title').value,
+        title_ru: document.getElementById('title-ru').value,
+        year: document.getElementById('year').value,
+        description: document.getElementById('description').value,
+        
+    }
+    const url = `/lab7/rest-api/films/`;
+    const method = 'POST';
+    fetch(url, {
+        method:method,
+        headers:{'Content-Type': 'application/json'},
+        body:JSON.stringify(film)
+    })
+    .then(function(){
+        fillFilmList();
+        hideModal();
     });
 }
