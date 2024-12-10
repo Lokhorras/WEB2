@@ -18,6 +18,9 @@
         position: absolute;
         padding: 20px;
     }
+    .error-message{
+        color: red;
+    }
     </style>
 {% endblock %}
 
@@ -52,7 +55,7 @@
         <input type="hidden" id="id">
         <label>
             Название фильма на русском:
-            <input type="text" id="title-ru">
+            <input type="text" id="title_ru">
         </label><br>
 
         <label>
@@ -68,7 +71,8 @@
 
         <label>
             Описание:
-            <textarea id='description'></textarea>                      
+            <textarea id="description"></textarea>
+            <div id="description-error" class="error-message"></div>                    
         </label><br>
 
         <button onclick='sendFilm()'>ОК</button>
