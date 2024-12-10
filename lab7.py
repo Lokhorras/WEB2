@@ -54,15 +54,36 @@ def del_film(id):
 def put_film(id):
     if id < 0 or id >= len(films):
         return jsonify({"error": "Такого фильма нет"}), 404
-    film = request.get_json()
-    if film['description'] == '':
-        return jsonify({'description': 'Заполните описание'}), 400
-    films[id] = film
+    
+    updated_film = request.get_json()
+
+    # Проверка на пустое описание
+    if 'description' in updated_film and updated_film['description'] == '':
+        return jsonify({'error': 'Заполните описание'}), 400
+    
+    # Если оригинальное название пустое, присваиваем русское название
+    if 'title' in updated_film and updated_film['title'] == '' and 'title_ru' in updated_film:
+        updated_film['title'] = updated_film['title_ru']
+
+    films[id] = updated_film
     return jsonify(films[id])
+
 
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_films():
     new_film = request.get_json()
+    
+    # Проверка и заполнение оригинального названия, если оно пустое
+    if 'title' in new_film and new_film['title'] == '' and 'title_ru' in new_film:
+        new_film['title'] = new_film['title_ru']
+
+    # Проверка обязательных полей
+    if 'title_ru' not in new_film or new_film['title_ru'] == '':
+        return jsonify({"error": "Название фильма на русском обязательно"}), 400
+    
+    if 'year' not in new_film or not isinstance(new_film['year'], int):
+        return jsonify({"error": "Год выпуска обязателен и должен быть числом"}), 400
+    
     films.append(new_film)
     new_film_index = len(films) - 1
     return jsonify({"index": new_film_index}), 201
