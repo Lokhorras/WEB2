@@ -55,8 +55,6 @@ def register():
     else:
         cur.execute("SELECT login FROM users WHERE login=?;", (login, ))   
     
-    
-        
     if cur.fetchone():
         db_close(conn, cur)
         return render_template ('lab5/register.html', error='Такой пользователь уже существует')

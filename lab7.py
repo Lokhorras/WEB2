@@ -34,8 +34,6 @@ def get_films():
     conn.close()
     return jsonify(films)
 
-
-
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
 def get_film(id):
     conn = get_db_connection()
@@ -46,8 +44,6 @@ def get_film(id):
     if not film:
         return jsonify({"error": "Фильм не найден"}), 404
     return jsonify(film)
-
-    
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['DELETE'])
 def delete_film(id):
@@ -61,8 +57,6 @@ def delete_film(id):
         conn.commit()
     conn.close()
     return '', 204
-
-
 
 @lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
 def update_film(id):

@@ -8,7 +8,6 @@ function fillFilmList() {
         tbody.innerHTML = '';
         for (let i = 0; i < films.length; i++) {
             let tr = document.createElement('tr');
-
             let tdTitleRus = document.createElement('td');
             let tdTitle = document.createElement('td');
             let tdYear = document.createElement('td');
@@ -18,7 +17,6 @@ function fillFilmList() {
             tdTitle.innerHTML = films[i].title 
                 ? `<em>(${films[i].title})</em>` 
                 : '';
-
             tdYear.innerText = films[i].year;
 
             // Кнопка редактирования
@@ -37,12 +35,10 @@ function fillFilmList() {
 
             tdActions.append(editButton);
             tdActions.append(delButton);
-
             tr.append(tdTitleRus);
             tr.append(tdTitle);
             tr.append(tdYear);
             tr.append(tdActions);
-
             tbody.append(tr);
         }
     });
@@ -99,7 +95,7 @@ function sendFilm() {
     const film = {
         title: title === '' ? title_ru : title, // Заполняем оригинальное название, если оно пустое
         title_ru: title_ru,
-        year: parseInt(year), // Преобразуем год в число
+        year: parseInt(year), 
         description: description
     };
 
