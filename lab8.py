@@ -7,6 +7,7 @@ from os import path
 import os
 from datetime import datetime
 
+
 lab8 = Blueprint('lab8', __name__)
 
 @lab8.route('/lab8/')
