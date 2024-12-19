@@ -24,7 +24,7 @@ def register():
     login_form = request.form.get('login')
     password_form = request.form.get('password')
     
-    login_exists = users.query.filter_by(login='alex').first()
+    login_exists = users.query.filter_by(login=login_form).first()
     if login_exists:
         return render_template('lab8/register.html',
                             error = 'Уже такой юзер есть')
