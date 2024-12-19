@@ -22,7 +22,7 @@ def register():
         return render_template('lab8/register.html')
     
     login_form = request.form.get('login')
-    password_form = request.form.get('passowrd')
+    password_form = request.form.get('password')
     
     login_exists = users.query.filter_by(login='alex').first()
     if login_exists:
