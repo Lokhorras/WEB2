@@ -37,7 +37,7 @@ def register():
 
 
 
-@lab8.route('/lab8/login/', methods = ['GET', 'POST'], login=session.get('login'))
+@lab8.route('/lab8/login/', methods = ['GET', 'POST'])
 def login():
     if request.method == 'GET':
         return render_template('/lab8/login.html')
@@ -67,3 +67,8 @@ def login():
 def article_list():
     return 'Список статей'
     
+@lab8.route('/lab8/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/lab8/')
