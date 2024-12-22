@@ -103,7 +103,7 @@ def create_article():
         db.session.add(new_article)
         db.session.commit()
 
-        return redirect('/lab8/artciles_list')  # Перенаправляем на страницу со списком статей
+        return redirect('/lab8/') 
 
     return render_template('/lab8/create_article.html')
 
@@ -123,7 +123,7 @@ def delete_article(article_id):
 
     db.session.delete(article)
     db.session.commit()
-    return redirect('/lab8/artciles_list')
+    return redirect('/lab8/') 
 
 @lab8.route('/lab8/edit_article/<int:article_id>', methods=['GET', 'POST'])
 @login_required
@@ -137,6 +137,6 @@ def edit_article(article_id):
         article.article_text = request.form.get('article_text')
         article.is_public = request.form.get('is_public') == 'on'
         db.session.commit()
-        return redirect('/lab8/artciles_list')
+        return redirect('/lab8/') 
 
     return render_template('/lab8/edit_article.html', article=article)
