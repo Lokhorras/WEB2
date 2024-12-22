@@ -137,3 +137,25 @@ def edit_article(article_id):
         return redirect('/lab8/') 
 
     return render_template('/lab8/edit_article.html', article=article)
+
+
+@lab8.route('/lab8/public_articles/')
+def public_articles():
+    # Получаем все публичные статьи
+    public_articles = articles.query.filter_by(is_public=True).all()
+    return render_template('/lab8/public_articles.html', articles=public_articles)
+
+
+@lab8.route('/lab8/search_articles/', methods=['GET', 'POST'])
+def search_articles():
+    if request.method == 'POST':
+        search_query = request.form.get('search_query')
+        if search_query:
+            # Ищем статьи, которые содержат поисковую строку в заголовке или тексте
+            found_articles = articles.query.filter(
+                (articles.title.contains(search_query)) | 
+                (articles.article_text.contains(search_query))
+            ).all()
+            return render_template('/lab8/search_results.html', articles=found_articles, search_query=search_query)
+    
+    return render_template('/lab8/search_articles.html')

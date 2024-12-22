@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>Результаты поиска по запросу "{{ search_query }}"</h1>
+    <ul>
+        {% for article in articles %}
+            <li>
+                <strong>{{ article.title }}</strong><br>
+                {{ article.article_text[:50] }}...<br>
+                {% if article.is_public %}
+                    <span style="color: green;">Опубликовано</span>
+                {% else %}
+                    <span style="color: red;">Не опубликовано</span>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/lab8/search_articles/">Новый поиск</a>
+    <a href="/lab8/">Назад</a>
+{% endblock %}

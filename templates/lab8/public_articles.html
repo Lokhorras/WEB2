@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>Публичные статьи</h1>
+    <ul>
+        {% for article in articles %}
+            <li>
+                <strong>{{ article.title }}</strong><br>
+                {{ article.article_text[:50] }}...<br>
+                <span style="color: green;">Опубликовано</span>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="/lab8/">Назад</a>
+{% endblock %}
