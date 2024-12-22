@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 9{% endblock %}
+{% block style %} 
+<style>
+    body {
+        background-color: #f0f8ff;
+        color: #000;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    h1 {
+        color: #ff6f61;
+    }
+    button {
+        background-color: #ff6f61;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+    img {
+        max-width: 300px;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+{% block main %}
+    <h1>Привет, {{ name }}! Укажи свой пол.</h1>
+    <form method="POST">
+        <label><input type="radio" name="gender" value="male" required> Мужчина</label>
+        <label><input type="radio" name="gender" value="female" required> Женщина</label>
+        <button type="submit">Далее</button>
+    </form>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 9{% endblock %}
+{% block style %} 
+<style>
+    body {
+        background-color: #f0f8ff;
+        color: #000;
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+    h1 {
+        color: #ff6f61;
+    }
+    button {
+        background-color: #ff6f61;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+    img {
+        max-width: 300px;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+{% block main %}
+    <h1>Что тебе больше нравится, {{ name }}?</h1>
+    <form method="POST">
+        <label><input type="radio" name="preference" value="tasty" required> Что-то вкусное</label>
+        <label><input type="radio" name="preference" value="beautiful" required> Что-то красивое</label>
+        <button type="submit">Далее</button>
+    </form>
+{% endblock %}

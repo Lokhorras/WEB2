@@ -10,6 +10,7 @@ from lab5 import lab5
 from lab6 import lab6
 from lab7 import lab7
 from lab8 import lab8
+from lab9 import lab9
 from rgz import rgz
 from db import db
 import sqlite3
@@ -36,6 +37,7 @@ app.register_blueprint(lab5)
 app.register_blueprint(lab6)
 app.register_blueprint(lab7)
 app.register_blueprint(lab8)
+app.register_blueprint(lab9)
 app.register_blueprint(rgz)
 
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'Секретно-секретный секрет')
@@ -80,6 +82,7 @@ def start():
                 <ol> <a href="/lab6/"> 6 Лабораторная работа </a> </ol>
                 <ol> <a href="/lab7/"> 7 Лабораторная работа </a> </ol>
                 <ol> <a href="/lab8/"> 8 Лабораторная работа </a> </ol>
+                <ol> <a href="/lab9/"> 9 Лабораторная работа </a> </ol>
                 <ol> <a href="/rgz/"> rgz </a> </ol>
             </body>
             <footer><p>Студент: Миракин Д.В.</p>
