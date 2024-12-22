@@ -82,7 +82,7 @@ def logout():
     logout_user()
     return redirect('/lab8/')
 
-@lab8.route('/create_article', methods=['GET', 'POST'])
+@lab8.route('/lab8/create_article', methods=['GET', 'POST'])
 @login_required
 def create_article():
     if request.method == 'POST':
@@ -107,14 +107,14 @@ def create_article():
 
     return render_template('create_article.html')
 
-@lab8.route('/articles')
+@lab8.route('/lab8/articles')
 @login_required
 def articles_list():
     # Получаем статьи текущего пользователя
     user_articles = articles.query.filter_by(login_id=current_user.id).all()
     return render_template('articles_list.html', articles=user_articles)
 
-@lab8.route('/delete_article/<int:article_id>', methods=['POST'])
+@lab8.route('/lab8/delete_article/<int:article_id>', methods=['POST'])
 @login_required
 def delete_article(article_id):
     article = articles.query.get_or_404(article_id)
@@ -125,7 +125,7 @@ def delete_article(article_id):
     db.session.commit()
     return redirect(url_for('articles_list'))
 
-@lab8.route('/edit_article/<int:article_id>', methods=['GET', 'POST'])
+@lab8.route('/lab8/edit_article/<int:article_id>', methods=['GET', 'POST'])
 @login_required
 def edit_article(article_id):
     article = articles.query.get_or_404(article_id)
