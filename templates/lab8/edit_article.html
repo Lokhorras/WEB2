@@ -4,7 +4,7 @@
 
 {% block main %}
     <h1>Редактировать статью</h1>
-    <form action="{{ url_for('edit_article', article_id=article.id) }}" method="post">
+    <form action="/lab8/edit_article/{{ article.id }}" method="post">
         <div>
             <label>
                 Заголовок:<br>

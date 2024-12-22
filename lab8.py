@@ -137,6 +137,6 @@ def edit_article(article_id):
         article.article_text = request.form.get('article_text')
         article.is_public = request.form.get('is_public') == 'on'
         db.session.commit()
-        return redirect(url_for('articles_list'))
+        return redirect('/lab8/artciles_list')
 
     return render_template('/lab8/edit_article.html', article=article)
