@@ -37,7 +37,7 @@ def register():
 
 
 
-@lab8.route('/lab8/login/', methods = ['GET', 'POST'])
+@lab8.route('/lab8/login/', methods = ['GET', 'POST'], login=session.get('login'))
 def login():
     if request.method == 'GET':
         return render_template('/lab8/login.html')
