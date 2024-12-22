@@ -1,43 +1,66 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, session
 
 lab9 = Blueprint('lab9', __name__)
 
 @lab9.route('/lab9/', methods=['GET', 'POST'])
 def main():
     if request.method == 'GET':
+        if 'name' in session:
+            return redirect(url_for('lab9.congratulation'))
         return render_template('lab9/index.html')
     elif request.method == 'POST':
         name = request.form.get('name')
-        return redirect(url_for('lab9.age', name=name))
+        session['name'] = name
+        return redirect(url_for('lab9.age'))
 
-@lab9.route('/lab9/age/<name>', methods=['GET', 'POST'])
-def age(name):
+@lab9.route('/lab9/age', methods=['GET', 'POST'])
+def age():
     if request.method == 'GET':
-        return render_template('lab9/age.html', name=name)
+        if 'age' in session:
+            return redirect(url_for('lab9.congratulation'))
+        return render_template('lab9/age.html', name=session['name'])
     elif request.method == 'POST':
         age = request.form.get('age')
-        return redirect(url_for('lab9.gender', name=name, age=age))
+        session['age'] = age
+        return redirect(url_for('lab9.gender'))
 
-@lab9.route('/lab9/gender/<name>/<age>', methods=['GET', 'POST'])
-def gender(name, age):
+@lab9.route('/lab9/gender', methods=['GET', 'POST'])
+def gender():
     if request.method == 'GET':
-        return render_template('lab9/gender.html', name=name, age=age)
+        if 'gender' in session:
+            return redirect(url_for('lab9.congratulation'))
+        return render_template('lab9/gender.html', name=session['name'], age=session['age'])
     elif request.method == 'POST':
         gender = request.form.get('gender')
-        return redirect(url_for('lab9.preference', name=name, age=age, gender=gender))
+        session['gender'] = gender
+        return redirect(url_for('lab9.preference'))
 
-@lab9.route('/lab9/preference/<name>/<age>/<gender>', methods=['GET', 'POST'])
-def preference(name, age, gender):
+@lab9.route('/lab9/preference', methods=['GET', 'POST'])
+def preference():
     if request.method == 'GET':
-        return render_template('lab9/preference.html', name=name, age=age, gender=gender)
+        if 'preference' in session:
+            return redirect(url_for('lab9.congratulation'))
+        return render_template('lab9/preference.html', name=session['name'], age=session['age'], gender=session['gender'])
     elif request.method == 'POST':
         preference = request.form.get('preference')
-        return redirect(url_for('lab9.detail', name=name, age=age, gender=gender, preference=preference))
+        session['preference'] = preference
+        return redirect(url_for('lab9.detail'))
 
-@lab9.route('/lab9/detail/<name>/<age>/<gender>/<preference>', methods=['GET', 'POST'])
-def detail(name, age, gender, preference):
+@lab9.route('/lab9/detail', methods=['GET', 'POST'])
+def detail():
     if request.method == 'GET':
-        return render_template('lab9/detail.html', name=name, age=age, gender=gender, preference=preference)
+        if 'detail' in session:
+            return redirect(url_for('lab9.congratulation'))
+        return render_template('lab9/detail.html', name=session['name'], age=session['age'], gender=session['gender'], preference=session['preference'])
     elif request.method == 'POST':
         detail = request.form.get('detail')
-        return render_template('lab9/congratulation.html', name=name, age=age, gender=gender, preference=preference, detail=detail)
+        session['detail'] = detail
+        return redirect(url_for('lab9.congratulation'))
+
+@lab9.route('/lab9/congratulation', methods=['GET', 'POST'])
+def congratulation():
+    if request.method == 'GET':
+        return render_template('lab9/congratulation.html', name=session.get('name'), age=session.get('age'), gender=session.get('gender'), preference=session.get('preference'), detail=session.get('detail'))
+    elif request.method == 'POST':
+        session.clear()
+        return redirect(url_for('lab9.main'))
