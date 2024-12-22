@@ -81,3 +81,62 @@ def article_list():
 def logout():
     logout_user()
     return redirect('/lab8/')
+
+@lab8.route('/create_article', methods=['GET', 'POST'])
+@login_required
+def create_article():
+    if request.method == 'POST':
+        # Получаем данные из формы
+        title = request.form.get('title')
+        article_text = request.form.get('article_text')
+        is_public = request.form.get('is_public') == 'on'  # Проверяем, отмечена ли галочка
+
+        # Создаем новую статью
+        new_article = articles(
+            login_id=current_user.id,
+            title=title,
+            article_text=article_text,
+            is_public=is_public
+        )
+
+        # Добавляем статью в базу данных
+        db.session.add(new_article)
+        db.session.commit()
+
+        return redirect(url_for('articles_list'))  # Перенаправляем на страницу со списком статей
+
+    return render_template('create_article.html')
+
+@lab8.route('/articles')
+@login_required
+def articles_list():
+    # Получаем статьи текущего пользователя
+    user_articles = articles.query.filter_by(login_id=current_user.id).all()
+    return render_template('articles_list.html', articles=user_articles)
+
+@lab8.route('/delete_article/<int:article_id>', methods=['POST'])
+@login_required
+def delete_article(article_id):
+    article = articles.query.get_or_404(article_id)
+    if article.login_id != current_user.id:
+        abort(403)  # Запрещаем удаление статьи другого пользователя
+
+    db.session.delete(article)
+    db.session.commit()
+    return redirect(url_for('articles_list'))
+
+@lab8.route('/edit_article/<int:article_id>', methods=['GET', 'POST'])
+@login_required
+def edit_article(article_id):
+    article = articles.query.get_or_404(article_id)
+    if article.login_id != current_user.id:
+        abort(403)  # Запрещаем редактирование статьи другого пользователя
+
+    if request.method == 'POST':
+        article.title = request.form.get('title')
+        article.article_text = request.form.get('article_text')
+        article.is_public = request.form.get('is_public') == 'on'
+        db.session.commit()
+        return redirect(url_for('articles_list'))
+
+    return render_template('edit_article.html', article=article)

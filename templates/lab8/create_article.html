@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block lab %}Лабораторная работа 8{% endblock %}
+
+{% block main %}
+    <h1>Создать статью</h1>
+    <form action="{{ url_for('create_article') }}" method="post">
+        <div>
+            <label>
+                Заголовок:<br>
+                <input type="text" name="title" required>
+            </label>
+        </div>
+        
+        <div>
+            <label>
+                Текст статьи:<br>
+                <textarea name="article_text" required></textarea>
+            </label>
+        </div>
+
+        <div>
+            <label>
+                Опубликовать:<br>
+                <input type="checkbox" name="is_public">
+            </label>
+        </div>
+
+        <button type="submit">Создать статью</button>
+    </form>
+    <a href="{{ url_for('articles_list') }}">Назад к списку статей</a>
+{% endblock %}
