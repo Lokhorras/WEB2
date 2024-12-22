@@ -16,8 +16,8 @@
                     <span style="color: red;">Не опубликовано</span>
                 {% endif %}
                 <br>
-                <a href="{{ url_for('edit_article', article_id=article.id) }}">Редактировать</a>
-                <form action="{{ url_for('delete_article', article_id=article.id) }}" method="post" style="display:inline;">
+                <a href="/lab8/edit_article/{{ article.id }}">Редактировать</a>
+                <form action="/lab8/delete_article/{{ article.id }}" method="post" style="display:inline;">
                     <button type="submit">Удалить</button>
                 </form>
             </li>
