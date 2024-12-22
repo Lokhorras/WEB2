@@ -42,7 +42,7 @@ def register():
 
     login_user(new_user, remember=False)
 
-    return redirect('/lab8/')
+    return redirect('/lab8/login')
 
 
 
