@@ -71,6 +71,7 @@ def login():
     return render_template('/lab8/login.html', error = 'Ошибка входа: логин и/или пароль неверны')
 
 
+
     
 @lab8.route('/lab8/logout')
 @login_required
@@ -103,7 +104,7 @@ def create_article():
 
     return render_template('/lab8/create_article.html')
 
-@lab8.route('/lab8/articles')
+@lab8.route('/lab8/articles/')
 @login_required
 def articles_list():
     # Получаем статьи текущего пользователя
