@@ -151,11 +151,25 @@ def search_articles():
     if request.method == 'POST':
         search_query = request.form.get('search_query')
         if search_query:
-            # Ищем статьи, которые содержат поисковую строку в заголовке или тексте
+            # Ищем только публичные статьи, которые содержат поисковую строку в заголовке или тексте
             found_articles = articles.query.filter(
                 (articles.title.contains(search_query)) | 
-                (articles.article_text.contains(search_query))
+                (articles.article_text.contains(search_query)),
+                articles.is_public == True
             ).all()
             return render_template('/lab8/search_results.html', articles=found_articles, search_query=search_query)
     
     return render_template('/lab8/search_articles.html')
+
+@lab8.route('/lab8/toggle_privacy/<int:article_id>', methods=['POST'])
+@login_required
+def toggle_privacy(article_id):
+    article = articles.query.get_or_404(article_id)
+    if article.login_id != current_user.id:
+        abort(403)  # Запрещаем изменение статьи другого пользователя
+
+    # Меняем приватность статьи
+    article.is_public = not article.is_public
+    db.session.commit()
+
+    return redirect(request.referrer or '/lab8/')

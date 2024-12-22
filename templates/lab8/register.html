@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block lab %}Лабораторная работа 8{% endblock %}
-
+{% block style %} <link rel="stylesheet" href="{{ url_for('static', filename='lab8/style.css') }}">{% endblock %}
 {% block main %}
     <h1>Регистрация</h1>
 
