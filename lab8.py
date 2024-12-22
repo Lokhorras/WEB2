@@ -44,18 +44,19 @@ def login():
     
     login_form = request.form.get('login')
     password_form = request.form.get('password')
-    
+    remember_me = request.form.get('remember_me')
+
     if not login_form:
-            return render_template('/lab8/login.html', error = 'Заполни')
+        return render_template('/lab8/login.html', error = 'Заполните все поля!')
 
     if not password_form:
-        return render_template('/lab8/login.html', error = 'Заполни')
+        return render_template('/lab8/login.html', error = 'Заполните все поля!')
 
     user = users.query.filter_by(login = login_form).first()
 
     if user:
         if check_password_hash(user.password, password_form):
-            login_user(user, remember=False)
+            login_user(user, remember=remember_me == True)
             return redirect('/lab8/')
         
     return render_template('/lab8/login.html', error = 'Ошибка входа: логин и/или пароль неверны')
