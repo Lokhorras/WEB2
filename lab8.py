@@ -105,14 +105,14 @@ def create_article():
 
         return redirect(url_for('articles_list'))  # Перенаправляем на страницу со списком статей
 
-    return render_template('create_article.html')
+    return render_template('/lab8/create_article.html')
 
 @lab8.route('/lab8/articles')
 @login_required
 def articles_list():
     # Получаем статьи текущего пользователя
     user_articles = articles.query.filter_by(login_id=current_user.id).all()
-    return render_template('articles_list.html', articles=user_articles)
+    return render_template('/lab8/articles_list.html', articles=user_articles)
 
 @lab8.route('/lab8/delete_article/<int:article_id>', methods=['POST'])
 @login_required
@@ -139,4 +139,4 @@ def edit_article(article_id):
         db.session.commit()
         return redirect(url_for('articles_list'))
 
-    return render_template('edit_article.html', article=article)
+    return render_template('/lab8/edit_article.html', article=article)
