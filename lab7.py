@@ -1,125 +1,138 @@
-from flask import Blueprint, url_for, redirect, render_template, request, session, current_app, jsonify, abort
-from werkzeug.security import check_password_hash, generate_password_hash
-from psycopg2.extras import RealDictCursor
-import psycopg2
+from flask import Blueprint, request, jsonify, session
 import sqlite3
-from os import path 
-import os
-from datetime import datetime
+from os import path
 
-lab7 = Blueprint('lab7', __name__)
+rgz = Blueprint('rgz', __name__)
 
+def db_connect():
+    dir_path = path.dirname(path.realpath(__file__))
+    db_path = path.join(dir_path, "database.db")
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
+    return conn, cur
 
-def get_db_connection():
-    conn = psycopg2.connect(
-        host = '127.0.0.1',
-        database = 'one',
-        user = 'one',
-        password = '123'
+def db_close(conn, cur):
+    conn.commit()
+    cur.close()
+    conn.close()
+
+@rgz.route('/rgz/rest-api/login', methods=['POST'])
+def login():
+    data = request.json
+    login = data.get('login')
+    password = data.get('password')
+
+    if not login or not password:
+        return jsonify({'error': 'Заполните поля'}), 400
+
+    conn, cur = db_connect()
+    cur.execute("SELECT login, password FROM users_new3 WHERE login=?;", (login,))
+    user = cur.fetchone()
+
+    if not user or user['password'] != password:
+        db_close(conn, cur)
+        return jsonify({'error': 'Логин и/или пароль неверны'}), 401
+
+    session['login'] = login
+    db_close(conn, cur)
+    return jsonify({'message': 'Успешный вход', 'login': login})
+
+@rgz.route('/rgz/rest-api/transfer', methods=['POST'])
+def transfer():
+    if 'login' not in session:
+        return jsonify({'error': 'Требуется авторизация'}), 401
+
+    data = request.json
+    sender_login = session['login']
+    receiver_account_number = data.get('receiver_account_number')
+    amount = data.get('amount')
+
+    if not receiver_account_number or not amount:
+        return jsonify({'error': 'Заполните все поля'}), 400
+
+    conn, cur = db_connect()
+
+    try:
+        conn.isolation_level = None
+        cur.execute("BEGIN;")
+
+        cur.execute("SELECT balance FROM users_new3 WHERE login=?;", (sender_login,))
+        sender_balance = cur.fetchone()['balance']
+
+        if sender_balance < amount:
+            cur.execute("ROLLBACK;")
+            return jsonify({'error': 'Недостаточно средств на счете'}), 400
+
+        new_sender_balance = sender_balance - amount
+        cur.execute("UPDATE users_new3 SET balance=? WHERE login=?;", (new_sender_balance, sender_login))
+
+        cur.execute("SELECT login, balance FROM users_new3 WHERE account_number=?;", (receiver_account_number,))
+        receiver = cur.fetchone()
+
+        if not receiver:
+            cur.execute("ROLLBACK;")
+            return jsonify({'error': 'Получатель не найден'}), 404
+
+        receiver_login = receiver['login']
+        receiver_balance = receiver['balance']
+
+        new_receiver_balance = receiver_balance + amount
+        cur.execute("UPDATE users_new3 SET balance=? WHERE account_number=?;", (new_receiver_balance, receiver_account_number))
+
+        cur.execute(
+            """
+            INSERT INTO transactions3 (sender_login, receiver_login, amount)
+            VALUES (?, ?, ?);
+            """,
+            (sender_login, receiver_login, amount)
+        )
+
+        cur.execute("COMMIT;")
+        db_close(conn, cur)
+
+        return jsonify({'message': 'Перевод выполнен успешно', 'amount': amount, 'receiver_login': receiver_login})
+
+    except Exception as e:
+        cur.execute("ROLLBACK;")
+        db_close(conn, cur)
+        return jsonify({'error': f'Ошибка при переводе средств: {str(e)}'}), 500
+
+@rgz.route('/rgz/rest-api/history', methods=['GET'])
+def history():
+    if 'login' not in session:
+        return jsonify({'error': 'Требуется авторизация'}), 401
+
+    user_login = session['login']
+    conn, cur = db_connect()
+
+    cur.execute(
+        """
+        SELECT sender_login, receiver_login, amount, timestamp 
+        FROM transactions3
+        WHERE sender_login = ? OR receiver_login = ?
+        ORDER BY timestamp DESC;
+        """,
+        (user_login, user_login)
     )
-    return conn
+    transactions3 = [dict(row) for row in cur.fetchall()]
+    db_close(conn, cur)
 
+    return jsonify({'transactions': transactions3})
 
-@lab7.route('/lab7/')
-def main():
-    return render_template('lab7/index.html')
+@rgz.route('/rgz/rest-api/account', methods=['GET'])
+def account():
+    if 'login' not in session:
+        return jsonify({'error': 'Требуется авторизация'}), 401
 
+    conn, cur = db_connect()
+    cur.execute("SELECT * FROM users_new3 WHERE login=?;", (session['login'],))
+    user = dict(cur.fetchone())
+    db_close(conn, cur)
 
-@lab7.route('/lab7/rest-api/films/', methods=['GET'])
-def get_films():
-    conn = get_db_connection()
-    with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-        cursor.execute("SELECT * FROM films ORDER BY id;")
-        films = cursor.fetchall()
-    conn.close()
-    return jsonify(films)
+    return jsonify({'user': user})
 
-@lab7.route('/lab7/rest-api/films/<int:id>', methods=['GET'])
-def get_film(id):
-    conn = get_db_connection()
-    with conn.cursor(cursor_factory=RealDictCursor) as cursor:
-        cursor.execute("SELECT * FROM films WHERE id = %s;", (id,))
-        film = cursor.fetchone()
-    conn.close()
-    if not film:
-        return jsonify({"error": "Фильм не найден"}), 404
-    return jsonify(film)
-
-@lab7.route('/lab7/rest-api/films/<int:id>', methods=['DELETE'])
-def delete_film(id):
-    conn = get_db_connection()
-    with conn.cursor() as cursor:
-        cursor.execute("DELETE FROM films WHERE id = %s RETURNING id;", (id,))
-        deleted_id = cursor.fetchone()
-        if not deleted_id:
-            conn.close()
-            return jsonify({"error": "Такого фильма нет"}), 404
-        conn.commit()
-    conn.close()
-    return '', 204
-
-@lab7.route('/lab7/rest-api/films/<int:id>', methods=['PUT'])
-def update_film(id):
-    updated_film = request.get_json()
-
-    if not updated_film.get('title_ru') or not updated_film['title_ru'].strip():
-        return jsonify({"error": "Название фильма на русском обязательно"}), 400
-
-    if not updated_film.get('year') or not isinstance(updated_film['year'], int):
-        return jsonify({"error": "Год выпуска обязателен и должен быть числом"}), 400
-    
-    if updated_film['year'] < 1895 or updated_film['year'] > datetime.now().year:
-        return jsonify({"error": "Год выпуска должен быть от 1895 до текущего"}), 400
-
-    if not updated_film.get('description') or len(updated_film['description']) > 2000:
-        return jsonify({"error": "Описание обязательно и не должно превышать 2000 символов"}), 400
-
-    conn = get_db_connection()
-    with conn.cursor() as cursor:
-        cursor.execute(
-            """
-            UPDATE films 
-            SET title = %s, title_ru = %s, year = %s, description = %s, updated_at = CURRENT_TIMESTAMP 
-            WHERE id = %s RETURNING id;
-            """,
-            (updated_film.get('title'), updated_film['title_ru'], updated_film['year'], updated_film['description'], id)
-        )
-        updated_id = cursor.fetchone()
-        if not updated_id:
-            conn.close()
-            return jsonify({"error": "Такого фильма нет"}), 404
-        conn.commit()
-    conn.close()
-    return jsonify({"id": id}), 200
-
-    
-
-@lab7.route('/lab7/rest-api/films/', methods=['POST'])
-def add_film():
-    new_film = request.get_json()
-    
-    if not new_film.get('title_ru') or not new_film['title_ru'].strip():
-        return jsonify({"error": "Название фильма на русском обязательно"}), 400
-
-    if not new_film.get('year') or not isinstance(new_film['year'], int):
-        return jsonify({"error": "Год выпуска обязателен и должен быть числом"}), 400
-    
-    if new_film['year'] < 1895 or new_film['year'] > datetime.now().year:
-        return jsonify({"error": "Год выпуска должен быть от 1895 до текущего"}), 400
-
-    if not new_film.get('description') or len(new_film['description']) > 2000:
-        return jsonify({"error": "Описание обязательно и не должно превышать 2000 символов"}), 400
-
-    conn = get_db_connection()
-    with conn.cursor() as cursor:
-        cursor.execute(
-            """
-            INSERT INTO films (title, title_ru, year, description) 
-            VALUES (%s, %s, %s, %s) RETURNING id;
-            """,
-            (new_film.get('title'), new_film['title_ru'], new_film['year'], new_film['description'])
-        )
-        new_id = cursor.fetchone()[0]
-        conn.commit()
-    conn.close()
-    return jsonify({"id": new_id}), 201
+@rgz.route('/rgz/rest-api/logout', methods=['POST'])
+def logout():
+    session.pop('login', None)
+    return jsonify({'message': 'Вы успешно вышли из системы'})
