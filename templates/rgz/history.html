@@ -18,10 +18,10 @@
     <tbody>
         {% for transaction in transactions3 %}
         <tr>
-            <td>{{ transaction[0] }}</td>
-            <td>{{ transaction[1] }}</td>
-            <td>{{ transaction[2] }}</td>
-            <td>{{ transaction[3] }}</td>
+            <td>{{ transaction.sender_login }}</td>
+            <td>{{ transaction.receiver_login }}</td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.timestamp }}</td>
         </tr>
         {% endfor %}
     </tbody>

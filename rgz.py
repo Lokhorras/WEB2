@@ -163,6 +163,7 @@ def history():
 
     return render_template('rgz/history.html', transactions3=transactions3)
 
+
 @rgz.route('/rgz/account')
 def account():
     if 'login' not in session:
