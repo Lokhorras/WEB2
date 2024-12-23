@@ -133,6 +133,6 @@ def account():
     return jsonify({'user': user})
 
 @rgz.route('/rgz/rest-api/logout', methods=['POST'])
-def logout():
+def api_logout():
     session.pop('login', None)
     return jsonify({'message': 'Вы успешно вышли из системы'})
