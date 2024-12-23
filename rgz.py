@@ -184,31 +184,20 @@ def history():
     conn, cur = db_connect()
 
     # Получаем историю переводов пользователя
-    if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute(
-            """
-            SELECT sender_login, receiver_login, amount, timestamp 
-            FROM transactions
-            WHERE sender_login = %s OR receiver_login = %s
-            ORDER BY timestamp DESC;
-            """,
-            (user_login, user_login)
-        )
-    else:
-        cur.execute(
-            """
-            SELECT sender_login, receiver_login, amount, timestamp 
-            FROM transactions
-            WHERE sender_login = ? OR receiver_login = ?
-            ORDER BY timestamp DESC;
-            """,
-            (user_login, user_login)
-        )
-    
+    cur.execute(
+        """
+        SELECT sender_login, receiver_login, amount, timestamp 
+        FROM transactions
+        WHERE sender_login = ? OR receiver_login = ?
+        ORDER BY timestamp DESC;
+        """,
+        (user_login, user_login)
+    )
     transactions = cur.fetchall()
-    db_close(conn, cur)
+    conn.close()  # Закрываем соединение с базой данных
 
     return render_template('rgz/history.html', transactions=transactions)
+
 
 
 
