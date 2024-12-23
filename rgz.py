@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session, render_template
+from flask import Blueprint, url_for, redirect, render_template, request, session, current_app
 import sqlite3
 from os import path
 
@@ -32,66 +32,82 @@ def db_close(conn, cur):
     cur.close()
     conn.close()
 
-@rgz.route('/rgz/rest-api/login', methods=['POST'])
-def loginn():
-    data = request.json
-    login = data.get('login')
-    password = data.get('password')
+@rgz.route('/rgz/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('rgz/login.html')
 
-    if not login or not password:
-        return jsonify({'error': 'Заполните поля'}), 400
+    login = request.form.get('login')
+    password = request.form.get('password')
+
+    if not (login or password):
+        return render_template('rgz/login.html', error='Заполните поля')
 
     conn, cur = db_connect()
+
     cur.execute("SELECT login, password FROM users_new3 WHERE login=?;", (login,))
     user = cur.fetchone()
 
-    if not user or user['password'] != password:
+    if not user:
         db_close(conn, cur)
-        return jsonify({'error': 'Логин и/или пароль неверны'}), 401
+        return render_template('rgz/login.html', error='Логин и/или пароль неверны')
+
+    if user['password'] != password:
+        db_close(conn, cur)
+        return render_template('rgz/login.html', error='Логин и/или пароль неверны')
 
     session['login'] = login
+    session['password'] = password
     db_close(conn, cur)
-    return jsonify({'message': 'Успешный вход', 'login': login})
+    return render_template('rgz/success_login.html', login=login)
 
-@rgz.route('/rgz/rest-api/transfer', methods=['POST'])
-def transferr():
+
+
+@rgz.route('/rgz/transfer', methods=['GET', 'POST'])
+def transfer():
     if 'login' not in session:
-        return jsonify({'error': 'Требуется авторизация'}), 401
+        return redirect('/rgz/login')
 
-    data = request.json
+    if request.method == 'GET':
+        return render_template('rgz/transfer.html')
+
     sender_login = session['login']
-    receiver_account_number = data.get('receiver_account_number')
-    amount = data.get('amount')
+    receiver_account_number = request.form.get('receiver_account_number')
+    amount = int(request.form.get('amount'))
 
     if not receiver_account_number or not amount:
-        return jsonify({'error': 'Заполните все поля'}), 400
+        return render_template('rgz/transfer.html', error='Заполните все поля')
 
     conn, cur = db_connect()
 
     try:
-        conn.isolation_level = None
+        # Начало транзакции
+        conn.isolation_level = None  # Отключаем autocommit
         cur.execute("BEGIN;")
 
+        # Получаем баланс отправителя
         cur.execute("SELECT balance FROM users_new3 WHERE login=?;", (sender_login,))
         sender_balance = cur.fetchone()['balance']
 
+        # Проверка достаточности средств
         if sender_balance < amount:
-            cur.execute("ROLLBACK;")
-            return jsonify({'error': 'Недостаточно средств на счете'}), 400
+            return render_template('rgz/transfer.html', error='Недостаточно средств на счете')
 
+        # Обновляем баланс отправителя
         new_sender_balance = sender_balance - amount
         cur.execute("UPDATE users_new3 SET balance=? WHERE login=?;", (new_sender_balance, sender_login))
 
+        # Получаем логин и баланс получателя
         cur.execute("SELECT login, balance FROM users_new3 WHERE account_number=?;", (receiver_account_number,))
         receiver = cur.fetchone()
 
         if not receiver:
-            cur.execute("ROLLBACK;")
-            return jsonify({'error': 'Получатель не найден'}), 404
+            return render_template('rgz/transfer.html', error='Получатель не найден')
 
         receiver_login = receiver['login']
         receiver_balance = receiver['balance']
 
+        # Обновляем баланс получателя
         new_receiver_balance = receiver_balance + amount
         cur.execute("UPDATE users_new3 SET balance=? WHERE account_number=?;", (new_receiver_balance, receiver_account_number))
 
@@ -103,24 +119,32 @@ def transferr():
             (sender_login, receiver_login, amount)
         )
 
+        # Фиксация транзакции
         cur.execute("COMMIT;")
         db_close(conn, cur)
 
-        return jsonify({'message': 'Перевод выполнен успешно', 'amount': amount, 'receiver_login': receiver_login})
+        return render_template(
+            'rgz/transfer_success.html',
+            amount=amount,
+            receiver_login=receiver_login
+        )
 
     except Exception as e:
+        # Откат транзакции в случае ошибки
         cur.execute("ROLLBACK;")
         db_close(conn, cur)
-        return jsonify({'error': f'Ошибка при переводе средств: {str(e)}'}), 500
+        print(f"Error: {e}")  # Отладочное сообщение
+        return render_template('rgz/transfer.html', error='Ошибка при переводе средств')
 
-@rgz.route('/rgz/rest-api/history', methods=['GET'])
-def historyy():
+@rgz.route('/rgz/history')
+def history():
     if 'login' not in session:
-        return jsonify({'error': 'Требуется авторизация'}), 401
-
+        return redirect('/rgz/login')
+    
     user_login = session['login']
     conn, cur = db_connect()
 
+    # Получаем историю переводов пользователя
     cur.execute(
         """
         SELECT sender_login, receiver_login, amount, timestamp 
@@ -130,24 +154,29 @@ def historyy():
         """,
         (user_login, user_login)
     )
-    transactions3 = [dict(row) for row in cur.fetchall()]
-    db_close(conn, cur)
+    transactions3 = cur.fetchall()
+    conn.close()  # Закрываем соединение с базой данных
 
-    return jsonify({'transactions': transactions3})
+    return render_template('rgz/history.html', transactions3=transactions3)
 
-@rgz.route('/rgz/rest-api/account', methods=['GET'])
-def accountt():
+
+@rgz.route('/rgz/account')
+def account():
     if 'login' not in session:
-        return jsonify({'error': 'Требуется авторизация'}), 401
+        return redirect('/rgz/login')
 
     conn, cur = db_connect()
+
     cur.execute("SELECT * FROM users_new3 WHERE login=?;", (session['login'],))
-    user = dict(cur.fetchone())
+    user = cur.fetchone()
     db_close(conn, cur)
 
-    return jsonify({'user': user})
+    return render_template('rgz/account.html', user=user)
 
-@rgz.route('/rgz/rest-api/logout', methods=['POST'])
-def api_logout():
+@rgz.route('/rgz/logout')
+def logoutt():
+    # Удаляем данные о пользователе из сессии
     session.pop('login', None)
-    return jsonify({'message': 'Вы успешно вышли из системы'})
+    session.pop('password', None)
+    # Перенаправляем на страницу входа
+    return redirect('/rgz/login')
