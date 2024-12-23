@@ -61,11 +61,7 @@ def login():
     db_close(conn, cur)
     return render_template('rgz/success_login.html', login=login)
 
-@rgz.route('/rgz/logout')
-def logout():
-    session.pop('login', None)
-    session.pop('password', None)
-    return redirect('rgz.lab')
+
 
 @rgz.route('/rgz/transfer', methods=['GET', 'POST'])
 def transfer():
