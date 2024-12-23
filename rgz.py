@@ -152,10 +152,11 @@ def transfer():
         cur.execute(
             """
             INSERT INTO transactions (sender_login, receiver_login, amount)
-            VALUES (%s, %s, %s);
+            VALUES (?, ?, ?);
             """,
             (sender_login, receiver_login, amount)
         )
+
 
         # Фиксация транзакции
         conn.commit()
