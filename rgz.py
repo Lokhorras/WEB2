@@ -1,9 +1,24 @@
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session, render_template
 import sqlite3
 from os import path
 
 rgz = Blueprint('rgz', __name__)
 
+@rgz.route('/rgz/')
+def lab():
+    return render_template('rgz/rgz.html', login=session.get('login'))
+# INSERT INTO users_new3 (id, full_name, login, password, phone, account_number, balance, role) 
+# VALUES
+# (1, 'John Doe', 'johndoe', '123', '+1234567890', '12345678', 1000.00, 'client'),
+# (2, 'Jane Smith', 'janesmith', '123', '+0987654321', '09876543', 1500.00, 'client'),
+# (3,'Alice Johnson', 'alicej', '123', '+1122334455', '11223344', 2000.00, 'manager'),
+# (4,'Bob Brown', 'bobbrown', '123', '+6677889900', '66778899', 500.00, 'client'),
+# (5,'Charlie Davis', 'charlied', '123', '+1231231234', '12312312', 3000.00, 'client'),
+# (6,'Eva White', 'evawhite', '123', '+4564564567', '45645645', 2500.00, 'client'),
+# (7,'Frank Green', 'frankg', '123', '+7897897890', '78978978', 1200.00, 'client'),
+# (8,'Grace Lee', 'gracelee', '123', '+3213213210', '32132132', 1800.00, 'client'),
+# (9,'Henry Clark', 'henryc', '123', '+9879879870', '98798798', 2200.00, 'manager'),
+# (10,'Ivy Harris', 'ivyh', '123', '+6546546540', '65465465', 900.00, 'client');  
 def db_connect():
     dir_path = path.dirname(path.realpath(__file__))
     db_path = path.join(dir_path, "database.db")
