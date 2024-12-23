@@ -18,7 +18,7 @@ def db_close(conn, cur):
     conn.close()
 
 @rgz.route('/rgz/rest-api/login', methods=['POST'])
-def login():
+def loginn():
     data = request.json
     login = data.get('login')
     password = data.get('password')
@@ -39,7 +39,7 @@ def login():
     return jsonify({'message': 'Успешный вход', 'login': login})
 
 @rgz.route('/rgz/rest-api/transfer', methods=['POST'])
-def transfer():
+def transferr():
     if 'login' not in session:
         return jsonify({'error': 'Требуется авторизация'}), 401
 
@@ -99,7 +99,7 @@ def transfer():
         return jsonify({'error': f'Ошибка при переводе средств: {str(e)}'}), 500
 
 @rgz.route('/rgz/rest-api/history', methods=['GET'])
-def history():
+def historyy():
     if 'login' not in session:
         return jsonify({'error': 'Требуется авторизация'}), 401
 
@@ -121,7 +121,7 @@ def history():
     return jsonify({'transactions': transactions3})
 
 @rgz.route('/rgz/rest-api/account', methods=['GET'])
-def account():
+def accountt():
     if 'login' not in session:
         return jsonify({'error': 'Требуется авторизация'}), 401
 
