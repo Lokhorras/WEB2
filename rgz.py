@@ -177,3 +177,10 @@ def account():
 
     return render_template('rgz/account.html', user=user)
 
+@rgz.route('/rgz/logout')
+def logoutt():
+    # Удаляем данные о пользователе из сессии
+    session.pop('login', None)
+    session.pop('password', None)
+    # Перенаправляем на страницу входа
+    return redirect('/rgz/login')
