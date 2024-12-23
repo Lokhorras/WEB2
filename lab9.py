@@ -18,6 +18,8 @@ def age():
     if request.method == 'GET':
         if 'age' in session:
             return redirect(url_for('lab9.congratulation'))
+        if 'name' not in session:
+            return redirect(url_for('lab9.main'))
         return render_template('lab9/age.html', name=session['name'])
     elif request.method == 'POST':
         age = request.form.get('age')
@@ -29,6 +31,8 @@ def gender():
     if request.method == 'GET':
         if 'gender' in session:
             return redirect(url_for('lab9.congratulation'))
+        if 'name' not in session or 'age' not in session:
+            return redirect(url_for('lab9.main'))
         return render_template('lab9/gender.html', name=session['name'], age=session['age'])
     elif request.method == 'POST':
         gender = request.form.get('gender')
@@ -40,6 +44,8 @@ def preference():
     if request.method == 'GET':
         if 'preference' in session:
             return redirect(url_for('lab9.congratulation'))
+        if 'name' not in session or 'age' not in session or 'gender' not in session:
+            return redirect(url_for('lab9.main'))
         return render_template('lab9/preference.html', name=session['name'], age=session['age'], gender=session['gender'])
     elif request.method == 'POST':
         preference = request.form.get('preference')
@@ -51,6 +57,8 @@ def detail():
     if request.method == 'GET':
         if 'detail' in session:
             return redirect(url_for('lab9.congratulation'))
+        if 'name' not in session or 'age' not in session or 'gender' not in session or 'preference' not in session:
+            return redirect(url_for('lab9.main'))
         return render_template('lab9/detail.html', name=session['name'], age=session['age'], gender=session['gender'], preference=session['preference'])
     elif request.method == 'POST':
         detail = request.form.get('detail')
