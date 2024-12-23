@@ -1,9 +1,6 @@
 from flask import Blueprint, url_for, redirect, render_template, request, session, current_app
-from psycopg2.extras import RealDictCursor
-import psycopg2
 import sqlite3
-from os import path 
-import os
+from os import path
 
 rgz = Blueprint('rgz', __name__)
 
@@ -12,41 +9,18 @@ def lab():
     return render_template('rgz/rgz.html', login=session.get('login'))
 
 def db_connect():
-    if current_app.config['DB_TYPE'] == 'postgres':
-        conn = psycopg2.connect(
-            host = '127.0.0.1',
-            database = 'one',
-            user = 'one',
-            password = '123'
-        )
-        cur = conn.cursor(cursor_factory=RealDictCursor)
-    else:
-        dir_path = path.dirname(path.realpath(__file__))
-        db_path = path.join(dir_path, "database.db")
-        conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
-        cur = conn.cursor()
-        
+    dir_path = path.dirname(path.realpath(__file__))
+    db_path = path.join(dir_path, "database.db")
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    cur = conn.cursor()
     return conn, cur
 
 def db_close(conn, cur):
     conn.commit()
     cur.close()
     conn.close()
-# INSERT INTO users_new3 (id, full_name, login, password, phone, account_number, balance, role) 
-# VALUES
-# (1, 'John Doe', 'johndoe', '123', '+1234567890', '12345678', 1000.00, 'client'),
-# (2, 'Jane Smith', 'janesmith', '123', '+0987654321', '09876543', 1500.00, 'client'),
-# (3,'Alice Johnson', 'alicej', '123', '+1122334455', '11223344', 2000.00, 'manager'),
-# (4,'Bob Brown', 'bobbrown', '123', '+6677889900', '66778899', 500.00, 'client'),
-# (5,'Charlie Davis', 'charlied', '123', '+1231231234', '12312312', 3000.00, 'client'),
-# (6,'Eva White', 'evawhite', '123', '+4564564567', '45645645', 2500.00, 'client'),
-# (7,'Frank Green', 'frankg', '123', '+7897897890', '78978978', 1200.00, 'client'),
-# (8,'Grace Lee', 'gracelee', '123', '+3213213210', '32132132', 1800.00, 'client'),
-# (9,'Henry Clark', 'henryc', '123', '+9879879870', '98798798', 2200.00, 'manager'),
-# (10,'Ivy Harris', 'ivyh', '123', '+6546546540', '65465465', 900.00, 'client');  
-    
-    
+
 @rgz.route('/rgz/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
@@ -60,17 +34,13 @@ def login():
 
     conn, cur = db_connect()
 
-    if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("SELECT login, password FROM users_new3 WHERE login=%s;", (login, ))
-    else:
-        cur.execute("SELECT login, password FROM users_new3 WHERE login=?;", (login, ))   
+    cur.execute("SELECT login, password FROM users_new3 WHERE login=?;", (login,))
     user = cur.fetchone()
 
     if not user:
         db_close(conn, cur)
         return render_template('rgz/login.html', error='Логин и/или пароль неверны')
 
-    # Проверка пароля в открытом виде
     if user['password'] != password:
         db_close(conn, cur)
         return render_template('rgz/login.html', error='Логин и/или пароль неверны')
@@ -80,15 +50,11 @@ def login():
     db_close(conn, cur)
     return render_template('rgz/success_login.html', login=login)
 
-
 @rgz.route('/rgz/logout')
 def logout():
     session.pop('login', None)
     session.pop('password', None)
     return redirect('rgz.lab')
-
-
-
 
 @rgz.route('/rgz/transfer', methods=['GET', 'POST'])
 def transfer():
@@ -109,13 +75,11 @@ def transfer():
 
     try:
         # Начало транзакции
-        conn.autocommit = False
+        conn.isolation_level = None  # Отключаем autocommit
+        cur.execute("BEGIN;")
 
         # Получаем баланс отправителя
-        if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("SELECT balance FROM users_new3 WHERE login=%s;", (sender_login,))
-        else:
-            cur.execute("SELECT balance FROM users_new3 WHERE login=?;", (sender_login,))
+        cur.execute("SELECT balance FROM users_new3 WHERE login=?;", (sender_login,))
         sender_balance = cur.fetchone()['balance']
 
         # Проверка достаточности средств
@@ -124,16 +88,10 @@ def transfer():
 
         # Обновляем баланс отправителя
         new_sender_balance = sender_balance - amount
-        if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("UPDATE users_new3 SET balance=%s WHERE login=%s;", (new_sender_balance, sender_login))
-        else:
-            cur.execute("UPDATE users_new3 SET balance=? WHERE login=?;", (new_sender_balance, sender_login))
+        cur.execute("UPDATE users_new3 SET balance=? WHERE login=?;", (new_sender_balance, sender_login))
 
         # Получаем логин и баланс получателя
-        if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("SELECT login, balance FROM users_new3 WHERE account_number=%s;", (receiver_account_number,))
-        else:
-            cur.execute("SELECT login, balance FROM users_new3 WHERE account_number=?;", (receiver_account_number,))
+        cur.execute("SELECT login, balance FROM users_new3 WHERE account_number=?;", (receiver_account_number,))
         receiver = cur.fetchone()
 
         if not receiver:
@@ -144,10 +102,7 @@ def transfer():
 
         # Обновляем баланс получателя
         new_receiver_balance = receiver_balance + amount
-        if current_app.config['DB_TYPE'] == 'postgres':
-            cur.execute("UPDATE users_new3 SET balance=%s WHERE account_number=%s;", (new_receiver_balance, receiver_account_number))
-        else:
-            cur.execute("UPDATE users_new3 SET balance=? WHERE account_number=?;", (new_receiver_balance, receiver_account_number))
+        cur.execute("UPDATE users_new3 SET balance=? WHERE account_number=?;", (new_receiver_balance, receiver_account_number))
 
         cur.execute(
             """
@@ -157,9 +112,8 @@ def transfer():
             (sender_login, receiver_login, amount)
         )
 
-
         # Фиксация транзакции
-        conn.commit()
+        cur.execute("COMMIT;")
         db_close(conn, cur)
 
         return render_template(
@@ -170,11 +124,10 @@ def transfer():
 
     except Exception as e:
         # Откат транзакции в случае ошибки
-        conn.rollback()
+        cur.execute("ROLLBACK;")
         db_close(conn, cur)
         print(f"Error: {e}")  # Отладочное сообщение
         return render_template('rgz/transfer.html', error='Ошибка при переводе средств')
-
 
 @rgz.route('/rgz/history')
 def history():
@@ -199,9 +152,6 @@ def history():
 
     return render_template('rgz/history.html', transactions3=transactions3)
 
-
-
-
 @rgz.route('/rgz/account')
 def account():
     if 'login' not in session:
@@ -209,20 +159,8 @@ def account():
 
     conn, cur = db_connect()
 
-    if current_app.config['DB_TYPE'] == 'postgres':
-        cur.execute("SELECT * FROM users_new3 WHERE login=%s;", (session['login'],))
-    else:
-        cur.execute("SELECT * FROM users_new3 WHERE login=?;", (session['login'],))
-
+    cur.execute("SELECT * FROM users_new3 WHERE login=?;", (session['login'],))
     user = cur.fetchone()
     db_close(conn, cur)
 
     return render_template('rgz/account.html', user=user)
-
-
-
-
-
-
-
-
