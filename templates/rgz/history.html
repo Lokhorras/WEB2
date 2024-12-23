@@ -5,7 +5,7 @@
 {% block main %}
 <h1>История переводов</h1>
 
-{% if transactions %}
+{% if transactions3 %}
 <table>
     <thead>
         <tr>
@@ -16,7 +16,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for transaction in transactions %}
+        {% for transaction in transactions3 %}
         <tr>
             <td>{{ transaction[0] }}</td>
             <td>{{ transaction[1] }}</td>
