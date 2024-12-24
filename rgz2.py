@@ -24,11 +24,11 @@ def db_close(conn, cur):
 def labbss():
     return render_template('base.html', login=session.get('login'))
 
-@rgz2.route('/rgz2/rest-api/login', methods=['POST'])
+@rgz2.route('/rgz2/rest-api/login', methods=['GET', 'POST'])
 def api_loginn():
     if request.method == 'POST':
         try:
-            # Убедимся, что данные передаются как JSON
+            # Проверяем, что данные передаются в формате JSON
             if not request.is_json:
                 return jsonify({'success': False, 'error': 'Unsupported Media Type. JSON expected'}), 415
 
@@ -52,6 +52,10 @@ def api_loginn():
                 return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
         except Exception as e:
             return jsonify({'success': False, 'error': str(e)}), 500
+    elif request.method == 'GET':
+        # Возвращаем страницу входа
+        return render_template('rgz2/login.html')
+
 
 # API для выхода
 @rgz2.route('/rgz2/rest-api/logout', methods=['POST'])
