@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Главная</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <div class="title">
+        <a class="a1" href="/rgz/login">Вход</a> 
+        <a class="a1" href="/rgz/account">Профиль</a> 
+        <a class="a1" href="/rgz/transfer">Перевести деньги</a>
+        <a class="a1" href="/rgz/history">История транзакций</a>
+        <a class="a1" href="/rgz/logout">Выход</a>
+        <span class="a1">{{ login or "Аноним" }}</span>
+
+        <!-- Ссылки для менеджера -->
+        {% if session.role == 'manager' %}
+            <a class="a1" href="/rgz/create_user">Создать пользователя</a>
+            <a class="a1" href="/rgz/manage_users">Управление пользователями</a>
+        {% endif %}
+    </div>
+
+    <h1>Добро пожаловать в систему RGZ</h1>
+    <p>Используйте ссылки выше для навигации по сайту.</p>
+
+    <script src="/static/js/api.js"></script>
+</body>
+</html>
