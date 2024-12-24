@@ -20,7 +20,7 @@ def db_close(conn, cur):
     conn.close()
 
 # Routes
-@rgz2.route('/')
+@rgz2.route('/rgz2/')
 def indexxx():
     return render_template('index.html')
 
