@@ -3,7 +3,7 @@ import sqlite3
 from os import path
 
 rgz2 = Blueprint('rgz2', __name__)
-
+rgz2.secret_key = '123'  
 # Функция для подключения к базе данных
 def db_connect():
     dir_path = path.dirname(path.realpath(__file__))
