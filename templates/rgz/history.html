@@ -4,11 +4,84 @@
 
 {% block main %}
 <style>
-    /* Styles remain the same */
+    body {
+        background-color: #eef3f8; /* Нейтральный фон */
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        color: #003f5c; /* Темно-синий цвет заголовка */
+        text-align: center;
+        margin-top: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #ffffff; /* Белый фон таблицы */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    table thead {
+        background-color: #005f87; /* Темно-синий для заголовка таблицы */
+        color: white;
+    }
+
+    table th, table td {
+        padding: 10px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+        font-weight: bold;
+    }
+
+    table tr:hover {
+        background-color: #f1f1f1; /* Легкий серый при наведении */
+    }
+
+    table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    p {
+        text-align: center;
+        font-size: 16px;
+        color: #4a4a4a;
+    }
+
+    a {
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        padding: 10px 20px;
+        background-color: #005f87;
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        width: fit-content;
+        border-radius: 5px;
+    }
+
+    a:hover {
+        background-color: #008fbf;
+    }
+
+    a:active {
+        background-color: #004f6a;
+    }
 </style>
 
 <h1>История переводов</h1>
 
+{% if transactions3 %}
 <table>
     <thead>
         <tr>
@@ -18,10 +91,20 @@
             <th>Дата и время</th>
         </tr>
     </thead>
-    <tbody id="transactions-body">
-        <!-- Transactions will be populated here -->
+    <tbody>
+        {% for transaction in transactions3 %}
+        <tr>
+            <td>{{ transaction.sender_login }}</td>
+            <td>{{ transaction.receiver_login }}</td>
+            <td>{{ transaction.amount }} руб.</td>
+            <td>{{ transaction.timestamp }}</td>
+        </tr>
+        {% endfor %}
     </tbody>
 </table>
+{% else %}
+<p>Нет записей о переводах.</p>
+{% endif %}
 
-<a class="a1" href="/rgz/account">Профиль</a>
+<a href="{{ url_for('rgz.account') }}">Вернуться в личный кабинет</a>
 {% endblock %}
