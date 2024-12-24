@@ -4,7 +4,7 @@ from os import path
 
 rgz2 = Flask('rgz2', __name__)
 
-@rgz2.route('/rgz/')
+@rgz2.route('/rgz2/')
 def lab():
     return render_template('rgz2/base.html', login=session.get('login'))
 
@@ -25,12 +25,12 @@ def db_close(conn, cur):
     conn.close()
 
 # Маршрут для отображения страницы входа
-@rgz2.route('/rgz/login', methods=['GET'])
+@rgz2.route('/rgz2/login', methods=['GET'])
 def login_pagee():
     return render_template('rgz2/login.html')
 
 # API для обработки входа
-@rgz2.route('/rgz/rest-api/login', methods=['POST'])
+@rgz2.route('/rgz2/rest-api/login', methods=['POST'])
 def api_loginn():
     data = request.get_json()
     login = data.get('login')
@@ -52,14 +52,14 @@ def api_loginn():
         return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
 
 # API для выхода
-@rgz2.route('/rgz/rest-api/logout', methods=['POST'])
+@rgz2.route('/rgz2/rest-api/logout', methods=['POST'])
 def api_logoutt():
     session.pop('login', None)
     session.pop('role', None)
     return jsonify({'success': True})
 
 # API для получения данных пользователя
-@rgz2.route('/rgz/rest-api/user', methods=['GET'])
+@rgz2.route('/rgz2/rest-api/user', methods=['GET'])
 def api_userr():
     if 'login' in session:
         conn, cur = db_connect()
@@ -74,7 +74,7 @@ def api_userr():
         return jsonify({'error': 'Not logged in'}), 401
 
 # API для получения истории транзакций
-@rgz2.route('/rgz/rest-api/transfers', methods=['GET'])
+@rgz2.route('/rgz2/rest-api/transfers', methods=['GET'])
 def api_transfersr():
     if 'login' in session:
         user_login = session['login']
@@ -95,7 +95,7 @@ def api_transfersr():
         return jsonify({'error': 'Not logged in'}), 401
 
 # API для перевода денег
-@rgz2.route('/rgz/rest-api/transfer', methods=['POST'])
+@rgz2.route('/rgz2/rest-api/transfer', methods=['POST'])
 def api_transferr():
     if 'login' in session:
         sender_login = session['login']

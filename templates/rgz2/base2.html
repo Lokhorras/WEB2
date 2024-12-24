@@ -35,10 +35,10 @@
 <body>
     <div class="navbar">
         <div>
-            <a href="/rgz/login">Вход</a>
-            <a href="/rgz/account">Профиль</a>
-            <a href="/rgz/transfer">Перевести деньги</a>
-            <a href="/rgz/history">История транзакций</a>
+            <a href="/rgz2/login">Вход</a>
+            <a href="/rgz2/account">Профиль</a>
+            <a href="/rgz2/transfer">Перевести деньги</a>
+            <a href="/rgz2/history">История транзакций</a>
             <a href="#" onclick="logout()">Выход</a>
         </div>
         <span>{% if session.get('login') %} {{ session.get('login') }} {% else %} Аноним {% endif %}</span>
