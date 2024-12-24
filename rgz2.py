@@ -4,6 +4,10 @@ from os import path
 
 rgz2 = Flask( 'rgz2', __name__)
 
+@rgz.route('/rgz/')
+def lab():
+    return render_template('rgz2/base.html', login=session.get('login'))
+
 
 # Функция для подключения к базе данных
 def db_connect():
@@ -22,12 +26,12 @@ def db_close(conn, cur):
 
 # Маршрут для отображения страницы входа
 @rgz2.route('/rgz/login', methods=['GET'])
-def login_page():
+def login_pagee():
     return render_template('rgz2/login.html')
 
 # API для обработки входа
 @rgz2.route('/rgz/rest-api/login', methods=['POST'])
-def api_login():
+def api_loginn():
     data = request.get_json()
     login = data.get('login')
     password = data.get('password')
@@ -49,14 +53,14 @@ def api_login():
 
 # API для выхода
 @rgz2.route('/rgz/rest-api/logout', methods=['POST'])
-def api_logout():
+def api_logoutt():
     session.pop('login', None)
     session.pop('role', None)
     return jsonify({'success': True})
 
 # API для получения данных пользователя
 @rgz2.route('/rgz/rest-api/user', methods=['GET'])
-def api_user():
+def api_userr():
     if 'login' in session:
         conn, cur = db_connect()
         cur.execute("SELECT * FROM users_new3 WHERE login=?;", (session['login'],))
@@ -71,7 +75,7 @@ def api_user():
 
 # API для получения истории транзакций
 @rgz2.route('/rgz/rest-api/transfers', methods=['GET'])
-def api_transfers():
+def api_transfersr():
     if 'login' in session:
         user_login = session['login']
         conn, cur = db_connect()
@@ -92,7 +96,7 @@ def api_transfers():
 
 # API для перевода денег
 @rgz2.route('/rgz/rest-api/transfer', methods=['POST'])
-def api_transfer():
+def api_transferr():
     if 'login' in session:
         sender_login = session['login']
         receiver_account_number = request.json.get('receiver_account_number')
