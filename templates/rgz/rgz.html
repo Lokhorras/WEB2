@@ -42,10 +42,6 @@
         <!-- Ссылки для менеджера -->
         {% if session.role == 'manager' %}
             <a class="a1" href="/rgz/create_user">Создать пользователя</a>
-            <a class="a1" href="/rgz/edit_user/{{ session.login }}">Редактировать пользователя</a>
-            <form action="/rgz/delete_user/{{ session.login }}" method="post" style="display:inline;">
-                <button type="submit" class="a1" onclick="return confirm('Вы уверены?')">Удалить пользователя</button>
-            </form>
             <a class="a1" href="/rgz/manage_users">Управление пользователями</a>
         {% endif %}
     </div>

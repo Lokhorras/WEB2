@@ -21,8 +21,12 @@
             <td>{{ user.full_name }}</td>
             <td>{{ user.role }}</td>
             <td>
+                <!-- Кнопка для редактирования пользователя -->
+                <a href="/rgz/edit_user/{{ user.login }}" class="a1">Редактировать</a>
+                
+                <!-- Форма для удаления пользователя -->
                 <form action="/rgz/delete_user/{{ user.login }}" method="post" style="display:inline;">
-                    <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить пользователя {{ user.login }}?')">Удалить</button>
+                    <button type="submit" class="a1" onclick="return confirm('Вы уверены, что хотите удалить пользователя {{ user.login }}?')">Удалить</button>
                 </form>
             </td>
         </tr>
