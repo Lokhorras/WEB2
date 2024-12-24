@@ -24,12 +24,10 @@ def db_close(conn, cur):
 def labbss():
     return render_template('base.html', login=session.get('login'))
 
-# API для обработки входа
 @rgz2.route('/rgz2/rest-api/login', methods=['GET', 'POST'])
 def api_loginn():
     if request.method == 'POST':
-        # Логика обработки POST-запроса (логин)
-        data = request.get_json()
+        data = request.get_json()  # Ожидаем JSON-данные
         login = data.get('login')
         password = data.get('password')
 
@@ -48,7 +46,6 @@ def api_loginn():
         else:
             return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
     elif request.method == 'GET':
-        # Логика обработки GET-запроса (например, отображение формы)
         return render_template('rgz2/login.html')
 
 # API для выхода

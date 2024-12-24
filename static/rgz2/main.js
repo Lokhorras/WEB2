@@ -1,24 +1,24 @@
 // Обработчик отправки формы входа
 document.getElementById('login-form').addEventListener('submit', function(event) {
-    event.preventDefault();
+    event.preventDefault(); // Предотвращаем стандартное поведение формы
 
     const formData = new FormData(event.target);
-    const data = Object.fromEntries(formData.entries());
+    const data = Object.fromEntries(formData.entries()); // Преобразуем FormData в объект
 
-    fetch('/rgz/rest-api/login', {
+    fetch('/rgz2/rest-api/login', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json' // Указываем, что отправляем JSON
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data) // Сериализуем данные в JSON
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             sessionStorage.setItem('login', data.login);
-            window.location.href = '/rgz/account';
+            window.location.href = '/rgz2/'; // Перенаправляем на главную страницу
         } else {
-            alert(data.error);
+            alert(data.error); // Показываем ошибку
         }
     })
     .catch(error => {
