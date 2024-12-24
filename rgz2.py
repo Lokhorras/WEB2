@@ -4,11 +4,6 @@ from os import path
 
 rgz2 = Blueprint('rgz2', __name__)
 
-@rgz2.route('/rgz2/')
-def labbss():
-    return render_template('/rgz2/base2.html', login=session.get('login'))
-
-
 # Функция для подключения к базе данных
 def db_connect():
     dir_path = path.dirname(path.realpath(__file__))
@@ -23,6 +18,11 @@ def db_close(conn, cur):
     conn.commit()
     cur.close()
     conn.close()
+
+# Маршрут для отображения главной страницы
+@rgz2.route('/rgz2/')
+def labbss():
+    return render_template('rgz2/base2.html', login=session.get('login'))
 
 # Маршрут для отображения страницы входа
 @rgz2.route('/rgz2/login', methods=['GET'])
@@ -129,6 +129,3 @@ def api_transferr():
             return jsonify({'error': str(e)}), 500
     else:
         return jsonify({'error': 'Not logged in'}), 401
-
-
-
