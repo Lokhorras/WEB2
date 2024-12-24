@@ -7,10 +7,14 @@ rgz2 = Blueprint('rgz2', __name__)
 def db_connect():
     dir_path = path.dirname(path.realpath(__file__))
     db_path = path.join(dir_path, "database.db")
-    conn = sqlite3.connect(db_path)
-    conn.row_factory = sqlite3.Row
-    cur = conn.cursor()
-    return conn, cur
+    try:
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
+        cur = conn.cursor()
+        return conn, cur
+    except Exception as e:
+        print(f"Ошибка подключения к базе данных: {e}")
+        raise
 
 def db_close(conn, cur):
     conn.commit()
@@ -24,28 +28,32 @@ def mainn():
 @rgz2.route('/rgz2/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # Получение данных из запроса
-        username = request.json.get('username')
-        password = request.json.get('password')
-
-        if not username or not password:
-            return jsonify({'error': 'Логин и пароль обязательны'}), 400
-
-        # Подключение к базе данных
-        conn, cur = db_connect()
         try:
-            cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
-            user = cur.fetchone()
-            if user:
-                # Сохраняем данные пользователя в сессии
-                session['user_id'] = user['id']
-                session['username'] = user['username']
-                session['role'] = user['role']
-                return jsonify({'message': 'Вход выполнен успешно', 'username': user['username']}), 200
-            else:
-                return jsonify({'error': 'Неверный логин или пароль'}), 401
-        finally:
-            db_close(conn, cur)
+            # Получаем данные из запроса
+            username = request.json.get('username')
+            password = request.json.get('password')
 
-    # Если метод GET, возвращаем HTML-форму
+            if not username or not password:
+                return jsonify({'error': 'Логин и пароль обязательны'}), 400
+
+            # Подключаемся к базе данных
+            conn, cur = db_connect()
+            try:
+                cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+                user = cur.fetchone()
+                if user:
+                    # Сохраняем данные в сессии
+                    session['user_id'] = user['id']
+                    session['username'] = user['username']
+                    session['role'] = user['role']
+                    return jsonify({'message': 'Вход выполнен успешно', 'username': user['username']}), 200
+                else:
+                    return jsonify({'error': 'Неверный логин или пароль'}), 401
+            finally:
+                db_close(conn, cur)
+        except Exception as e:
+            # Логируем ошибку для отладки
+            return jsonify({'error': str(e)}), 500
+
     return render_template('rgz2/login.html')
+
