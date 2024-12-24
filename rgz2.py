@@ -6,7 +6,7 @@ rgz2 = Blueprint('rgz2', __name__)
 
 @rgz2.route('/rgz2/')
 def labbss():
-    return render_template('rgz2/base.html', login=session.get('login'))
+    return render_template('/rgz2/base2.html', login=session.get('login'))
 
 
 # Функция для подключения к базе данных
