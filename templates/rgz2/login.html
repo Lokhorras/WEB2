@@ -2,7 +2,9 @@
 
 {% block script %}
 <script>
-    async function login() {
+    async function login(event) {
+        event.preventDefault(); // Предотвращаем отправку формы
+
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
@@ -22,6 +24,12 @@
             document.getElementById('errorMessage').textContent = data.error;
         }
     }
+
+    // Добавляем обработчик события для кнопки "Войти"
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginButton = document.querySelector('button[type="submit"]');
+        loginButton.addEventListener('click', login);
+    });
 </script>
 {% endblock %}
 
@@ -74,10 +82,8 @@
         <form id="loginForm">
             <input type="text" id="username" name="username" placeholder="Логин" required>
             <input type="password" id="password" name="password" placeholder="Пароль" required>
-            <button type="button" onclick="login()">Войти</button>
+            <button type="submit">Войти</button>
         </form>
         <p id="errorMessage" style="color: red; text-align: center;"></p>
     </div>
-
-
 {% endblock %}
