@@ -24,7 +24,7 @@ def db_close(conn, cur):
 def indexxx():
     return render_template('index.html')
 
-@rgz2.route('rgz2/api/login', methods=['POST'])
+@rgz2.route('/rgz2/api/login', methods=['POST'])
 def api_loginnn():
     data = request.get_json()
     login = data.get('login')
@@ -46,13 +46,13 @@ def api_loginnn():
     db_close(conn, cur)
     return jsonify({'message': 'Успешный вход', 'login': login, 'role': user['role']}), 200
 
-@rgz2.route('rgz2/api/logout', methods=['POST'])
+@rgz2.route('/rgz2/api/logout', methods=['POST'])
 def api_logout():
     session.pop('login', None)
     session.pop('role', None)
     return jsonify({'message': 'Успешный выход'}), 200
 
-@rgz2.route('/api/transfer', methods=['POST'])
+@rgz2.route('/rgz2/api/transfer', methods=['POST'])
 def api_transferrr():
     if 'login' not in session:
         return jsonify({'error': 'Необходима авторизация'}), 401
@@ -107,7 +107,7 @@ def api_transferrr():
         db_close(conn, cur)
         return jsonify({'error': f'Ошибка: {str(e)}'}), 500
 
-@rgz2.route('rgz2/api/account', methods=['GET'])
+@rgz2.route('/rgz2/api/account', methods=['GET'])
 def api_accounttt():
     if 'login' not in session:
         return jsonify({'error': 'Необходима авторизация'}), 401
