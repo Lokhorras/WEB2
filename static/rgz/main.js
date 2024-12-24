@@ -1,6 +1,6 @@
 function fetchUser() {
     if (sessionStorage.getItem('login')) {
-        fetch('/rgz/rest-api/user')
+        fetch('/rgz/rest-api/user')  // Используйте маршрут для получения данных пользователя
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
@@ -13,6 +13,23 @@ function fetchUser() {
     } else {
         window.location.href = '/rgz/rest-api/login';
     }
+}
+
+function loginUser(login, password) {
+    fetch('/rgz/rest-api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ login: login, password: password })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            sessionStorage.setItem('login', login);
+            window.location.href = '/rgz/account';
+        } else {
+            alert(data.error);
+        }
+    });
 }
 
 function fetchTransfers() {
