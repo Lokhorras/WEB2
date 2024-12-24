@@ -1,5 +1,4 @@
 from flask import Blueprint, url_for, redirect, render_template, request, session, current_app, jsonify
-from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 from os import path
 
@@ -53,7 +52,9 @@ def login():
         db_close(conn, cur)
         return render_template('rgz/login.html', error='Логин и/или пароль неверны')
 
-    if user['password'] != password:
+    # Убираем проверку хешированного пароля
+    # if not check_password_hash(user['password'], password):
+    if user['password'] != password:  # Сравниваем пароли в открытом виде
         db_close(conn, cur)
         return render_template('rgz/login.html', error='Логин и/или пароль неверны')
 
@@ -214,7 +215,8 @@ def create_user():
     if not full_name or not login or not password or not phone or not account_number:
         return render_template('rgz/create_user.html', error='Заполните все поля')
 
-    hashed_password = generate_password_hash(password)
+    # Убираем хеширование пароля
+    # hashed_password = generate_password_hash(password)
 
     conn, cur = db_connect()
     try:
@@ -223,7 +225,7 @@ def create_user():
             INSERT INTO users_new3 (full_name, login, password, phone, account_number, balance, role)
             VALUES (?, ?, ?, ?, ?, ?, ?);
             """,
-            (full_name, login, hashed_password, phone, account_number, balance, role)
+            (full_name, login, password, phone, account_number, balance, role)  # Используем пароль в открытом виде
         )
         conn.commit()
         db_close(conn, cur)
@@ -262,8 +264,9 @@ def edit_user(login):
         if full_name:
             cur.execute("UPDATE users_new3 SET full_name=? WHERE login=?;", (full_name, login))
         if password:
-            hashed_password = generate_password_hash(password)
-            cur.execute("UPDATE users_new3 SET password=? WHERE login=?;", (hashed_password, login))
+            # Убираем хеширование пароля
+            # hashed_password = generate_password_hash(password)
+            cur.execute("UPDATE users_new3 SET password=? WHERE login=?;", (password, login))  # Используем пароль в открытом виде
         if phone:
             cur.execute("UPDATE users_new3 SET phone=? WHERE login=?;", (phone, login))
         if account_number:
