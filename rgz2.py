@@ -21,7 +21,7 @@ def db_close(conn, cur):
 def mainn():
     return render_template('rgz2/index.html')
 
-@rgz2.route('/rgz/login', methods=['GET', 'POST'])
+@rgz2.route('/rgz2/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         # Получение данных из запроса
@@ -49,3 +49,4 @@ def login():
 
     # Если метод GET, возвращаем HTML-форму
     return render_template('rgz2/login.html')
+
