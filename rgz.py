@@ -6,7 +6,7 @@ rgz = Blueprint('rgz', __name__)
 
 @rgz.route('/rgz/')
 def lab():
-    return render_template('rgz/rgz.html', login=session.get('login'))
+    return render_template('rgz2/index.html', login=session.get('login'))
 # INSERT INTO users_new3 (id, full_name, login, password, phone, account_number, balance, role) 
 # VALUES
 # (1, 'John Doe', 'johndoe', '123', '+1234567890', '12345678', 1000.00, 'client'),
