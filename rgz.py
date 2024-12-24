@@ -46,7 +46,7 @@ def login():
 
     conn, cur = db_connect()
 
-    cur.execute("SELECT login, password FROM users_new3 WHERE login=?;", (login,))
+    cur.execute("SELECT login, password, role FROM users_new3 WHERE login=?;", (login,))
     user = cur.fetchone()
 
     if not user:
@@ -57,8 +57,9 @@ def login():
         db_close(conn, cur)
         return render_template('rgz/login.html', error='Логин и/или пароль неверны')
 
+    # Сохраняем данные пользователя в сессии
     session['login'] = login
-    session['password'] = password
+    session['role'] = user['role']  # Сохраняем роль пользователя
     db_close(conn, cur)
     return render_template('rgz/success_login.html', login=login)
 
