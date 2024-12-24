@@ -30,7 +30,7 @@ def login():
     if request.method == 'POST':
         try:
             # Получаем данные из запроса
-            username = request.json.get('username')
+            username = request.json.get('username')  # 'login' в вашей таблице
             password = request.json.get('password')
 
             if not username or not password:
@@ -39,14 +39,16 @@ def login():
             # Подключаемся к базе данных
             conn, cur = db_connect()
             try:
-                cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+                # Выбираем пользователя по логину и паролю
+                cur.execute("SELECT * FROM users_new3 WHERE login = ? AND password = ?", (username, password))
                 user = cur.fetchone()
+
                 if user:
                     # Сохраняем данные в сессии
                     session['user_id'] = user['id']
-                    session['username'] = user['username']
+                    session['username'] = user['login']
                     session['role'] = user['role']
-                    return jsonify({'message': 'Вход выполнен успешно', 'username': user['username']}), 200
+                    return jsonify({'message': 'Вход выполнен успешно', 'username': user['login']}), 200
                 else:
                     return jsonify({'error': 'Неверный логин или пароль'}), 401
             finally:
@@ -55,5 +57,5 @@ def login():
             # Логируем ошибку для отладки
             return jsonify({'error': str(e)}), 500
 
+    # Возвращаем HTML-форму, если запрос GET
     return render_template('rgz2/login.html')
-
