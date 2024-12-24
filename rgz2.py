@@ -18,5 +18,5 @@ def db_close(conn, cur):
     conn.close()
 
 @rgz2.route('/rgz2/')
-def main():
-    return render_template('lab7/index.html')
+def mainn():
+    return render_template('rgz2/index.html')

@@ -86,7 +86,7 @@ def start():
                 <ol> <a href="/lab8/"> 8 Лабораторная работа </a> </ol>
                 <ol> <a href="/lab9/"> 9 Лабораторная работа </a> </ol>
                 <ol> <a href="/rgz/"> rgz </a> </ol>
-                <ol> <a href="/rgz2/interface"> rgz2 Interface </a> </ol>
+                <ol> <a href="/rgz2/"> РГЗ </a> </ol>
             </body>
             <footer><p>Студент: Миракин Д.В.</p>
             Группа: ФБИ-22 
