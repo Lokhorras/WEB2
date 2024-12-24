@@ -1,12 +1,58 @@
 {% extends 'base.html' %}
 
-{% block lab %}{% endblock %}
+{% block lab %}Bank{% endblock %}
 
 {% block main %}
 <style>
     body {
-        background-color: #f0f8ff; 
+        background-color: #eef3f8; /* Светлый и нейтральный фон */
+        font-family: Arial, sans-serif; /* Простой и читаемый шрифт */
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        color: #003f5c; /* Темно-синий цвет, внушающий доверие */
+        font-size: 28px;
+        text-align: center;
+        margin-top: 50px;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* Легкая тень для акцента */
+    }
+
+    .congrats-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 80vh; /* Центрирование по вертикали */
+    }
+
+    .btn-back {
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #005f87; /* Цвет кнопки */
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 25px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-back:hover {
+        background-color: #008fbf; /* Ярче при наведении */
+        transform: scale(1.05); /* Легкое увеличение при наведении */
+    }
+
+    .btn-back:active {
+        background-color: #004f6a; /* Темнее при клике */
     }
 </style>
-    <h1>Поздравляю {{ login }} с успешным входом на сайт</h1>
+
+<div class="congrats-container">
+    <h1>Поздравляем, {{ login or "гость" }}! Вы успешно вошли на сайт банка</h1>
+    <a class="btn-back" href="/">На главную</a>
+</div>
 {% endblock %}

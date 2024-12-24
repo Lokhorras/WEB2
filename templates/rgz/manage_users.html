@@ -3,9 +3,120 @@
 {% block lab %}Управление пользователями{% endblock %}
 
 {% block main %}
+<style>
+    body {
+        background-color: #eef3f8; /* Нейтральный фон */
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        color: #003f5c; /* Темно-синий цвет заголовка */
+        text-align: center;
+        margin-top: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    table {
+        width: 90%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    table thead {
+        background-color: #005f87; /* Темно-синий для заголовка таблицы */
+        color: white;
+    }
+
+    table th,
+    table td {
+        padding: 10px 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    table th {
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    table tr:hover {
+        background-color: #f1f1f1; /* Легкий серый при наведении */
+    }
+
+    table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .a1 {
+        text-decoration: none;
+        padding: 5px 10px;
+        background-color: #0ec2e2;
+        color: white;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .a1:hover {
+        background-color: #00adb3;
+    }
+
+    .a1:active {
+        background-color: #008c99;
+    }
+
+    form {
+        display: inline;
+    }
+
+    form button {
+        padding: 5px 10px;
+        background-color: #d9534f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    form button:hover {
+        background-color: #c9302c;
+    }
+
+    form button:active {
+        background-color: #ac2925;
+    }
+
+    a.return-link {
+        display: block;
+        margin: 20px auto;
+        text-align: center;
+        padding: 10px 20px;
+        background-color: #005f87;
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        width: fit-content;
+        border-radius: 5px;
+    }
+
+    a.return-link:hover {
+        background-color: #008fbf;
+    }
+
+    a.return-link:active {
+        background-color: #004f6a;
+    }
+</style>
+
 <h1>Управление пользователями</h1>
 
-<table border="1">
+<table>
     <thead>
         <tr>
             <th>Логин</th>
@@ -21,12 +132,9 @@
             <td>{{ user.full_name }}</td>
             <td>{{ user.role }}</td>
             <td>
-                <!-- Кнопка для редактирования пользователя -->
                 <a href="/rgz/edit_user/{{ user.login }}" class="a1">Редактировать</a>
-                
-                <!-- Форма для удаления пользователя -->
-                <form action="/rgz/delete_user/{{ user.login }}" method="post" style="display:inline;">
-                    <button type="submit" class="a1" onclick="return confirm('Вы уверены, что хотите удалить пользователя {{ user.login }}?')">Удалить</button>
+                <form action="/rgz/delete_user/{{ user.login }}" method="post">
+                    <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить пользователя {{ user.login }}?')">Удалить</button>
                 </form>
             </td>
         </tr>
@@ -34,5 +142,5 @@
     </tbody>
 </table>
 
-<a href="/rgz/account">Вернуться в личный кабинет</a>
+<a href="/rgz/account" class="return-link">Вернуться в личный кабинет</a>
 {% endblock %}

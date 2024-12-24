@@ -1,36 +1,58 @@
 {% extends "base.html" %}
 
-{% block lab %}bank{% endblock %}
+{% block lab %}Bank{% endblock %}
 
 {% block main %}
     <style>
         body {
-            background-color: #f0f8ff; 
+            background-color: #eef3f8; /* Светлый нейтральный фон */
+            font-family: Arial, sans-serif; /* Читаемый шрифт */
+            margin: 0;
+            padding: 0;
         }
-        
-        .title{
+
+        .title {
             width: 100%;
             height: 150px;
             display: flex;
-            gap: 10px;
+            gap: 20px;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             align-items: center;
-            text-align: center;
-            background-color: rgb(156, 209, 209);
             justify-content: center;
-
+            background-color: #003f5c; /* Темно-синий, внушающий доверие */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        .a1{
-            border-radius: 50px;
-            width: 150px;
-            height: 20px;
-            vertical-align: 30px;
-            background-color: antiquewhite;
+
+        .a1 {
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white; /* Белый текст для контраста */
+            background-color: #005f87; /* Чуть светлее для кнопок */
             text-decoration: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
+        .a1:hover {
+            background-color: #008fbf; /* Ярче при наведении */
+            transform: scale(1.05); /* Легкое увеличение при наведении */
+        }
+
+        .a1:active {
+            background-color: #004f6a; /* Темнее при клике */
+        }
+
+        .a1:last-child {
+            background-color: transparent;
+            color: #ffffff;
+            font-style: italic;
+            pointer-events: none; /* Для отображения имени, без ссылки */
+        }
     </style>
+
     <div class="title">
         <a class="a1" href="/rgz/login">Вход</a> 
         <a class="a1" href="/rgz/account">Профиль</a> 

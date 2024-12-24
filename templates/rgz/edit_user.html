@@ -3,6 +3,83 @@
 {% block lab %}Редактирование пользователя{% endblock %}
 
 {% block main %}
+<style>
+    body {
+        background-color: #eef3f8; /* Нейтральный фон */
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1 {
+        color: #003f5c; /* Темно-синий цвет заголовка */
+        text-align: center;
+        margin-top: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    form {
+        max-width: 400px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #ffffff; /* Белый фон для контраста */
+        border: 1px solid #d1e7f3;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #4a4a4a;
+    }
+
+    form input,
+    form select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    form button {
+        width: 100%;
+        padding: 10px;
+        background-color: #005f87; /* Темно-синий цвет кнопки */
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+        background-color: #008fbf; /* Ярче при наведении */
+    }
+
+    form button:active {
+        background-color: #004f6a; /* Темнее при клике */
+    }
+
+    p {
+        text-align: center;
+        font-size: 14px;
+    }
+
+    p[style="color: red;"] {
+        color: red;
+        font-weight: bold;
+        margin-top: -10px;
+        margin-bottom: 15px;
+    }
+</style>
+
 <h1>Редактирование пользователя</h1>
 
 {% if error %}
@@ -11,25 +88,25 @@
 
 <form method="post">
     <label for="full_name">ФИО:</label>
-    <input type="text" id="full_name" name="full_name" value="{{ user.full_name }}"><br><br>
+    <input type="text" id="full_name" name="full_name" value="{{ user.full_name }}" required>
 
     <label for="password">Пароль:</label>
-    <input type="password" id="password" name="password"><br><br>
+    <input type="password" id="password" name="password">
 
     <label for="phone">Телефон:</label>
-    <input type="text" id="phone" name="phone" value="{{ user.phone }}"><br><br>
+    <input type="text" id="phone" name="phone" value="{{ user.phone }}" required>
 
     <label for="account_number">Номер счета:</label>
-    <input type="text" id="account_number" name="account_number" value="{{ user.account_number }}"><br><br>
+    <input type="text" id="account_number" name="account_number" value="{{ user.account_number }}" required>
 
     <label for="balance">Баланс:</label>
-    <input type="number" id="balance" name="balance" step="0.01" value="{{ user.balance }}"><br><br>
+    <input type="number" id="balance" name="balance" step="0.01" value="{{ user.balance }}" required>
 
     <label for="role">Роль:</label>
-    <select id="role" name="role">
+    <select id="role" name="role" required>
         <option value="client" {% if user.role == 'client' %}selected{% endif %}>Клиент</option>
         <option value="manager" {% if user.role == 'manager' %}selected{% endif %}>Менеджер</option>
-    </select><br><br>
+    </select>
 
     <button type="submit">Сохранить изменения</button>
 </form>

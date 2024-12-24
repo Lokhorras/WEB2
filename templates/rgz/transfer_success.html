@@ -3,8 +3,62 @@
 {% block lab %}Перевод средств выполнен успешно{% endblock %}
 
 {% block main %}
+<style>
+    body {
+        background-color: #eef3f8; /* Нейтральный фон */
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        color: #28a745; /* Зеленый цвет для успешных действий */
+        text-align: center;
+        margin-top: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .success-message {
+        width: 50%;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .success-message p {
+        font-size: 18px;
+        margin: 10px 0;
+        color: #4a4a4a;
+    }
+
+    .success-message a {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 10px 20px;
+        background-color: #005f87;
+        color: white;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+    }
+
+    .success-message a:hover {
+        background-color: #008fbf;
+    }
+
+    .success-message a:active {
+        background-color: #004f6a;
+    }
+</style>
+
 <h1>Перевод средств выполнен успешно</h1>
-<p>Сумма перевода: {{ amount }}</p>
-<p>Получатель: {{ receiver_login }}</p>
-<a href="{{ url_for('rgz.account') }}">Вернуться в личный кабинет</a>
+
+<div class="success-message">
+    <p><strong>Сумма перевода:</strong> {{ amount }} руб.</p>
+    <p><strong>Получатель:</strong> {{ receiver_login }}</p>
+    <a href="{{ url_for('rgz.account') }}">Вернуться в личный кабинет</a>
+</div>
 {% endblock %}
