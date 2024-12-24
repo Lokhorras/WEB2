@@ -21,24 +21,26 @@ def db_close(conn, cur):
 def lab():
     return render_template('rgz/rgz.html', login=session.get('login'))
 
-@rgz.route('/rgz/rest-api/login', methods=['GET', 'POST'])
+@rgz.route('/rgz/rest-api/login', methods=['POST'])
 def api_login():
-    if request.method == 'POST':
-        login = request.json.get('login')
-        password = request.json.get('password')
-        conn, cur = db_connect()
-        cur.execute("SELECT login, role FROM users_new3 WHERE login=? AND password=?;", (login, password))
-        user = cur.fetchone()
-        db_close(conn, cur)
-        if user:
-            session['login'] = login
-            session['role'] = user['role']
-            return jsonify({'success': True, 'role': user['role']})
-        else:
-            return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+    data = request.get_json()  # Получаем данные из JSON
+    login = data.get('login')
+    password = data.get('password')
+
+    if not login or not password:
+        return jsonify({'success': False, 'error': 'Login and password are required'}), 400
+
+    conn, cur = db_connect()
+    cur.execute("SELECT login, role FROM users_new3 WHERE login=? AND password=?;", (login, password))
+    user = cur.fetchone()
+    db_close(conn, cur)
+
+    if user:
+        session['login'] = login
+        session['role'] = user['role']
+        return jsonify({'success': True, 'role': user['role']})
     else:
-        # Обработка GET-запроса (например, отображение страницы логина)
-        return render_template('rgz/login.html')
+        return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
 
 @rgz.route('/rgz/rest-api/logout', methods=['POST'])
 def api_logout():

@@ -1,3 +1,32 @@
+document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();  // Предотвращаем стандартное поведение формы
+
+    const formData = new FormData(event.target);
+    const data = Object.fromEntries(formData.entries());  // Преобразуем FormData в объект
+
+    fetch('/rgz/rest-api/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)  // Сериализация данных в JSON
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            sessionStorage.setItem('login', data.login);
+            window.location.href = '/rgz/rest-api/account';
+        } else {
+            alert(data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred during login');
+    });
+});
+
+
 function fetchUser() {
     if (sessionStorage.getItem('login')) {
         fetch('/rgz/rest-api/user')  // Используйте маршрут для получения данных пользователя
@@ -18,8 +47,13 @@ function fetchUser() {
 function loginUser(login, password) {
     fetch('/rgz/rest-api/login', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ login: login, password: password })
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            login: 'your_login',
+            password: 'your_password'
+        })
     })
     .then(response => response.json())
     .then(data => {
