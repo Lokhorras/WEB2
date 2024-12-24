@@ -5,25 +5,15 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     const data = Object.fromEntries(formData.entries());  // Преобразуем FormData в объект
 
     fetch('/rgz/rest-api/login', {
-        method: 'POST',
+        method: 'POST', // Убедитесь, что метод POST
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)  // Сериализация данных в JSON
+        body: JSON.stringify({
+            login: 'your_login',
+            password: 'your_password'
+        })
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            sessionStorage.setItem('login', data.login);
-            window.location.href = '/rgz/rest-api/account';
-        } else {
-            alert(data.error);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred during login');
-    });
 });
 
 
