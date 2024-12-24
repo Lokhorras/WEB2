@@ -1,22 +1,22 @@
 function fetchUser() {
     if (sessionStorage.getItem('login')) {
-        fetch('/rgz/api/user')
+        fetch('/rgz/rest-api/user')
             .then(response => response.json())
             .then(data => {
                 if (data.error) {
                     alert(data.error);
-                    window.location.href = '/rgz/login';
+                    window.location.href = '/rgz/rest-api/login';
                 } else {
                     displayUser(data);
                 }
             });
     } else {
-        window.location.href = '/rgz/login';
+        window.location.href = '/rgz/rest-api/login';
     }
 }
 
 function fetchTransfers() {
-    fetch('/rgz/api/transfers')
+    fetch('/rgz/rest-api/transfers')
         .then(response => response.json())
         .then(transactions => {
             displayTransfers(transactions);
@@ -26,7 +26,7 @@ function fetchTransfers() {
 function transferFunds() {
     const receiverAccount = document.getElementById('receiver_account_number').value;
     const amount = document.getElementById('amount').value;
-    fetch('/rgz/api/transfer', {
+    fetch('/rgz/rest-api/transfer', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({receiver_account_number: receiverAccount, amount: amount})

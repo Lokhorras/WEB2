@@ -21,7 +21,7 @@ def db_close(conn, cur):
 def lab():
     return render_template('rgz/rgz.html', login=session.get('login'))
 
-@rgz.route('/rgz/api/login', methods=['POST'])
+@rgz.route('/rgz/rest-api/login', methods=['POST'])
 def api_login():
     login = request.json.get('login')
     password = request.json.get('password')
@@ -36,13 +36,13 @@ def api_login():
     else:
         return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
 
-@rgz.route('/rgz/api/logout', methods=['POST'])
+@rgz.route('/rgz/rest-api/logout', methods=['POST'])
 def api_logout():
     session.pop('login', None)
     session.pop('role', None)
     return jsonify({'success': True})
 
-@rgz.route('/rgz/api/user', methods=['GET'])
+@rgz.route('/rgz/rest-api/user', methods=['GET'])
 def api_user():
     if 'login' in session:
         conn, cur = db_connect()
@@ -56,7 +56,7 @@ def api_user():
     else:
         return jsonify({'error': 'Not logged in'}), 401
 
-@rgz.route('/rgz/api/transfers', methods=['GET'])
+@rgz.route('/rgz/rest-api/transfers', methods=['GET'])
 def api_transfers():
     if 'login' in session:
         user_login = session['login']
@@ -76,7 +76,7 @@ def api_transfers():
     else:
         return jsonify({'error': 'Not logged in'}), 401
 
-@rgz.route('/rgz/api/transfer', methods=['POST'])
+@rgz.route('/rgz/rest-api/transfer', methods=['POST'])
 def api_transfer():
     if 'login' in session:
         sender_login = session['login']
