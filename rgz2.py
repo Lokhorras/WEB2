@@ -22,7 +22,7 @@ def db_close(conn, cur):
 # Маршрут для отображения главной страницы
 @rgz2.route('/rgz2/')
 def labbss():
-    return render_template('rgz2/base2.html', login=session.get('login'))
+    return render_template('base.html', login=session.get('login'))
 
 # Маршрут для отображения страницы входа
 @rgz2.route('/rgz2/login', methods=['GET'])
