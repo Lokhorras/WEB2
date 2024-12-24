@@ -49,4 +49,3 @@ def login():
 
     # Если метод GET, возвращаем HTML-форму
     return render_template('rgz2/login.html')
-

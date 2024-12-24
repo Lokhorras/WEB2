@@ -3,29 +3,29 @@
 {% block script %}
 <script>
     async function login(event) {
-        event.preventDefault(); // Предотвращаем отправку формы
+        event.preventDefault();  // Чтобы форма не отправлялась по умолчанию
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
 
-        const response = await fetch('/rgz/login', {
+        const response = await fetch('/rgz2/login', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json',  // Устанавливаем тип данных
             },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ username, password }),  // Отправляем данные в формате JSON
         });
 
         const data = await response.json();
         if (response.ok) {
-            alert(data.message);
-            window.location.href = "/rgz/account";
+            alert(data.message);  // Уведомление об успешном входе
+            window.location.href = "/rgz/account";  // Перенаправление на страницу аккаунта
         } else {
-            document.getElementById('errorMessage').textContent = data.error;
+            document.getElementById('errorMessage').textContent = data.error;  // Ошибка, если вход неудачен
         }
     }
 
-    // Добавляем обработчик события для кнопки "Войти"
+    // Добавляем обработчик событий для кнопки
     document.addEventListener('DOMContentLoaded', function() {
         const loginButton = document.querySelector('button[type="submit"]');
         loginButton.addEventListener('click', login);
