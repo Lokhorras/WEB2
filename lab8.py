@@ -168,7 +168,7 @@ def toggle_privacy(article_id):
     if article.login_id != current_user.id:
         abort(403)  # Запрещаем изменение статьи другого пользователя
 
-    # Меняем приватность статьи
+
     article.is_public = not article.is_public
     db.session.commit()
 

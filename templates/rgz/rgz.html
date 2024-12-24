@@ -5,8 +5,8 @@
 {% block main %}
     <style>
         body {
-            background-color: #eef3f8; /* Светлый нейтральный фон */
-            font-family: Arial, sans-serif; /* Читаемый шрифт */
+            background-color: #eef3f8;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             overflow-x: hidden;
@@ -21,7 +21,7 @@
             padding: 20px;
             align-items: center;
             justify-content: center;
-            background-color: #003f5c; /* Темно-синий, внушающий доверие */
+            background-color: #003f5c; 
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
@@ -30,27 +30,27 @@
             padding: 10px 20px;
             font-size: 16px;
             font-weight: bold;
-            color: white; /* Белый текст для контраста */
-            background-color: #005f87; /* Чуть светлее для кнопок */
+            color: white; 
+            background-color: #005f87; 
             text-decoration: none;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
         .a1:hover {
-            background-color: #008fbf; /* Ярче при наведении */
-            transform: scale(1.05); /* Легкое увеличение при наведении */
+            background-color: #008fbf; 
+            transform: scale(1.05); 
         }
 
         .a1:active {
-            background-color: #004f6a; /* Темнее при клике */
+            background-color: #004f6a;
         }
 
         .a1:last-child {
             background-color: transparent;
             color: #ffffff;
             font-style: italic;
-            pointer-events: none; /* Для отображения имени, без ссылки */
+            pointer-events: none; 
         }
     </style>
 
@@ -61,8 +61,6 @@
         <a class="a1" href="/rgz/history">История транзакций</a>
         <a class="a1" href="/rgz/logout">Выход</a>
 
-
-        <!-- Ссылки для менеджера -->
         {% if session.role == 'manager' %}
             <a class="a1" href="/rgz/create_user">Создать пользователя</a>
             <a class="a1" href="/rgz/manage_users">Управление пользователями</a>

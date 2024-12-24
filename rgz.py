@@ -53,9 +53,8 @@ def login():
         db_close(conn, cur)
         return render_template('rgz/login.html', error='Логин и/или пароль неверны')
 
-    # Убираем проверку хешированного пароля
-    # if not check_password_hash(user['password'], password):
-    if user['password'] != password:  # Сравниваем пароли в открытом виде
+
+    if user['password'] != password:  
         db_close(conn, cur)
         return render_template('rgz/login.html', error='Логин и/или пароль неверны')
 
@@ -123,7 +122,7 @@ def transfer():
             (sender_login, receiver_login, amount)
         )
 
-        # Фиксация транзакции
+
         cur.execute("COMMIT;")
         db_close(conn, cur)
 
@@ -134,10 +133,9 @@ def transfer():
         )
 
     except Exception as e:
-        # Откат транзакции в случае ошибки
         cur.execute("ROLLBACK;")
         db_close(conn, cur)
-        print(f"Error: {e}")  # Отладочное сообщение
+        print(f"Error: {e}")  
         return render_template('rgz/transfer.html', error='Ошибка при переводе средств')
 
 @rgz.route('/rgz/history')
@@ -159,7 +157,7 @@ def history():
         (user_login, user_login)
     )
     transactions3 = cur.fetchall()
-    conn.close()  # Закрываем соединение с базой данных
+    conn.close()
 
     return render_template('rgz/history.html', transactions3=transactions3)
 
@@ -179,10 +177,8 @@ def account():
 
 @rgz.route('/rgz/logout')
 def logoutt():
-    # Удаляем данные о пользователе из сессии
     session.pop('login', None)
     session.pop('password', None)
-    # Перенаправляем на страницу входа
     return redirect('/rgz/login')
 
 # Функция для проверки, является ли текущий пользователь менеджером
@@ -195,7 +191,7 @@ def is_manager():
     db_close(conn, cur)
     return user and user['role'] == 'manager'
 
-# Маршрут для создания нового пользователя
+
 @rgz.route('/rgz/create_user', methods=['GET', 'POST'])
 def create_user():
     if not is_manager():
@@ -210,14 +206,12 @@ def create_user():
     password = request.form.get('password')
     phone = request.form.get('phone')
     account_number = request.form.get('account_number')
-    balance = float(request.form.get('balance', 0))  # По умолчанию баланс 0
-    role = request.form.get('role', 'client')  # По умолчанию роль клиент
+    balance = float(request.form.get('balance', 0))  
+    role = request.form.get('role', 'client')  
 
     if not full_name or not login or not password or not phone or not account_number:
         return render_template('rgz/create_user.html', error='Заполните все поля')
 
-    # Убираем хеширование пароля
-    # hashed_password = generate_password_hash(password)
 
     conn, cur = db_connect()
     try:
@@ -235,7 +229,6 @@ def create_user():
         db_close(conn, cur)
         return render_template('rgz/create_user.html', error=f'Ошибка при создании пользователя: {str(e)}')
 
-# Маршрут для редактирования пользователя
 @rgz.route('/rgz/edit_user/<login>', methods=['GET', 'POST'])
 def edit_user(login):
     if not is_manager():
@@ -252,7 +245,6 @@ def edit_user(login):
     if request.method == 'GET':
         return render_template('rgz/edit_user.html', user=user)
 
-    # Обработка POST-запроса
     full_name = request.form.get('full_name')
     password = request.form.get('password')
     phone = request.form.get('phone')
@@ -265,9 +257,7 @@ def edit_user(login):
         if full_name:
             cur.execute("UPDATE users_new3 SET full_name=? WHERE login=?;", (full_name, login))
         if password:
-            # Убираем хеширование пароля
-            # hashed_password = generate_password_hash(password)
-            cur.execute("UPDATE users_new3 SET password=? WHERE login=?;", (password, login))  # Используем пароль в открытом виде
+            cur.execute("UPDATE users_new3 SET password=? WHERE login=?;", (password, login))  
         if phone:
             cur.execute("UPDATE users_new3 SET phone=? WHERE login=?;", (phone, login))
         if account_number:
@@ -284,7 +274,7 @@ def edit_user(login):
         db_close(conn, cur)
         return render_template('rgz/edit_user.html', user=user, error=f'Ошибка при редактировании пользователя: {str(e)}')
 
-# Маршрут для удаления пользователя
+
 @rgz.route('/rgz/delete_user/<login>', methods=['POST'])
 def delete_user(login):
     if not is_manager():
@@ -295,7 +285,7 @@ def delete_user(login):
         cur.execute("DELETE FROM users_new3 WHERE login=?;", (login,))
         conn.commit()
         db_close(conn, cur)
-        return redirect('/rgz/manage_users')  # Перенаправляем на страницу управления пользователями
+        return redirect('/rgz/manage_users')  
     except Exception as e:
         db_close(conn, cur)
         return render_template('rgz/manage_users.html', error=f'Ошибка при удалении пользователя: {str(e)}')
