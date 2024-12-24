@@ -1,34 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Банковская система</title>
-    <script src="script.js" defer></script>
-</head>
-<body>
-    <h1>Банковская система</h1>
-    <div id="auth-section">
-        <h2>Вход</h2>
-        <label for="login">Логин:</label>
-        <input type="text" id="login" required>
-        <label for="password">Пароль:</label>
-        <input type="password" id="password" required>
-        <button onclick="login()">Войти</button>
+{% extends "base.html" %}
+
+{% block lab %}bank{% endblock %}
+
+{% block main %}
+    <style>
+        body {
+            background-color: #f0f8ff; 
+        }
+        
+        .title{
+            width: 100%;
+            height: 150px;
+            display: flex;
+            gap: 10px;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+            text-align: center;
+            background-color: rgb(156, 209, 209);
+            justify-content: center;
+
+        }
+        .a1{
+            border-radius: 50px;
+            width: 150px;
+            height: 20px;
+            vertical-align: 30px;
+            background-color: antiquewhite;
+            text-decoration: none;
+        }
+
+    </style>
+    <div class="title">
+        <a class="a1" href="/rgz/login">Вход</a> 
+        <a class="a1" href="/rgz/account">Профиль</a> 
+        <a class="a1" href="/rgz/transfer">Перевести деньги</a>
+        <a class="a1" href="/rgz/history">История транзакций</a>
+        <a class="a1" href="/rgz/logout">Выход</a>
+        <a class="a1" href="#">{{ login or "Аноним" }}</a>
+
+        <!-- Ссылки для менеджера -->
+        {% if session.role == 'manager' %}
+            <a class="a1" href="/rgz/create_user">Создать пользователя</a>
+            <a class="a1" href="/rgz/manage_users">Управление пользователями</a>
+        {% endif %}
     </div>
-    <div id="main-section" style="display: none;">
-        <h2>Добро пожаловать, <span id="username"></span>!</h2>
-        <button onclick="logout()">Выйти</button>
-        <h3>Баланс:</h3>
-        <div id="balance">Загрузка...</div>
-        <h3>Перевод</h3>
-        <label for="receiver">Номер счёта получателя:</label>
-        <input type="text" id="receiver" required>
-        <label for="amount">Сумма:</label>
-        <input type="number" id="amount" required>
-        <button onclick="transfer()">Отправить</button>
-        <h3>История операций</h3>
-        <ul id="history"></ul>
-    </div>
-</body>
-</html>
+{% endblock %}
