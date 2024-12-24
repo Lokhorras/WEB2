@@ -29,6 +29,10 @@ function loginUser(login, password) {
         } else {
             alert(data.error);
         }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred during login');
     });
 }
 
