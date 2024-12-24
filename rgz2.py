@@ -22,7 +22,7 @@ def db_close(conn, cur):
 # Routes
 @rgz2.route('/rgz2/')
 def indexxx():
-    return render_template('index.html')
+    return render_template('rgz2/index.html')
 
 @rgz2.route('/rgz2/api/login', methods=['POST'])
 def api_loginnn():
