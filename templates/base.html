@@ -3,48 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Bank App{% endblock %}</title>
-    <script src="{{ url_for('static', filename='rgz/main.js') }}" defer></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .navbar {
-            background-color: #003f5c;
-            color: white;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            margin-left: 15px;
-        }
-        .navbar a:hover {
-            text-decoration: underline;
-        }
-        .content {
-            padding: 20px;
-        }
-    </style>
+    <title>{% if name %}
+                {{name}},
+            {% else %}
+                Аноним, 
+            {% endif %} 
+            {% block lab %}
+            {% endblock %}
+    </title>
+    {% block head %}{% endblock %}
+    {% block script %} {% endblock %}
+    {% block style %} {% endblock %}
+    <link rel="icon" href="{{ url_for('static', filename='favicon (2).ico') }}">
 </head>
+    <style>                                              
+    </style>
 <body>
-    <div class="navbar">
-        <div>
-            <a href="/rgz2/rest-api/login">Вход</a>
-            <a href="/rgz2/rest-api/account">Профиль</a>
-            <a href="/rgz2/rest-api/transfer">Перевести деньги</a>
-            <a href="/rgz2/rest-api/history">История транзакций</a>
-            <a href="#" onclick="logout()">Выход</a>
-        </div>
-        <span>{% if session.get('login') %} {{ session.get('login') }} {% else %} Аноним {% endif %}</span>
-    </div>
-    <div class="content">
-        {% block main %}{% endblock %}
-    </div>
+
+
+        {% block main %} {% endblock %}
+    </main>
+
+
+    
 </body>
 </html>
