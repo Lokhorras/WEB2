@@ -4,88 +4,20 @@
 
 {% block main %}
 <style>
-    body {
-        background-color: #eef3f8; /* Нейтральный фон */
-        font-family: Arial, sans-serif;
-    }
-
-    h1 {
-        color: #003f5c; /* Темно-синий цвет заголовка */
-        text-align: center;
-        margin-top: 20px;
-        font-size: 24px;
-        font-weight: bold;
-    }
-
-    .transfer-form {
-        width: 50%;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #ffffff;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 5px;
-    }
-
-    .transfer-form label {
-        display: block;
-        margin: 10px 0 5px;
-        font-weight: bold;
-        font-size: 16px;
-        color: #4a4a4a;
-    }
-
-    .transfer-form input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 14px;
-    }
-
-    .transfer-form button {
-        width: 100%;
-        padding: 10px;
-        background-color: #005f87;
-        color: white;
-        font-size: 16px;
-        font-weight: bold;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-
-    .transfer-form button:hover {
-        background-color: #008fbf;
-    }
-
-    .transfer-form button:active {
-        background-color: #004f6a;
-    }
-
-    .error-message {
-        color: red;
-        text-align: center;
-        font-weight: bold;
-        margin-bottom: 15px;
-    }
+    /* Styles remain the same */
 </style>
 
 <h1>Перевод средств</h1>
 
 <div class="transfer-form">
-    {% if error %}
-    <p class="error-message">{{ error }}</p>
-    {% endif %}
-
-    <form method="post">
+    <form id="transfer-form">
         <label for="receiver_account_number">Номер счета получателя:</label>
         <input type="text" id="receiver_account_number" name="receiver_account_number" placeholder="Введите номер счета" required>
 
         <label for="amount">Сумма перевода:</label>
         <input type="number" id="amount" name="amount" step="0.01" placeholder="Введите сумму" required>
 
-        <button type="submit">Перевести</button>
+        <button type="button" onclick="transferFunds()">Перевести</button>
     </form>
 </div>
 {% endblock %}

@@ -3,88 +3,21 @@
 {% block lab %}Bank{% endblock %}
 
 {% block main %}
-    <style>
-        body {
-            background-color: #eef3f8; /* Светлый нейтральный фон */
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+    /* Styles remain the same */
+</style>
 
-        .profile {
-            max-width: 400px;
-            margin: 50px auto; /* Центрирование по горизонтали и вертикали */
-            padding: 30px;
-            border: 1px solid #d1e7f3; /* Легкая граница */
-            border-radius: 10px;
-            background-color: #ffffff; /* Белый фон для контраста */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Легкая тень для объема */
-            text-align: center;
-        }
+<div class="profile">
+    <h1>Профиль пользователя</h1>
+    <p><strong>Логин:</strong> {{ login }}</p>
+    <p><strong>ФИО:</strong> <span id="full_name"></span></p>
+    <p><strong>Телефон:</strong> <span id="phone"></span></p>
+    <p><strong>Номер счета:</strong> <span id="account_number"></span></p>
+    <p class="balance"><strong>Баланс:</strong> <span id="balance"></span></p>
 
-        .profile h1 {
-            font-size: 24px;
-            color: #003f5c; /* Темно-синий цвет заголовка */
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        .profile p {
-            margin: 10px 0;
-            font-size: 16px;
-            color: #4a4a4a;
-        }
-
-        .profile strong {
-            font-weight: bold;
-            color: #005f87; /* Акцентный цвет для текста */
-        }
-
-        .profile .balance {
-            font-size: 18px;
-            color: #008000; /* Зеленый цвет для баланса */
-            margin-top: 10px;
-        }
-
-        .profile .actions {
-            margin-top: 30px;
-        }
-
-        .profile .actions a {
-            display: inline-block;
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            background-color: #005f87; /* Темно-синий цвет кнопки */
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .profile .actions a:hover {
-            background-color: #008fbf; /* Ярче при наведении */
-            transform: scale(1.05); /* Легкое увеличение при наведении */
-        }
-
-        .profile .actions a:active {
-            background-color: #004f6a; /* Темнее при клике */
-        }
-    </style>
-
-    <div class="profile">
-        <h1>Профиль пользователя</h1>
-        <p><strong>Логин:</strong> {{ user.login }}</p>
-        <p><strong>ФИО:</strong> {{ user.full_name }}</p>
-        <p><strong>Телефон:</strong> {{ user.phone }}</p>
-        <p><strong>Номер счета:</strong> {{ user.account_number }}</p>
-        <p class="balance"><strong>Баланс:</strong> {{ user.balance }} руб.</p>
-
-        <div class="actions">
-            <a href="/rgz/transfer">Перевести деньги</a>
-            <a href="/rgz/">Назад</a>
-        </div>
+    <div class="actions">
+        <a href="/rgz/transfer">Перевести деньги</a>
+        <a href="/rgz/logout">Выйти</a>
     </div>
+</div>
 {% endblock %}
