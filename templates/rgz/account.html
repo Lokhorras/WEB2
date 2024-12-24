@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block lab %}{% endblock %}
+
+{% block main %}
+    <style>
+        body {
+            background-color: #f0f8ff;
+        }
+
+        .profile {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .profile h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .profile p {
+            margin-bottom: 10px;
+        }
+
+        .profile strong {
+            font-weight: bold;
+        }
+
+        .profile .balance {
+            font-size: 1.5em;
+            color: green;
+        }
+
+        .profile .actions {
+            margin-top: 20px;
+        }
+
+        .profile .actions a {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #0ec2e2;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+
+        .profile .actions a:hover {
+            background-color: #00adb3;
+        }
+    </style>
+
+    <div class="profile">
+        <h1>Профиль пользователя</h1>
+        <p><strong>Логин:</strong> {{ user.login }}</p>
+        <p><strong>ФИО:</strong> {{ user.full_name }}</p>
+        <p><strong>Телефон:</strong> {{ user.phone }}</p>
+        <p><strong>Номер счета:</strong> {{ user.account_number }}</p>
+        <p class="balance"><strong>Баланс:</strong> {{ user.balance }} руб.</p>
+
+        <div class="actions">
+            <a href="/rgz/transfer">Перевести деньги</a>
+            <a href="/rgz/">Назад</a>
+        </div>
+    </div>
+{% endblock %}

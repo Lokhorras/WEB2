@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session, render_template
+from flask import Blueprint, url_for, redirect, render_template, request, session, current_app, jsonify
 import sqlite3
 from os import path
 
@@ -18,9 +18,7 @@ def lab():
 # (7,'Frank Green', 'frankg', '123', '+7897897890', '78978978', 1200.00, 'client'),
 # (8,'Grace Lee', 'gracelee', '123', '+3213213210', '32132132', 1800.00, 'client'),
 # (9,'Henry Clark', 'henryc', '123', '+9879879870', '98798798', 2200.00, 'manager'),
-
-
-
+# (10,'Ivy Harris', 'ivyh', '123', '+6546546540', '65465465', 900.00, 'client');  
 def db_connect():
     dir_path = path.dirname(path.realpath(__file__))
     db_path = path.join(dir_path, "database.db")
@@ -34,97 +32,123 @@ def db_close(conn, cur):
     cur.close()
     conn.close()
 
-@rgz.route('rgz/api/login', methods=['POST'])
-def api_login():
-    data = request.get_json()
-    login = data.get('login')
-    password = data.get('password')
 
-    if not (login and password):
-        return jsonify({'error': 'Заполните все поля'}), 400
+@rgz.route('/rgz/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'GET':
+        return render_template('rgz/login.html')
+
+    login = request.form.get('login')
+    password = request.form.get('password')
+
+    if not (login or password):
+        return render_template('rgz/login.html', error='Заполните поля')
 
     conn, cur = db_connect()
+
     cur.execute("SELECT login, password, role FROM users_new3 WHERE login=?;", (login,))
     user = cur.fetchone()
 
-    if not user or user['password'] != password:
+    if not user:
         db_close(conn, cur)
-        return jsonify({'error': 'Логин и/или пароль неверны'}), 401
+        return render_template('rgz/login.html', error='Логин и/или пароль неверны')
 
+    # Убираем проверку хешированного пароля
+    # if not check_password_hash(user['password'], password):
+    if user['password'] != password:  # Сравниваем пароли в открытом виде
+        db_close(conn, cur)
+        return render_template('rgz/login.html', error='Логин и/или пароль неверны')
+
+    # Сохраняем данные пользователя в сессии
     session['login'] = login
-    session['role'] = user['role']
+    session['role'] = user['role']  # Сохраняем роль пользователя
     db_close(conn, cur)
-    return jsonify({'message': 'Успешный вход', 'login': login, 'role': user['role']}), 200
+    return render_template('rgz/success_login.html', login=login)
 
-@rgz.route('rgz/api/logout', methods=['POST'])
-def api_logout():
-    session.pop('login', None)
-    session.pop('role', None)
-    return jsonify({'message': 'Успешный выход'}), 200
 
-@rgz.route('rgz/api/transfer', methods=['POST'])
-def api_transfer():
+
+@rgz.route('/rgz/transfer', methods=['GET', 'POST'])
+def transfer():
     if 'login' not in session:
-        return jsonify({'error': 'Необходима авторизация'}), 401
+        return redirect('/rgz/login')
 
-    data = request.get_json()
-    receiver_account_number = data.get('receiver_account_number')
-    amount = data.get('amount')
-
-    if not receiver_account_number or not amount:
-        return jsonify({'error': 'Заполните все поля'}), 400
+    if request.method == 'GET':
+        return render_template('rgz/transfer.html')
 
     sender_login = session['login']
+    receiver_account_number = request.form.get('receiver_account_number')
+    amount = int(request.form.get('amount'))
+
+    if not receiver_account_number or not amount:
+        return render_template('rgz/transfer.html', error='Заполните все поля')
+
     conn, cur = db_connect()
 
     try:
-        conn.isolation_level = None
+        # Начало транзакции
+        conn.isolation_level = None  # Отключаем autocommit
         cur.execute("BEGIN;")
 
+        # Получаем баланс отправителя
         cur.execute("SELECT balance FROM users_new3 WHERE login=?;", (sender_login,))
         sender_balance = cur.fetchone()['balance']
 
+        # Проверка достаточности средств
         if sender_balance < amount:
-            return jsonify({'error': 'Недостаточно средств'}), 400
+            return render_template('rgz/transfer.html', error='Недостаточно средств на счете')
 
-        cur.execute("UPDATE users_new3 SET balance=? WHERE login=?;",
-                    (sender_balance - amount, sender_login))
+        # Обновляем баланс отправителя
+        new_sender_balance = sender_balance - amount
+        cur.execute("UPDATE users_new3 SET balance=? WHERE login=?;", (new_sender_balance, sender_login))
 
-        cur.execute("SELECT login, balance FROM users_new3 WHERE account_number=?;",
-                    (receiver_account_number,))
+        # Получаем логин и баланс получателя
+        cur.execute("SELECT login, balance FROM users_new3 WHERE account_number=?;", (receiver_account_number,))
         receiver = cur.fetchone()
 
         if not receiver:
-            return jsonify({'error': 'Получатель не найден'}), 404
+            return render_template('rgz/transfer.html', error='Получатель не найден')
 
-        cur.execute("UPDATE users_new3 SET balance=? WHERE account_number=?;",
-                    (receiver['balance'] + amount, receiver_account_number))
+        receiver_login = receiver['login']
+        receiver_balance = receiver['balance']
+
+        # Обновляем баланс получателя
+        new_receiver_balance = receiver_balance + amount
+        cur.execute("UPDATE users_new3 SET balance=? WHERE account_number=?;", (new_receiver_balance, receiver_account_number))
 
         cur.execute(
             """
             INSERT INTO transactions3 (sender_login, receiver_login, amount)
             VALUES (?, ?, ?);
             """,
-            (sender_login, receiver['login'], amount))
+            (sender_login, receiver_login, amount)
+        )
 
+        # Фиксация транзакции
         cur.execute("COMMIT;")
         db_close(conn, cur)
 
-        return jsonify({'message': 'Перевод выполнен успешно', 'amount': amount, 'receiver': receiver['login']}), 200
+        return render_template(
+            'rgz/transfer_success.html',
+            amount=amount,
+            receiver_login=receiver_login
+        )
 
     except Exception as e:
+        # Откат транзакции в случае ошибки
         cur.execute("ROLLBACK;")
         db_close(conn, cur)
-        return jsonify({'error': f'Ошибка: {str(e)}'}), 500
+        print(f"Error: {e}")  # Отладочное сообщение
+        return render_template('rgz/transfer.html', error='Ошибка при переводе средств')
 
-@rgz.route('rgz/api/history', methods=['GET'])
-def api_history():
+@rgz.route('/rgz/history')
+def history():
     if 'login' not in session:
-        return jsonify({'error': 'Необходима авторизация'}), 401
-
+        return redirect('/rgz/login')
+    
     user_login = session['login']
     conn, cur = db_connect()
 
+    # Получаем историю переводов пользователя
     cur.execute(
         """
         SELECT sender_login, receiver_login, amount, timestamp 
@@ -134,33 +158,66 @@ def api_history():
         """,
         (user_login, user_login)
     )
-    transactions = [dict(row) for row in cur.fetchall()]
-    db_close(conn, cur)
+    transactions3 = cur.fetchall()
+    conn.close()  # Закрываем соединение с базой данных
 
-    return jsonify({'transactions': transactions}), 200
+    return render_template('rgz/history.html', transactions3=transactions3)
 
-@rgz.route('rgz/api/account', methods=['GET'])
-def api_account():
+
+@rgz.route('/rgz/account')
+def account():
     if 'login' not in session:
-        return jsonify({'error': 'Необходима авторизация'}), 401
+        return redirect('/rgz/login')
 
     conn, cur = db_connect()
+
     cur.execute("SELECT * FROM users_new3 WHERE login=?;", (session['login'],))
-    user = dict(cur.fetchone())
+    user = cur.fetchone()
     db_close(conn, cur)
 
-    return jsonify({'user': user}), 200
+    return render_template('rgz/account.html', user=user)
 
-@rgz.route('rgz/api/create_user', methods=['POST'])
-def api_create_user():
-    if session.get('role') != 'manager':
-        return jsonify({'error': 'Недостаточно прав'}), 403
+@rgz.route('/rgz/logout')
+def logoutt():
+    # Удаляем данные о пользователе из сессии
+    session.pop('login', None)
+    session.pop('password', None)
+    # Перенаправляем на страницу входа
+    return redirect('/rgz/login')
 
-    data = request.get_json()
-    required_fields = ['full_name', 'login', 'password', 'phone', 'account_number', 'balance', 'role']
+# Функция для проверки, является ли текущий пользователь менеджером
+def is_manager():
+    if 'login' not in session:
+        return False
+    conn, cur = db_connect()
+    cur.execute("SELECT role FROM users_new3 WHERE login=?;", (session['login'],))
+    user = cur.fetchone()
+    db_close(conn, cur)
+    return user and user['role'] == 'manager'
 
-    if not all(field in data for field in required_fields):
-        return jsonify({'error': 'Заполните все поля'}), 400
+# Маршрут для создания нового пользователя
+@rgz.route('/rgz/create_user', methods=['GET', 'POST'])
+def create_user():
+    if not is_manager():
+        return redirect('/rgz/login')
+
+    if request.method == 'GET':
+        return render_template('rgz/create_user.html')
+
+    # Обработка POST-запроса
+    full_name = request.form.get('full_name')
+    login = request.form.get('login')
+    password = request.form.get('password')
+    phone = request.form.get('phone')
+    account_number = request.form.get('account_number')
+    balance = float(request.form.get('balance', 0))  # По умолчанию баланс 0
+    role = request.form.get('role', 'client')  # По умолчанию роль клиент
+
+    if not full_name or not login or not password or not phone or not account_number:
+        return render_template('rgz/create_user.html', error='Заполните все поля')
+
+    # Убираем хеширование пароля
+    # hashed_password = generate_password_hash(password)
 
     conn, cur = db_connect()
     try:
@@ -169,64 +226,88 @@ def api_create_user():
             INSERT INTO users_new3 (full_name, login, password, phone, account_number, balance, role)
             VALUES (?, ?, ?, ?, ?, ?, ?);
             """,
-            (data['full_name'], data['login'], data['password'], data['phone'],
-            data['account_number'], data['balance'], data['role'])
+            (full_name, login, password, phone, account_number, balance, role)  # Используем пароль в открытом виде
         )
         conn.commit()
         db_close(conn, cur)
-        return jsonify({'message': 'Пользователь успешно создан'}), 201
+        return redirect('/rgz/account')
     except Exception as e:
         db_close(conn, cur)
-        return jsonify({'error': f'Ошибка: {str(e)}'}), 500
+        return render_template('rgz/create_user.html', error=f'Ошибка при создании пользователя: {str(e)}')
 
-@rgz.route('rgz/api/edit_user/<login>', methods=['PUT'])
-def api_edit_user(login):
-    if session.get('role') != 'manager':
-        return jsonify({'error': 'Недостаточно прав'}), 403
+# Маршрут для редактирования пользователя
+@rgz.route('/rgz/edit_user/<login>', methods=['GET', 'POST'])
+def edit_user(login):
+    if not is_manager():
+        return redirect('/rgz/login')
 
-    data = request.get_json()
     conn, cur = db_connect()
+    cur.execute("SELECT * FROM users_new3 WHERE login=?;", (login,))
+    user = cur.fetchone()
+    db_close(conn, cur)
 
+    if not user:
+        return render_template('rgz/edit_user.html', error='Пользователь не найден')
+
+    if request.method == 'GET':
+        return render_template('rgz/edit_user.html', user=user)
+
+    # Обработка POST-запроса
+    full_name = request.form.get('full_name')
+    password = request.form.get('password')
+    phone = request.form.get('phone')
+    account_number = request.form.get('account_number')
+    balance = float(request.form.get('balance', 0))
+    role = request.form.get('role', 'client')
+
+    conn, cur = db_connect()
     try:
-        fields_to_update = []
-        values = []
-        for field, value in data.items():
-            fields_to_update.append(f"{field} = ?")
-            values.append(value)
-
-        values.append(login)
-        cur.execute(f"UPDATE users_new3 SET {', '.join(fields_to_update)} WHERE login = ?;", values)
+        if full_name:
+            cur.execute("UPDATE users_new3 SET full_name=? WHERE login=?;", (full_name, login))
+        if password:
+            # Убираем хеширование пароля
+            # hashed_password = generate_password_hash(password)
+            cur.execute("UPDATE users_new3 SET password=? WHERE login=?;", (password, login))  # Используем пароль в открытом виде
+        if phone:
+            cur.execute("UPDATE users_new3 SET phone=? WHERE login=?;", (phone, login))
+        if account_number:
+            cur.execute("UPDATE users_new3 SET account_number=? WHERE login=?;", (account_number, login))
+        if balance is not None:
+            cur.execute("UPDATE users_new3 SET balance=? WHERE login=?;", (balance, login))
+        if role:
+            cur.execute("UPDATE users_new3 SET role=? WHERE login=?;", (role, login))
 
         conn.commit()
         db_close(conn, cur)
-        return jsonify({'message': 'Пользователь успешно обновлен'}), 200
+        return redirect('/rgz/account')
     except Exception as e:
         db_close(conn, cur)
-        return jsonify({'error': f'Ошибка: {str(e)}'}), 500
+        return render_template('rgz/edit_user.html', user=user, error=f'Ошибка при редактировании пользователя: {str(e)}')
 
-@rgz.route('rgz/api/delete_user/<login>', methods=['DELETE'])
-def api_delete_user(login):
-    if session.get('role') != 'manager':
-        return jsonify({'error': 'Недостаточно прав'}), 403
+# Маршрут для удаления пользователя
+@rgz.route('/rgz/delete_user/<login>', methods=['POST'])
+def delete_user(login):
+    if not is_manager():
+        return redirect('/rgz/login')
 
     conn, cur = db_connect()
     try:
         cur.execute("DELETE FROM users_new3 WHERE login=?;", (login,))
         conn.commit()
         db_close(conn, cur)
-        return jsonify({'message': 'Пользователь успешно удален'}), 200
+        return redirect('/rgz/manage_users')  # Перенаправляем на страницу управления пользователями
     except Exception as e:
         db_close(conn, cur)
-        return jsonify({'error': f'Ошибка: {str(e)}'}), 500
-
-@rgz.route('rgz/api/manage_users', methods=['GET'])
-def api_manage_users():
-    if session.get('role') != 'manager':
-        return jsonify({'error': 'Недостаточно прав'}), 403
+        return render_template('rgz/manage_users.html', error=f'Ошибка при удалении пользователя: {str(e)}')
+    
+@rgz.route('/rgz/manage_users')
+def manage_users():
+    if not is_manager():
+        return redirect('/rgz/login')
 
     conn, cur = db_connect()
     cur.execute("SELECT login, full_name, role FROM users_new3;")
-    users = [dict(row) for row in cur.fetchall()]
+    users = cur.fetchall()
     db_close(conn, cur)
 
-    return jsonify({'users': users}), 200
+    return render_template('rgz/manage_users.html', users=users)    
