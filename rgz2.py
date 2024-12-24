@@ -2,10 +2,10 @@ from flask import Flask, Blueprint, url_for, redirect, render_template, request,
 import sqlite3
 from os import path
 
-rgz2 = Flask('rgz2', __name__)
+rgz2 = Blueprint('rgz2', __name__)
 
 @rgz2.route('/rgz2/')
-def lab():
+def labbss():
     return render_template('rgz2/base.html', login=session.get('login'))
 
 
