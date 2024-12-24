@@ -24,11 +24,6 @@ def db_close(conn, cur):
 def labbss():
     return render_template('base.html', login=session.get('login'))
 
-# Маршрут для отображения страницы входа
-@rgz2.route('/rgz2/login', methods=['GET'])
-def login_pagee():
-    return render_template('rgz2/login.html')
-
 # API для обработки входа
 @rgz2.route('/rgz2/rest-api/login', methods=['GET', 'POST'])
 def api_loginn():
