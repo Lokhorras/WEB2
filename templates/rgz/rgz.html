@@ -60,12 +60,13 @@
         <a class="a1" href="/rgz/transfer">Перевести деньги</a>
         <a class="a1" href="/rgz/history">История транзакций</a>
         <a class="a1" href="/rgz/logout">Выход</a>
-        <a class="a1" href="#">{{ login or "Аноним" }}</a>
+
 
         <!-- Ссылки для менеджера -->
         {% if session.role == 'manager' %}
             <a class="a1" href="/rgz/create_user">Создать пользователя</a>
             <a class="a1" href="/rgz/manage_users">Управление пользователями</a>
         {% endif %}
+        <a class="a1" href="#">{{ login or "Аноним" }}</a>
     </div>
 {% endblock %}
