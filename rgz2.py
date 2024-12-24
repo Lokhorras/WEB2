@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session, jsonify, Blueprint
 import sqlite3
 from os import path
-
+from rgz2 import rgz2
 rgz2 = Blueprint('rgz2', __name__)
 
 
