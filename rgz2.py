@@ -24,29 +24,34 @@ def db_close(conn, cur):
 def labbss():
     return render_template('base.html', login=session.get('login'))
 
-@rgz2.route('/rgz2/rest-api/login', methods=['GET', 'POST'])
+@rgz2.route('/rgz2/rest-api/login', methods=['POST'])
 def api_loginn():
     if request.method == 'POST':
-        data = request.get_json()  # Ожидаем JSON-данные
-        login = data.get('login')
-        password = data.get('password')
+        try:
+            # Убедимся, что данные передаются как JSON
+            if not request.is_json:
+                return jsonify({'success': False, 'error': 'Unsupported Media Type. JSON expected'}), 415
 
-        if not login or not password:
-            return jsonify({'success': False, 'error': 'Login and password are required'}), 400
+            data = request.get_json()  # Читаем JSON-данные
+            login = data.get('login')
+            password = data.get('password')
 
-        conn, cur = db_connect()
-        cur.execute("SELECT login, role FROM users_new3 WHERE login=? AND password=?;", (login, password))
-        user = cur.fetchone()
-        db_close(conn, cur)
+            if not login or not password:
+                return jsonify({'success': False, 'error': 'Login and password are required'}), 400
 
-        if user:
-            session['login'] = login
-            session['role'] = user['role']
-            return jsonify({'success': True, 'role': user['role']})
-        else:
-            return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
-    elif request.method == 'GET':
-        return render_template('rgz2/login.html')
+            conn, cur = db_connect()
+            cur.execute("SELECT login, role FROM users_new3 WHERE login=? AND password=?;", (login, password))
+            user = cur.fetchone()
+            db_close(conn, cur)
+
+            if user:
+                session['login'] = login
+                session['role'] = user['role']
+                return jsonify({'success': True, 'role': user['role']})
+            else:
+                return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+        except Exception as e:
+            return jsonify({'success': False, 'error': str(e)}), 500
 
 # API для выхода
 @rgz2.route('/rgz2/rest-api/logout', methods=['POST'])
