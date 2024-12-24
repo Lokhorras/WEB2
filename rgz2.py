@@ -24,34 +24,32 @@ def db_close(conn, cur):
 def labbss():
     return render_template('base.html', login=session.get('login'))
 
-@rgz2.route('/rgz2/rest-api/login', methods=['GET', 'POST'])
+@rgz2.route('/rgz2/rest-api/login', methods=['POST'])
 def api_loginn():
     if request.method == 'POST':
-        try:
-            # Проверяем, что данные передаются в формате JSON
-            if not request.is_json:
-                return jsonify({'success': False, 'error': 'Unsupported Media Type. JSON expected'}), 415
+        # Проверяем тип запроса
+        if not request.is_json:
+            return jsonify({'success': False, 'error': 'Unsupported Media Type. JSON expected'}), 415
 
-            data = request.get_json()  # Читаем JSON-данные
-            login = data.get('login')
-            password = data.get('password')
+        data = request.get_json()  # Получаем данные
+        login = data.get('login')
+        password = data.get('password')
 
-            if not login or not password:
-                return jsonify({'success': False, 'error': 'Login and password are required'}), 400
+        if not login or not password:
+            return jsonify({'success': False, 'error': 'Login and password are required'}), 400
 
-            conn, cur = db_connect()
-            cur.execute("SELECT login, role FROM users_new3 WHERE login=? AND password=?;", (login, password))
-            user = cur.fetchone()
-            db_close(conn, cur)
+        conn, cur = db_connect()
+        cur.execute("SELECT login, role FROM users_new3 WHERE login=? AND password=?;", (login, password))
+        user = cur.fetchone()
+        db_close(conn, cur)
 
-            if user:
-                session['login'] = login
-                session['role'] = user['role']
-                return jsonify({'success': True, 'role': user['role']})
-            else:
-                return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
-        except Exception as e:
-            return jsonify({'success': False, 'error': str(e)}), 500
+        if user:
+            session['login'] = login
+            session['role'] = user['role']
+            return jsonify({'success': True, 'role': user['role']})
+        else:
+            return jsonify({'success': False, 'error': 'Invalid credentials'}), 401
+
     elif request.method == 'GET':
         # Возвращаем страницу входа
         return render_template('rgz2/login.html')

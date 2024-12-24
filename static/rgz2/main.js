@@ -1,4 +1,3 @@
-// Обработчик отправки формы входа
 document.getElementById('login-form').addEventListener('submit', function(event) {
     event.preventDefault(); // Предотвращаем стандартное поведение формы
 
@@ -8,7 +7,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     fetch('/rgz2/rest-api/login', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json' // Указываем, что отправляем JSON
+            'Content-Type': 'application/json', // Указываем, что отправляем JSON
         },
         body: JSON.stringify(data) // Сериализуем данные в JSON
     })
@@ -26,6 +25,7 @@ document.getElementById('login-form').addEventListener('submit', function(event)
         alert('An error occurred during login');
     });
 });
+
 
 // Функция для выхода
 function logout() {
