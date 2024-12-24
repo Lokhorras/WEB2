@@ -20,3 +20,32 @@ def db_close(conn, cur):
 @rgz2.route('/rgz2/')
 def mainn():
     return render_template('rgz2/index.html')
+
+@rgz2.route('/rgz/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Получение данных из запроса
+        username = request.json.get('username')
+        password = request.json.get('password')
+
+        if not username or not password:
+            return jsonify({'error': 'Логин и пароль обязательны'}), 400
+
+        # Подключение к базе данных
+        conn, cur = db_connect()
+        try:
+            cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password))
+            user = cur.fetchone()
+            if user:
+                # Сохраняем данные пользователя в сессии
+                session['user_id'] = user['id']
+                session['username'] = user['username']
+                session['role'] = user['role']
+                return jsonify({'message': 'Вход выполнен успешно', 'username': user['username']}), 200
+            else:
+                return jsonify({'error': 'Неверный логин или пароль'}), 401
+        finally:
+            db_close(conn, cur)
+
+    # Если метод GET, возвращаем HTML-форму
+    return render_template('rgz2/login.html')

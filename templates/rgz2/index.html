@@ -32,17 +32,17 @@
 
     </style>
     <div class="title">
-        <a class="a1" href="/rgz/login">Вход</a> 
-        <a class="a1" href="/rgz/account">Профиль</a> 
-        <a class="a1" href="/rgz/transfer">Перевести деньги</a>
-        <a class="a1" href="/rgz/history">История транзакций</a>
-        <a class="a1" href="/rgz/logout">Выход</a>
+        <a class="a1" href="/rgz2/login">Вход</a> 
+        <a class="a1" href="/rgz2/account">Профиль</a> 
+        <a class="a1" href="/rgz2/transfer">Перевести деньги</a>
+        <a class="a1" href="/rgz2/history">История транзакций</a>
+        <a class="a1" href="/rgz2/logout">Выход</a>
         <a class="a1" href="#">{{ login or "Аноним" }}</a>
 
         <!-- Ссылки для менеджера -->
         {% if session.role == 'manager' %}
-            <a class="a1" href="/rgz/create_user">Создать пользователя</a>
-            <a class="a1" href="/rgz/manage_users">Управление пользователями</a>
+            <a class="a1" href="/rgz2/create_user">Создать пользователя</a>
+            <a class="a1" href="/rgz2/manage_users">Управление пользователями</a>
         {% endif %}
     </div>
 {% endblock %}
