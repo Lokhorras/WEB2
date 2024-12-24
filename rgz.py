@@ -291,7 +291,19 @@ def delete_user(login):
         cur.execute("DELETE FROM users_new3 WHERE login=?;", (login,))
         conn.commit()
         db_close(conn, cur)
-        return redirect('/rgz/account')
+        return redirect('/rgz/manage_users')  # Перенаправляем на страницу управления пользователями
     except Exception as e:
         db_close(conn, cur)
-        return render_template('rgz/account.html', error=f'Ошибка при удалении пользователя: {str(e)}')
+        return render_template('rgz/manage_users.html', error=f'Ошибка при удалении пользователя: {str(e)}')
+    
+@rgz.route('/rgz/manage_users')
+def manage_users():
+    if not is_manager():
+        return redirect('/rgz/login')
+
+    conn, cur = db_connect()
+    cur.execute("SELECT login, full_name, role FROM users_new3;")
+    users = cur.fetchall()
+    db_close(conn, cur)
+
+    return render_template('rgz/manage_users.html', users=users)    
