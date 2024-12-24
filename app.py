@@ -12,6 +12,7 @@ from lab7 import lab7
 from lab8 import lab8
 from lab9 import lab9
 from rgz import rgz
+from rgz2 import rgz2
 from db import db
 import sqlite3
 from os import path 
@@ -39,7 +40,7 @@ app.register_blueprint(lab7)
 app.register_blueprint(lab8)
 app.register_blueprint(lab9)
 app.register_blueprint(rgz)
-
+app.register_blueprint(rgz2)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'Секретно-секретный секрет')
 app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
 

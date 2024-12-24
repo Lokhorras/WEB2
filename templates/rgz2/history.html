@@ -1,0 +1,20 @@
+{% extends "base2.html" %}
+
+{% block title %}История транзакций{% endblock %}
+
+{% block main %}
+    <h1>История транзакций</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Отправитель</th>
+                <th>Получатель</th>
+                <th>Сумма</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody id="transactions-body">
+            <!-- Данные будут заполняться через JavaScript -->
+        </tbody>
+    </table>
+{% endblock %}
