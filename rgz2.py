@@ -1,9 +1,9 @@
-from flask import Flask, render_template, request, session, jsonify
+from flask import Flask, render_template, request, session, jsonify, Blueprint
 import sqlite3
 from os import path
 
-rgz2 = Flask('rgz2', __name__)
-rgz2.secret_key = 'your_secret_key'
+rgz2 = Blueprint('rgz2', __name__)
+
 
 # Database connection helpers
 def db_connect():
