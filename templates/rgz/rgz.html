@@ -38,5 +38,10 @@
         <a class="a1" href="/rgz/history">История транзакций</a>
         <a class="a1" href="/rgz/logout">Выход</a>
         <a class="a1" href="#">{{ login or "Аноним" }}</a>
+        <a class="a1" href="/rgz/create_user">Создать пользователя</a>
+        <a class="a1" href="/rgz/edit_user/{{ session.login }}">Редактировать пользователя</a>
+        <form action="/rgz/delete_user/{{ session.login }}" method="post" style="display:inline;">
+            <button type="submit" class="a1" onclick="return confirm('Вы уверены?')">Удалить пользователя</button>
+        </form>
     </div>
 {% endblock %}
