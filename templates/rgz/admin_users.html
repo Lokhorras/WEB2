@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block lab %}Управление пользователями{% endblock %}
+
+{% block style %}
+<style>
+    /* Общие стили */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    main {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        max-width: 1200px;
+        margin: 20px auto;
+    }
+
+    h1 {
+        color: #343a40;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* Стили для таблицы */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    .table th,
+    .table td {
+        padding: 12px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table th {
+        background-color: #595379;
+        color: white;
+        font-weight: bold;
+    }
+
+    .table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    /* Стили для кнопок */
+    .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: black;
+    }
+
+    .btn-warning:hover {
+        background-color: #e0a800;
+        transform: translateY(-2px);
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        transform: translateY(-2px);
+    }
+
+    /* Стили для форм */
+    form.d-inline {
+        display: inline-block;
+        margin-right: 5px;
+    }
+
+    /* Стили для контейнера с таблицей */
+    .table-container {
+        overflow-x: auto;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<h1>Управление пользователями</h1>
+
+<div class="table-container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя пользователя</th>
+                <th>Администратор</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ 'Да' if user.is_admin else 'Нет' }}</td>
+                <td>
+                    <a href="{{ url_for('rgz.admin_edit_user', id=user.id) }}" class="btn btn-warning">Редактировать</a>
+                    <form action="{{ url_for('rgz.admin_delete_user', id=user.id) }}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

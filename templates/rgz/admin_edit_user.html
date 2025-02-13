@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block lab %}Редактирование пользователя{% endblock %}
+
+{% block style %}
+<style>
+    /* Общие стили */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+
+    main {
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 90%;
+        max-width: 600px;
+        margin: 20px auto;
+    }
+
+    h1 {
+        color: #343a40;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    /* Стили для формы */
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #495057;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 16px;
+        color: #495057;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #595379;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(162, 67, 165, 0.25);
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .form-check-input {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+
+    .form-check-label {
+        font-size: 16px;
+        color: #495057;
+        cursor: pointer;
+    }
+
+    /* Стили для кнопок */
+    .btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-primary {
+        background-color: #595379;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #595379;
+        transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+    }
+
+    /* Контейнер для кнопок */
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block main %}
+<h1>Редактирование пользователя</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label for="username">Имя пользователя</label>
+        <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" required>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="is_admin" name="is_admin" {% if user.is_admin %}checked{% endif %}>
+        <label class="form-check-label" for="is_admin">Администратор</label>
+    </div>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{{ url_for('rgz.admin_users') }}" class="btn btn-secondary">Отмена</a>
+    </div>
+</form>
+{% endblock %}
