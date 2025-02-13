@@ -1,17 +1,17 @@
 header{
     height: 50px;
-    background-color: antiquewhite;
+    background-color: rgb(233, 139, 220);
     margin: 0;
     padding: 0;
 }
 body{
     margin: 0;
     padding: 0;
-    color: rgb(34, 29, 16);
+    color: rgb(236, 215, 160);
 }
 footer{
     height: 75px;
-    background-color: antiquewhite;
+    background-color: rgb(236, 179, 250);
     margin: 0;
     padding: 0;
     position: fixed;
