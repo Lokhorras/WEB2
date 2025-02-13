@@ -69,28 +69,39 @@ create = False
 @app.route("/")
 def start():
     styles = url_for("static", filename="lab1/styles.css")
-    return '''<!doctype html>
+    return f'''<!doctype html>
         <html>
-            <header>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных </header>
-            <link rel = "stylesheet" href="''' + styles +'''"   
+            <head>
+                <title>НГТУ, ФБ, WEB-программирование</title>
+                <link rel="stylesheet" href="{styles}">
+            </head>
             <body>
+                <header>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</header>
                 <h1>НГТУ, ФБ, Лабораторные работы</h1> 
-                <ol> <a href="/lab1"> 1 Лабораторная работа </a> </ol>
-                <ol> <a href="/lab2"> 2 Лабораторная работа </a> </ol>
-                <ol> <a href="/lab3/"> 3 Лабораторная работа </a> </ol>
-                <ol> <a href="/lab4/"> 4 Лабораторная работа </a> </ol>
-                <ol> <a href="/lab5/"> 5 Лабораторная работа </a> </ol>
-                <ol> <a href="/lab6/"> 6 Лабораторная работа </a> </ol>
-                <ol> <a href="/lab7/"> 7 Лабораторная работа </a> </ol>
-                <ol> <a href="/lab8/"> 8 Лабораторная работа </a> </ol>
-                <ol> <a href="/lab9/"> 9 Лабораторная работа </a> </ol>
-                <ol> <a href="/rgz/"> rgz </a> </ol>
-                <ol> <a href="/rgz2/"> rgzz </a> </ol>
+                <table border="1" cellspacing="0" cellpadding="10">
+                    <tr>
+                        <th>№</th>
+                        <th>Название</th>
+                        <th>Ссылка</th>
+                    </tr>
+                    <tr><td>1</td><td>Лабораторная работа 1</td><td><a href="/lab1">Перейти</a></td></tr>
+                    <tr><td>2</td><td>Лабораторная работа 2</td><td><a href="/lab2">Перейти</a></td></tr>
+                    <tr><td>3</td><td>Лабораторная работа 3</td><td><a href="/lab3">Перейти</a></td></tr>
+                    <tr><td>4</td><td>Лабораторная работа 4</td><td><a href="/lab4">Перейти</a></td></tr>
+                    <tr><td>5</td><td>Лабораторная работа 5</td><td><a href="/lab5">Перейти</a></td></tr>
+                    <tr><td>6</td><td>Лабораторная работа 6</td><td><a href="/lab6">Перейти</a></td></tr>
+                    <tr><td>7</td><td>Лабораторная работа 7</td><td><a href="/lab7">Перейти</a></td></tr>
+                    <tr><td>8</td><td>Лабораторная работа 8</td><td><a href="/lab8">Перейти</a></td></tr>
+                    <tr><td>9</td><td>Лабораторная работа 9</td><td><a href="/lab9">Перейти</a></td></tr>
+                    <tr><td>10</td><td>РГЗ</td><td><a href="/rgz">Перейти</a></td></tr>
+                    <tr><td>11</td><td>РГЗ 2</td><td><a href="/rgz2">Перейти</a></td></tr>
+                </table>
             </body>
-            <footer><p>Студент: Перевязко Алина</p>
-            Группа: ФБИ-21
-            Курс: Ф3
-            Год: 2024
+            <footer>
+                <p>Студент: Перевязко Алина</p>
+                <p>Группа: ФБИ-21</p>
+                <p>Курс: Ф3</p>
+                <p>Год: 2024</p>
             </footer>
         </html>'''
 
