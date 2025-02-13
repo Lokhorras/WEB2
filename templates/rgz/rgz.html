@@ -5,7 +5,7 @@
 {% block main %}
     <style>
         body {
-            background-color: #595379; 
+            background-color: #595379;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -14,23 +14,35 @@
 
         .title {
             width: 100%;
-            height: 150px;
+            height: auto;
             display: flex;
-            gap: 20px;
-            margin: 0;
-            padding: 20px;
-            align-items: center;
             justify-content: center;
             background-color: #595379;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        table {
+            width: 60%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        td {
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #ddd;
         }
 
         .a1 {
+            display: inline-block;
             border-radius: 25px;
             padding: 10px 20px;
             font-size: 16px;
             font-weight: bold;
-            color: white; 
+            color: white;
             background-color: #595379;
             text-decoration: none;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -38,33 +50,42 @@
         }
 
         .a1:hover {
-            background-color: #595379; 
-            transform: scale(1.05); 
+            background-color: #47406a;
+            transform: scale(1.05);
         }
 
         .a1:active {
-            background-color: #595379; 
+            background-color: #3a3559;
         }
 
-        .a1:last-child {
+        .disabled {
             background-color: transparent;
             color: #a84444;
             font-style: italic;
-            pointer-events: none; 
+            pointer-events: none;
         }
     </style>
 
     <div class="title">
-        <a class="a1" href="/rgz/login">Вход</a> 
-        <a class="a1" href="/rgz/account">Профиль</a> 
-        <a class="a1" href="/rgz/transfer">Перевести деньги</a>
-        <a class="a1" href="/rgz/history">История транзакций</a>
-        <a class="a1" href="/rgz/logout">Выход</a>
-
-        {% if session.role == 'manager' %}
-            <a class="a1" href="/rgz/create_user">Создать пользователя</a>
-            <a class="a1" href="/rgz/manage_users">Управление пользователями</a>
-        {% endif %}
-        <a class="a1" href="#">{{ login or "Аноним" }}</a>
+        <table>
+            <tr>
+                <td><a class="a1" href="/rgz/login">Вход</a></td>
+                <td><a class="a1" href="/rgz/account">Профиль</a></td>
+            </tr>
+            <tr>
+                <td><a class="a1" href="/rgz/transfer">Перевести деньги</a></td>
+                <td><a class="a1" href="/rgz/history">История транзакций</a></td>
+            </tr>
+            <tr>
+                <td><a class="a1" href="/rgz/logout">Выход</a></td>
+                <td class="disabled">{{ login or "Аноним" }}</td>
+            </tr>
+            {% if session.role == 'manager' %}
+            <tr>
+                <td><a class="a1" href="/rgz/create_user">Создать пользователя</a></td>
+                <td><a class="a1" href="/rgz/manage_users">Управление пользователями</a></td>
+            </tr>
+            {% endif %}
+        </table>
     </div>
 {% endblock %}
