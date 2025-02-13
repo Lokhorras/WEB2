@@ -39,7 +39,6 @@ app.register_blueprint(lab7)
 app.register_blueprint(lab8)
 app.register_blueprint(lab9)
 app.register_blueprint(rgz)
-app.register_blueprint(rgz2)
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'Секретно-секретный секрет')
 app.config['DB_TYPE'] = os.getenv('DB_TYPE', 'postgres')
 
