@@ -1,30 +1,62 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% if name %}
-                {{name}},
-            {% else %}
-                Аноним, 
-            {% endif %} 
-            {% block lab %}
-            {% endblock %}
+    <title>
+        {% if name %}
+            {{ name }},
+        {% else %}
+            Аноним, 
+        {% endif %} 
+        {% block lab %}{% endblock %}
     </title>
     {% block head %}{% endblock %}
     {% block script %} {% endblock %}
     {% block style %} {% endblock %}
     <link rel="icon" href="{{ url_for('static', filename='favicon (2).ico') }}">
-</head>
-    <style>                                              
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #595379;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        footer {
+            background-color: #595379;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
     </style>
+</head>
 <body>
 
+    <header>
+        НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных
+    </header>
 
-        {% block main %} {% endblock %}
+    <main>
+        {% block main %}{% endblock %}
     </main>
 
-
+    <footer>
+        <p>Студент: Перевязко Алина</p>
+        <p>Группа: ФБИ-21</p>
+        <p>Курс: Ф3</p>
+        <p>Год: 2024</p>
+    </footer>
     
 </body>
 </html>
