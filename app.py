@@ -12,7 +12,6 @@ from lab7 import lab7
 from lab8 import lab8
 from lab9 import lab9
 from rgz import rgz
-from rgz2 import rgz2
 from db import db
 import sqlite3
 from os import path 
@@ -94,7 +93,6 @@ def start():
                     <tr><td>8</td><td>Лабораторная работа 8</td><td><a href="/lab8">Перейти</a></td></tr>
                     <tr><td>9</td><td>Лабораторная работа 9</td><td><a href="/lab9">Перейти</a></td></tr>
                     <tr><td>10</td><td>РГЗ</td><td><a href="/rgz">Перейти</a></td></tr>
-                    <tr><td>11</td><td>РГЗ 2</td><td><a href="/rgz2">Перейти</a></td></tr>
                 </table>
             </body>
             <footer>
