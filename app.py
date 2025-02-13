@@ -87,8 +87,8 @@ def start():
                 <ol> <a href="/rgz/"> rgz </a> </ol>
                 <ol> <a href="/rgz2/"> rgzz </a> </ol>
             </body>
-            <footer><p>Студент: Миракин Д.В.</p>
-            Группа: ФБИ-22 
+            <footer><p>Студент: Перевязко Алина</p>
+            Группа: ФБИ-2
             Курс: Ф3
             Год: 2024
             </footer>
